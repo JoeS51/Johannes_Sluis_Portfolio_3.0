@@ -1,0 +1,40 @@
+.trailsText {
+    position: relative;
+    width: 100%;
+    height: 80px;
+    line-height: 80px;
+    color: black;
+    font-size: 6em;
+    font-weight: 800;
+    letter-spacing: -0.05em;
+    will-change: transform, opacity;
+    overflow: hidden;
+  }
+  
+  .trailsText > div {
+    padding-right: 0.05em;
+    overflow: hidden;
+  }
+  
+  .container {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    height: 100%;
+    justify-content: center;
+  }
+
+  .card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.25rem;
+    height: 10rem;
+    width: 25%;
+    text-align: center;
+    border-radius: 10px;
+  }
+  
+  .parallax {
+    margin-right: 15%;
+  }
