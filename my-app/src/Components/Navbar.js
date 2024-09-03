@@ -11,10 +11,13 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import FaceIcon from '@mui/icons-material/Face';
+import CastleIcon from '@mui/icons-material/Castle';
+import CottageIcon from '@mui/icons-material/Cottage';
+import HomeIcon from '@mui/icons-material/Home';
+import { lightBlue } from '@mui/material/colors';
+import pfp from '../Pictures/profilepic.jpeg';
 
-const pages = ['Experience', 'Pricing', 'Contact'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ['About', 'Resume', 'Projects', 'Random'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -26,6 +29,10 @@ function ResponsiveAppBar() {
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
+  
+  const goToLinkedin = (e) => {
+    window.open('https://www.linkedin.com/in/johannes-joe-sluis-b8585b1b3/', '_blank')
+  }
 
   const handleCloseNavMenu = () => {
     window.location.href = '#resume-section'
@@ -39,7 +46,7 @@ function ResponsiveAppBar() {
     <AppBar position="static" color='white'>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <FaceIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <HomeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -55,7 +62,6 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            JS
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
@@ -92,7 +98,7 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
-          <FaceIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <CastleIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -120,7 +126,8 @@ function ResponsiveAppBar() {
                       color: 'black',
                       display: 'block',
                       fontFamily: 'Helvetica Neue',
-                      textTransform: 'none' }}
+                      textTransform: 'none',
+                      fontSize: 17}}
               >
                 {page}
               </Button>
@@ -129,7 +136,8 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="../Pictures/pfp.png" />
+                {/* <Avatar sx={{ bgcolor: lightBlue[500] }}>JS</Avatar> */}
+                <Avatar src={pfp}></Avatar>
               </IconButton>
             </Tooltip>
             <Menu
@@ -148,11 +156,15 @@ function ResponsiveAppBar() {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                <MenuItem onClick={goToLinkedin}>
+                    <Typography sx={{ textAlign: 'center' }}>Linkedin</Typography>
                 </MenuItem>
-              ))}
+                <MenuItem>
+                    <Typography sx={{ textAlign: 'center' }}>206-317-9976</Typography>
+                </MenuItem>
+                <MenuItem>
+                    <Typography sx={{ textAlign: 'center' }}>jsluis@cs.washington.edu</Typography>
+                </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

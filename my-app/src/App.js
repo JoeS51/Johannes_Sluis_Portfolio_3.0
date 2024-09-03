@@ -36,15 +36,19 @@ export default function App() {
         </ParallaxLayer>
 
         <ParallaxLayer offset={1} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#ebebeb'}}>
-          {/* <div className={`${styles.card} ${styles.parallax} ${styles.container}`}> */}
-          <div className={styles.container} id='resume-section'>
-            <iframe src={resume} title="description" height="500" width="400"></iframe>
-          </div>
+        <div className={styles.topcontainer}>
+          <Trail open={open}>
+            <span>About Me</span>
+          </Trail>
+          <h1>Hello, I'm Johannes (Joe) Sluis! I am currently a Senior at the University of Washington, studying Computer Science
+            and minoring in Business Administration. 
+          </h1>
+        </div>
         </ParallaxLayer>
 
-        <ParallaxLayer offset={2} speed={0} style={{ ...alignCenter, justifyContent: 'flex-end', backgroundColor: '#ccd5c4' }}>
-          <div className={`${styles.card} ${styles.parallax} ${styles.blue}`}>
-            <p>Neither am I</p>
+        <ParallaxLayer offset={2} speed={0} style={{ ...alignCenter, justifyContent: 'flex-end', backgroundColor: '#ced4da' }}>
+          <div className={styles.topcontainer} id='resume-section'>
+            <iframe src={resume} title="description" height="500" width="400"></iframe>
           </div>
         </ParallaxLayer>
       </Parallax>

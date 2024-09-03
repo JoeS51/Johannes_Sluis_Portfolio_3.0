@@ -24,6 +24,30 @@
     justify-content: center;
   }
 
+  .topcontainer {
+    min-height: 100vh;               /* Make container full height of viewport */
+    display: flex;                   /* Use flexbox for layout */
+    flex-direction: column;          /* Stack children vertically */
+    justify-content: space-between;  /* Distribute space evenly between children */
+    align-items: center;             /* Center children horizontally */
+    padding-top: 40px;               /* Add padding at the top if needed */
+  }
+  
+  .topcontainer span {
+    align-self: flex-start;          /* Align span at the top */
+    text-align: center;              /* Center text inside span */
+    width: 100%;                     /* Make span take full width */
+  }
+  
+  .topcontainer h1 {
+    max-width: 80%;                /* Set a maximum width for the h2 */
+    margin: auto;                  /* Center the h2 horizontally */
+    text-align: center;            /* Center the text inside h2 */
+    padding: 0 20px;               /* Optional: Add padding to the left and right */
+    box-sizing: border-box;        /* Ensure padding is included in the element's width */
+  }
+  
+
   .card {
     display: flex;
     justify-content: center;
