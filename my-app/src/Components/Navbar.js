@@ -16,9 +16,16 @@ import CottageIcon from '@mui/icons-material/Cottage';
 import HomeIcon from '@mui/icons-material/Home';
 import { lightBlue } from '@mui/material/colors';
 import pfp from '../Pictures/profilepic.jpeg';
+import { animateScroll } from 'react-scroll';
 
 const pages = ['About', 'Resume', 'Projects', 'Random'];
 
+const options = {
+    // your options here, for example:
+    duration: 500,
+    smooth: true,
+  };
+  
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -34,8 +41,19 @@ function ResponsiveAppBar() {
     window.open('https://www.linkedin.com/in/johannes-joe-sluis-b8585b1b3/', '_blank')
   }
 
-  const handleCloseNavMenu = () => {
-    window.location.href = '#resume-section'
+  const goToHome = (e) => {
+    console.log("go hom")
+    document.getElementById('root').scrollIntoView({ behavior: "smooth" }) 
+  }
+
+  const handleCloseNavMenu = (e, str) => {
+    //window.location.href = '#resume-section'
+    console.log(str)
+    if (str == 'About') {
+        document.getElementById('about').scrollIntoView({ block: 'end',  behavior: 'smooth' })
+    } else {
+        document.getElementById('resume-section').scrollIntoView({ block: 'end',  behavior: 'smooth' }) 
+    }
   };
 
   const handleCloseUserMenu = () => {
@@ -46,12 +64,13 @@ function ResponsiveAppBar() {
     <AppBar position="static" color='white'>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <HomeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <IconButton onClick={goToHome}>
+            <HomeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, fontSize: 'large' }} />
+          </IconButton>
           <Typography
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -92,7 +111,7 @@ function ResponsiveAppBar() {
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
+                <MenuItem key={page} onClick={ (e) => handleCloseNavMenu(e, page)}>
                   <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
                 </MenuItem>
               ))}
@@ -121,13 +140,14 @@ function ResponsiveAppBar() {
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                onClick={ (e) => handleCloseNavMenu(e, page)}
                 sx={{ my: 2,
                       color: 'black',
                       display: 'block',
-                      fontFamily: 'Helvetica Neue',
+                      fontFamily: "Arial",
                       textTransform: 'none',
-                      fontSize: 17}}
+                      fontSize: 20,
+                      fontWeight: 'bold'}}
               >
                 {page}
               </Button>

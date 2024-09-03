@@ -8,12 +8,10 @@
     font-weight: 800;
     letter-spacing: -0.05em;
     will-change: transform, opacity;
-    overflow: hidden;
   }
   
   .trailsText > div {
     padding-right: 0.05em;
-    overflow: hidden;
   }
   
   .container {
@@ -30,7 +28,7 @@
     flex-direction: column;          /* Stack children vertically */
     justify-content: space-between;  /* Distribute space evenly between children */
     align-items: center;             /* Center children horizontally */
-    padding-top: 40px;               /* Add padding at the top if needed */
+    padding-top: 80px;               /* Add padding at the top if needed */
   }
   
   .topcontainer span {
@@ -44,7 +42,7 @@
     margin: auto;                  /* Center the h2 horizontally */
     text-align: center;            /* Center the text inside h2 */
     padding: 0 20px;               /* Optional: Add padding to the left and right */
-    box-sizing: border-box;        /* Ensure padding is included in the element's width */
+    box-sizing: border-box;
   }
   
 

@@ -20,7 +20,7 @@ export default function App() {
       <ResponsiveAppBar></ResponsiveAppBar>
       <Parallax pages={3}>
         <ParallaxLayer offset={0} speed={0} style={{ ...alignCenter, justifyContent: 'center' }}>
-        <div className={styles.container}>
+        <div className={styles.container} id='root'>
           <img src={pfp}
             alt="Pfp"
             width="200"
@@ -36,7 +36,7 @@ export default function App() {
         </ParallaxLayer>
 
         <ParallaxLayer offset={1} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#ebebeb'}}>
-        <div className={styles.topcontainer}>
+        <div className={styles.topcontainer} id='about'>
           <Trail open={open}>
             <span>About Me</span>
           </Trail>
