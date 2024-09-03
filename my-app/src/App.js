@@ -5,8 +5,12 @@ import styles from './styles.module.css'
 
 import Trail from './Components/Trail'
 import { Parallax, ParallaxLayer } from '@react-spring/parallax'
+
 import ResponsiveAppBar from './Components/Navbar'
+
 import pfp from './Pictures/pfp.png'
+
+import resume from './Pictures/resume.pdf'
 
 export default function App() {
   const [open, set] = useState(true)
@@ -31,9 +35,10 @@ export default function App() {
         </div>
         </ParallaxLayer>
 
-        <ParallaxLayer offset={1} speed={0} style={{ ...alignCenter, justifyContent: 'flex-end', backgroundColor: '#ebebeb'}}>
-          <div className={`${styles.card} ${styles.parallax} ${styles.purple}`}>
-            <p>I'm not</p>
+        <ParallaxLayer offset={1} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#ebebeb'}}>
+          {/* <div className={`${styles.card} ${styles.parallax} ${styles.container}`}> */}
+          <div className={styles.container} id='resume-section'>
+            <iframe src={resume} title="description" height="500" width="400"></iframe>
           </div>
         </ParallaxLayer>
 

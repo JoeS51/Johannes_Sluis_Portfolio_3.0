@@ -28,7 +28,7 @@ function ResponsiveAppBar() {
   };
 
   const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
+    window.location.href = '#resume-section'
   };
 
   const handleCloseUserMenu = () => {
@@ -116,7 +116,11 @@ function ResponsiveAppBar() {
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'black', display: 'block', fontFamily: 'Helvetica Neue' }}
+                sx={{ my: 2,
+                      color: 'black',
+                      display: 'block',
+                      fontFamily: 'Helvetica Neue',
+                      textTransform: 'none' }}
               >
                 {page}
               </Button>
