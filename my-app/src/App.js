@@ -6,6 +6,7 @@ import styles from './styles.module.css'
 import Trail from './Components/Trail'
 import { Parallax, ParallaxLayer } from '@react-spring/parallax'
 import ResponsiveAppBar from './Components/Navbar'
+import pfp from './Pictures/pfp.png'
 
 export default function App() {
   const [open, set] = useState(true)
@@ -16,6 +17,12 @@ export default function App() {
       <Parallax pages={3}>
         <ParallaxLayer offset={0} speed={0} style={{ ...alignCenter, justifyContent: 'center' }}>
         <div className={styles.container}>
+          <img src={pfp}
+            alt="Pfp"
+            width="200"
+            height="200"
+            style={{ marginRight: '40px' }}
+          />
           <Trail open={open}>
             <span>Johannes</span>
             <span>Sluis</span>
