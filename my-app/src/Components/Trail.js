@@ -11,6 +11,7 @@ const Trail = ({ open, children }) => {
     x: open ? 0 : 20,
     height: open ? 110 : 0,
     from: { opacity: 0, x: 20, height: 0 },
+    delay: 200
   })
   return (
     <div>

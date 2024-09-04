@@ -17,6 +17,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import { lightBlue } from '@mui/material/colors';
 import pfp from '../Pictures/profilepic.jpeg';
 import { animateScroll } from 'react-scroll';
+import { Link } from "react-router-dom";
 
 const pages = ['About', 'Resume', 'Projects', 'Random'];
 
@@ -61,12 +62,14 @@ function ResponsiveAppBar() {
   };
 
   return (
-    <AppBar position="static" color='white'>
+    <AppBar position="absolute" color='inherit'>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <IconButton onClick={goToHome}>
-            <HomeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, fontSize: 'large' }} />
-          </IconButton>
+          <Link to="/" style={{ textDecoration: 'none' }} >
+            <IconButton onClick={goToHome}>
+                <HomeIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1, fontSize: 'large' }} />
+            </IconButton>
+          </Link>
           <Typography
             variant="h6"
             noWrap
@@ -110,11 +113,15 @@ function ResponsiveAppBar() {
               onClose={handleCloseNavMenu}
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={ (e) => handleCloseNavMenu(e, page)}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                <MenuItem onClick={ (e) => handleCloseNavMenu(e)}>
+                    <Typography sx={{ textAlign: 'center' }}>About</Typography>
                 </MenuItem>
-              ))}
+                <MenuItem onClick={ (e) => handleCloseNavMenu(e)}>
+                    <Typography sx={{ textAlign: 'center' }}>Resume</Typography>
+                </MenuItem>
+                <MenuItem onClick={ (e) => handleCloseNavMenu(e)}>
+                    <Typography sx={{ textAlign: 'center' }}>Random</Typography>
+                </MenuItem>
             </Menu>
           </Box>
           <CastleIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
@@ -137,21 +144,55 @@ function ResponsiveAppBar() {
             LOGO
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            
               <Button
-                key={page}
-                onClick={ (e) => handleCloseNavMenu(e, page)}
+                onClick={ (e) => handleCloseNavMenu(e)}
                 sx={{ my: 2,
                       color: 'black',
                       display: 'block',
                       fontFamily: "Arial",
                       textTransform: 'none',
-                      fontSize: 20,
-                      fontWeight: 'bold'}}
+                      fontSize: 20,}}
               >
-                {page}
+                About
               </Button>
-            ))}
+
+              <Button
+                onClick={ (e) => handleCloseNavMenu(e)}
+                sx={{ my: 2,
+                      color: 'black',
+                      display: 'block',
+                      fontFamily: "Arial",
+                      textTransform: 'none',
+                      fontSize: 20,}}
+              >
+                Resume
+              </Button>
+
+              <Button
+                onClick={ (e) => handleCloseNavMenu(e)}
+                sx={{ my: 2,
+                      color: 'black',
+                      display: 'block',
+                      fontFamily: "Arial",
+                      textTransform: 'none',
+                      fontSize: 20,}}
+              >
+                Projects
+              </Button>
+             
+            <Link to="/Random" style={{ textDecoration: 'none' }} >
+                <Button
+                    sx={{ my: 2,
+                        color: 'black',
+                        display: 'block',
+                        fontFamily: "Arial",
+                        textTransform: 'none',
+                        fontSize: 20,}}
+                >
+                    Random
+                </Button>
+            </Link>
           </Box>
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
