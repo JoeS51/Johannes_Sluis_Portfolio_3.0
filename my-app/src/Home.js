@@ -1,16 +1,13 @@
 import React, { useState } from 'react'
 import { useTrail, a } from '@react-spring/web'
-
 import styles from './styles.module.css'
-
 import Trail from './Components/Trail'
 import { Parallax, ParallaxLayer } from '@react-spring/parallax'
-
 import ResponsiveAppBar from './Components/Navbar'
-
 import pfp from './Pictures/pfp.png'
-
 import resume from './Pictures/resume.pdf'
+import Stack from '@mui/material/Stack';
+import pic from './Pictures/profilepic.jpeg';
 
 export default function Home() {
   const [open, set] = useState(true)
@@ -39,9 +36,10 @@ export default function Home() {
           <Trail open={open}>
             <span>About Me</span>
           </Trail>
-          <h1>Hello, I'm Johannes (Joe) Sluis! I am currently a Senior at the University of Washington, studying Computer Science
-            and minoring in Business Administration. 
-          </h1>
+            <img src={pic} width="200" height="200"/>
+            <h1>Hello, I'm Johannes (Joe) Sluis! I am currently a Senior at the University of Washington, studying Computer Science
+                and minoring in Business Administration. 
+            </h1>
         </div>
         </ParallaxLayer>
 
