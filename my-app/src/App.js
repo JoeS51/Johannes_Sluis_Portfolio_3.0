@@ -10,6 +10,7 @@ import ResponsiveAppBar from './Components/Navbar'
 
 import Home from './Home'
 import Main from './Main'
+import Experience from './Experience'
 
 export default function App() {
   const [open, set] = useState(true)
@@ -17,7 +18,7 @@ export default function App() {
   return (
     <div>
       <ResponsiveAppBar/>
-      <Home />
+      <Home/>
     </div>
   )
 }

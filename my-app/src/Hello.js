@@ -73,10 +73,11 @@ export default function Grid() {
     to: {
       scale: 1,
     },
-    delay: i * 200,
+    delay: i * 100,
     config: {
-      mass: 2,
-      tension: 220,
+      mass: 1,
+      tension: 400,
+      friction: 20
     },
   }))
 
@@ -116,6 +117,7 @@ export default function Grid() {
               width={10}
               height={10}
               fill="currentColor"
+              speed={30}
               style={{
                 transformOrigin: `${5 + OFFSET * 2}px ${5 + OFFSET * 2}px`,
                 transform: `translate(${COORDS[index][0] + OFFSET}px, ${COORDS[index][1] + OFFSET}px)`,

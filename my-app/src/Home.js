@@ -8,6 +8,7 @@ import pfp from './Pictures/pfp.png'
 import resume from './Pictures/resume.pdf'
 import Stack from '@mui/material/Stack';
 import pic from './Pictures/profilepic.jpeg';
+import Experience from './Experience'
 
 export default function Home() {
   const [open, set] = useState(true)
@@ -19,8 +20,8 @@ export default function Home() {
         <div className={styles.container} id='root'>
           <img src={pfp}
             alt="Pfp"
-            width="200"
-            height="200"
+            width="250"
+            height="250"
             style={{ marginRight: '40px' }}
           />
           <Trail open={open}>
@@ -43,10 +44,12 @@ export default function Home() {
         </div>
         </ParallaxLayer>
 
-        <ParallaxLayer offset={2} speed={0} style={{ ...alignCenter, justifyContent: 'flex-end', backgroundColor: '#ced4da' }}>
-          <div className={styles.topcontainer} id='resume-section'>
-            <iframe src={resume} title="description" height="500" width="400"></iframe>
+        <ParallaxLayer offset={1.75} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#ebebeb' }}>
+          <div id='resume-section'>
+            <Experience/>
           </div>
+        </ParallaxLayer>
+        <ParallaxLayer offset={2.75} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#ebebeb' }}>
         </ParallaxLayer>
       </Parallax>
     </div>
