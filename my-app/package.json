@@ -14,12 +14,16 @@
     "@testing-library/user-event": "^13.5.0",
     "animejs": "^3.2.2",
     "bootstrap": "^5.3.3",
+    "clsx": "^2.1.1",
+    "framer-motion": "^11.5.4",
     "react": "^18.3.1",
     "react-bootstrap": "^2.10.4",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.26.1",
     "react-scripts": "5.0.1",
     "react-scroll": "^1.9.0",
+    "simplex-noise": "^4.0.3",
+    "tailwind-merge": "^2.5.2",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
@@ -45,5 +49,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.45",
+    "tailwindcss": "^3.4.10"
   }
 }

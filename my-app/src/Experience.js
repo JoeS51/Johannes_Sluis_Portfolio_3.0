@@ -73,7 +73,7 @@ const Experience = () => {
                 </ListItemButton>
                 </List>
                 {job == "Microsoft1" &&
-                <Grow in={job == "Microsoft1"} {...(job == "Microsoft1" ? { timeout: 1000 } : {})}>
+                <Grow in={job == "Microsoft1"} {...(job == "Microsoft1" ? { timeout: 750 } : {})}>
                     <Card border="light" style={{ width: '30rem' }}>
                         <Card.Header>Microsoft</Card.Header>
                         <Card.Body>
@@ -87,7 +87,7 @@ const Experience = () => {
                 </Grow>
                 }
                 {job == "Blue" &&
-                <Grow in={job == "Blue"} {...(job == "Blue" ? { timeout: 1000 } : {})}>
+                <Grow in={job == "Blue"} {...(job == "Blue" ? { timeout: 750 } : {})}>
                     <Card border="light" style={{ width: '30rem' }}>
                         <Card.Header>Blue Origin</Card.Header>
                         <Card.Body>
@@ -101,7 +101,7 @@ const Experience = () => {
                 </Grow>
                 }
                 {job == "Microsoft2" &&
-                <Grow in={job == "Microsoft2"} {...(job == "Microsoft2" ? { timeout: 1000 } : {})}>
+                <Grow in={job == "Microsoft2"} {...(job == "Microsoft2" ? { timeout: 750 } : {})}>
                     <Card border="light" style={{ width: '30rem' }}>
                         <Card.Header>Microsoft 2</Card.Header>
                         <Card.Body>
@@ -115,7 +115,7 @@ const Experience = () => {
                 </Grow>
                 }
                 {job == "Hcr" &&
-                <Grow in={job == "Hcr"} {...(job == "Hcr" ? { timeout: 1000 } : {})}>
+                <Grow in={job == "Hcr"} {...(job == "Hcr" ? { timeout: 750 } : {})}>
                     <Card border="light" style={{ width: '30rem' }}>
                         <Card.Header>HCR Lab</Card.Header>
                         <Card.Body>
@@ -129,7 +129,7 @@ const Experience = () => {
                 </Grow>
                 }
                 {job == "Cledge" &&
-                <Grow in={job == "Cledge"} {...(job == "Cledge" ? { timeout: 1000 } : {})}>
+                <Grow in={job == "Cledge"} {...(job == "Cledge" ? { timeout: 750 } : {})}>
                     <Card border="light" style={{ width: '30rem' }}>
                         <Card.Header>Cledge</Card.Header>
                         <Card.Body>
@@ -143,7 +143,7 @@ const Experience = () => {
                 </Grow>
                 }
                 {job == "Codeninjas" &&
-                <Grow in={job == "Codeninjas"} {...(job == "Codeninjas" ? { timeout: 1000 } : {})}>
+                <Grow in={job == "Codeninjas"} {...(job == "Codeninjas" ? { timeout: 750 } : {})}>
                     <Card border="light" style={{ width: '30rem' }}>
                         <Card.Header>Lead Instructor</Card.Header>
                         <Card.Body>

@@ -9,13 +9,18 @@ import resume from './Pictures/resume.pdf'
 import Stack from '@mui/material/Stack';
 import pic from './Pictures/profilepic.jpeg';
 import Experience from './Experience'
+import Divider from '@mui/material/Divider';
+import Signature from './Components/Signature'
+import { WavyBackground } from './Components/Wave'
 
 export default function Home() {
   const [open, set] = useState(true)
   const alignCenter = { display: 'flex', alignItems: 'center' }
+
   return (
     <div>
       <Parallax pages={3}>
+      <WavyBackground className="max-w-4xl mx-auto pb-40">
         <ParallaxLayer offset={0} speed={0} style={{ ...alignCenter, justifyContent: 'center' }}>
         <div className={styles.container} id='root'>
           <img src={pfp}
@@ -31,9 +36,9 @@ export default function Home() {
           </Trail>
         </div>
         </ParallaxLayer>
-
-        <ParallaxLayer offset={1} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#ebebeb'}}>
-        <div className={styles.topcontainer} id='about'>
+        </WavyBackground>
+        <ParallaxLayer id='about' offset={1} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#ebebeb'}}>
+        <div className={styles.topcontainer}>
           <Trail open={open}>
             <span>About Me</span>
           </Trail>
@@ -42,8 +47,9 @@ export default function Home() {
                 and minoring in Business Administration. 
             </h1>
         </div>
+        <Divider flexItem orientation="horizontal" sx={{ bgcolor: "secondary.light" }} />
         </ParallaxLayer>
-
+        
         <ParallaxLayer offset={1.75} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#ebebeb' }}>
           <div id='resume-section'>
             <Experience/>
