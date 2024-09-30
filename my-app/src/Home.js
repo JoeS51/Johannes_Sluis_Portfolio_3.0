@@ -37,25 +37,25 @@ export default function Home() {
         </div>
         </ParallaxLayer>
         </WavyBackground>
-        <ParallaxLayer id='about' offset={1} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#ebebeb'}}>
+        <ParallaxLayer id='about' offset={1} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#f2f6fc'}}>
         <div className={styles.topcontainer}>
           <Trail open={open}>
             <span>About Me</span>
           </Trail>
-            <img src={pic} width="200" height="200"/>
-            <h1>Hello, I'm Johannes (Joe) Sluis! I am currently a Senior at the University of Washington, studying Computer Science
-                and minoring in Business Administration. 
-            </h1>
+          <img src={pic} width="200" height="200" style={{ margin: '20px 0' }}/>
+          <h1>Hello, I'm Johannes (Joe) Sluis! I am currently a Senior at the University of Washington, studying Computer Science
+              and minoring in Business Administration. 
+          </h1>
         </div>
         <Divider flexItem orientation="horizontal" sx={{ bgcolor: "secondary.light" }} />
         </ParallaxLayer>
         
-        <ParallaxLayer offset={1.75} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#ebebeb' }}>
+        <ParallaxLayer offset={1.75} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#f2f6fc' }}>
           <div id='resume-section'>
             <Experience/>
           </div>
         </ParallaxLayer>
-        <ParallaxLayer offset={2.75} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#ebebeb' }}>
+        <ParallaxLayer offset={2.75} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#f2f6fc' }}>
         </ParallaxLayer>
       </Parallax>
     </div>

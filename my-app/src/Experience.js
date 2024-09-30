@@ -18,11 +18,14 @@ import Blue from './Pictures/bo.jpeg'
 import hcr from './Pictures/hcr_logo.svg'
 import Cledge from './Pictures/cledge.jpeg'
 import Codeninjas from './Pictures/codeninjas.png'
+import Azure from './Pictures/azure.png'
+import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import Ace from './Pictures/ace.png'
 import ListItemButton from '@mui/material/ListItemButton';
 
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
+import { motion } from 'framer-motion';
 
 import Grow from '@mui/material/Grow';
 
@@ -74,13 +77,24 @@ const Experience = () => {
                 </List>
                 {job == "Microsoft1" &&
                 <Grow in={job == "Microsoft1"} {...(job == "Microsoft1" ? { timeout: 750 } : {})}>
-                    <Card border="light" style={{ width: '30rem' }}>
+                    <Card border="light" style={{ width: '40rem' }}>
                         <Card.Header>Microsoft</Card.Header>
                         <Card.Body>
-                        <Card.Title>Light Card Title</Card.Title>
+                        <Card.Title>Azure Arc SQL Server Team</Card.Title>
                         <Card.Text>
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
+                             <ul>
+                                <br></br>
+                                <li>Developed automated tooling to generate analysis reports for simulations to ensure mission objectives are met</li>
+                                <br></br>
+                                <li>Engineered over 15 configurations of the rocket’s Monte-Carlo simulations, ensuring efficacy and safety</li>
+                            </ul>
+                            <br></br>
+                            <motion.div
+                            animate={{ rotate: [0, 360] }} // Rotate from 0 to 360 degrees
+                            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                            >
+                                <img src={Azure} height={100} width={100} />
+                            </motion.div>
                         </Card.Text>
                         </Card.Body>
                     </Card>
@@ -88,13 +102,25 @@ const Experience = () => {
                 }
                 {job == "Blue" &&
                 <Grow in={job == "Blue"} {...(job == "Blue" ? { timeout: 750 } : {})}>
-                    <Card border="light" style={{ width: '30rem' }}>
+                    <Card border="light" style={{ width: '40rem' }}>
                         <Card.Header>Blue Origin</Card.Header>
                         <Card.Body>
-                        <Card.Title>Light Card Title</Card.Title>
+                        <Card.Title>New Glenn Guidance & Control</Card.Title>
                         <Card.Text>
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
+                            <ul>
+                                <br></br>
+                                <li>Developed automated tooling to generate analysis reports for simulations to ensure mission objectives are met</li>
+                                <br></br>
+                                <li>Engineered over 15 configurations of the rocket’s Monte-Carlo simulations, ensuring efficacy and safety</li>
+                            </ul>
+                            <br></br>
+                            <motion.div
+                                animate={{ x: [0, 500, 0] }}  // Move 30px to the right and back
+                                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                                >
+                                <RocketLaunchIcon
+                                fontSize="large" />
+                            </motion.div>
                         </Card.Text>
                         </Card.Body>
                     </Card>
@@ -102,13 +128,19 @@ const Experience = () => {
                 }
                 {job == "Microsoft2" &&
                 <Grow in={job == "Microsoft2"} {...(job == "Microsoft2" ? { timeout: 750 } : {})}>
-                    <Card border="light" style={{ width: '30rem' }}>
-                        <Card.Header>Microsoft 2</Card.Header>
+                    <Card border="light" style={{ width: '40rem' }}>
+                        <Card.Header>Microsoft</Card.Header>
                         <Card.Body>
-                        <Card.Title>Light Card Title</Card.Title>
+                        <Card.Title>Azure Arc SQL Server Team</Card.Title>
                         <Card.Text>
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
+                            <ul>
+                                <br></br>
+                                <li>Migrated Backup/Restore settings into SQL Server instances for Arc-enabled SQL Servers to allow 16,000+
+                                enterprise partners and <span style={{ color: 'green' }}>over 140,000 SQL Server instances</span> to have configuration settings for backup properties</li>
+                                <br></br>
+                                <li>Developed and integrated back end and front end solutions for the Azure Portal, using C#, REST APIs, .NET,
+                                React, and TypeScript to enhance the Backup and Restore tab for SQL Server instances</li>
+                            </ul>
                         </Card.Text>
                         </Card.Body>
                     </Card>
@@ -116,27 +148,35 @@ const Experience = () => {
                 }
                 {job == "Hcr" &&
                 <Grow in={job == "Hcr"} {...(job == "Hcr" ? { timeout: 750 } : {})}>
-                    <Card border="light" style={{ width: '30rem' }}>
+                    <Card border="light" style={{ width: '40rem' }}>
                         <Card.Header>HCR Lab</Card.Header>
                         <Card.Body>
-                        <Card.Title>Light Card Title</Card.Title>
-                        <Card.Text>
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
-                        </Card.Text>
+                        <Card.Title>Stretch Robot</Card.Title>
+                            <ul>
+                                <br></br>
+                                <li>Collaborated with Hello Robot researchers to develop and deploy an improved interface for the Stretch Robot,
+                                enhancing client independence by reducing task completion time by over 80%</li>
+                                <br></br>
+                                <li>Co-authoring the paper “Inquiries during Programming by Demonstration to Reduce User Burden” to facilitate
+                                easier control of the robot for individuals with motor impairments</li>
+                            </ul>
                         </Card.Body>
                     </Card>
                 </Grow>
                 }
                 {job == "Cledge" &&
                 <Grow in={job == "Cledge"} {...(job == "Cledge" ? { timeout: 750 } : {})}>
-                    <Card border="light" style={{ width: '30rem' }}>
+                    <Card border="light" style={{ width: '40rem' }}>
                         <Card.Header>Cledge</Card.Header>
                         <Card.Body>
                         <Card.Title>Light Card Title</Card.Title>
                         <Card.Text>
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
+                            <ul>
+                                <br></br>
+                                <li>Developed automated tooling to generate analysis reports for simulations to ensure mission objectives are met</li>
+                                <br></br>
+                                <li>Engineered over 15 configurations of the rocket’s Monte-Carlo simulations, ensuring efficacy and safety</li>
+                            </ul>
                         </Card.Text>
                         </Card.Body>
                     </Card>
@@ -144,13 +184,17 @@ const Experience = () => {
                 }
                 {job == "Codeninjas" &&
                 <Grow in={job == "Codeninjas"} {...(job == "Codeninjas" ? { timeout: 750 } : {})}>
-                    <Card border="light" style={{ width: '30rem' }}>
+                    <Card border="light" style={{ width: '40rem' }}>
                         <Card.Header>Lead Instructor</Card.Header>
                         <Card.Body>
                         <Card.Title>Code Ninjas</Card.Title>
                         <Card.Text>
-                            Some quick example text to build on the card title and make up the
-                            bulk of the card's content.
+                            <ul>
+                                <br></br>
+                                <li>Developed automated tooling to generate analysis reports for simulations to ensure mission objectives are met</li>
+                                <br></br>
+                                <li>Engineered over 15 configurations of the rocket’s Monte-Carlo simulations, ensuring efficacy and safety</li>
+                            </ul>
                         </Card.Text>
                         </Card.Body>
                     </Card>

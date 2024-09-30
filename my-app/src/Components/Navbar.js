@@ -77,7 +77,7 @@ function ResponsiveAppBar() {
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
+              fontFamily: 'Helvetica',
               fontWeight: 700,
               letterSpacing: '.3rem',
               color: 'inherit',
@@ -134,7 +134,7 @@ function ResponsiveAppBar() {
               mr: 2,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
-              fontFamily: 'monospace',
+              fontFamily: 'Helvetica',
               fontWeight: 700,
               letterSpacing: '.3rem',
               color: 'inherit',
@@ -150,7 +150,7 @@ function ResponsiveAppBar() {
                 sx={{ my: 2,
                       color: 'black',
                       display: 'block',
-                      fontFamily: "Arial",
+                      fontFamily: "Helvetica",
                       textTransform: 'none',
                       fontSize: 20,}}
               >
@@ -162,7 +162,7 @@ function ResponsiveAppBar() {
                 sx={{ my: 2,
                       color: 'black',
                       display: 'block',
-                      fontFamily: "Arial",
+                      fontFamily: "Helvetica",
                       textTransform: 'none',
                       fontSize: 20,}}
               >
@@ -174,7 +174,7 @@ function ResponsiveAppBar() {
                 sx={{ my: 2,
                       color: 'black',
                       display: 'block',
-                      fontFamily: "Arial",
+                      fontFamily: "Helvetica",
                       textTransform: 'none',
                       fontSize: 20,}}
               >
@@ -186,7 +186,7 @@ function ResponsiveAppBar() {
                     sx={{ my: 2,
                         color: 'black',
                         display: 'block',
-                        fontFamily: "Arial",
+                        fontFamily: "Helvetica",
                         textTransform: 'none',
                         fontSize: 20,}}
                 >

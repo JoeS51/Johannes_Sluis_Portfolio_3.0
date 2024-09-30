@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .trailsText {
     position: relative;
     width: 100%;
@@ -82,3 +81,13 @@
     width: 50vw;
     margin: 0 auto;
   }
+
+  ul {
+    list-style-type: disc; /* Ensures the bullets are shown */
+    margin-left: 20px; /* Adds indentation */
+    font-size: 18px;
+}
+
+li {
+    margin-bottom: 10px; /* Optional: Adds space between list items */
+}
