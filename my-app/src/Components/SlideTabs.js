@@ -3,7 +3,9 @@ import { motion } from "framer-motion";
 
 export const SlideTabsExample = () => {
   return (
-    <SlideTabs />
+    <div className="pt-4">
+      <SlideTabs />
+    </div>
   );
 };
 

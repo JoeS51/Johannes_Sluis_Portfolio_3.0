@@ -70,7 +70,7 @@ export default function Home() {
                 alt="Pfp"
                 width="250"
                 height="250"
-                style={{ marginRight: '40px' }}
+                style={{ marginTop: '-120px' }}
               />
             </motion.div>
 
@@ -89,17 +89,19 @@ export default function Home() {
                 src={pic}
                 width="250"
                 height="250"
-                style={{ margin: '20px 0' }}
+                style={{ marginTop: '-120px' }}
                 alt="Profile Pic"
               />
             </motion.div>
           </motion.div>
         </motion.div>
+        <div style={{marginLeft: '50px', marginTop: '-250px' }}>
           <Trail open={open}>
             <span>Johannes</span>
             <span>Sluis</span>
             <span>Portfolio</span>
           </Trail>
+        </div>
         </div>
         </ParallaxLayer>
         </WavyBackground>
