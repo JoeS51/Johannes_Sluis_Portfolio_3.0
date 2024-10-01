@@ -11,13 +11,15 @@ import ResponsiveAppBar from './Components/Navbar'
 import Home from './Home'
 import Main from './Main'
 import Experience from './Experience'
+import { SlideTabsExample } from './Components/SlideTabs.js'
 
 export default function App() {
   const [open, set] = useState(true)
   const alignCenter = { display: 'flex', alignItems: 'center' }
   return (
     <div>
-      <ResponsiveAppBar/>
+      {/* <ResponsiveAppBar/> */}
+      <SlideTabsExample/>
       <Home/>
     </div>
   )
