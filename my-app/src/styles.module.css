@@ -76,14 +76,14 @@
     margin: 0 auto;
   }
 
-  ul {
-    list-style-type: disc; /* Ensures the bullets are shown */
-    margin-left: 20px; /* Adds indentation */
-    font-size: 18px;
+.list {
+  list-style-type: disc; /* Ensures the bullets are shown */
+  margin-left: 20px; /* Adds indentation */
+  font-size: 18px;
 }
 
-li {
-    margin-bottom: 10px; /* Optional: Adds space between list items */
+.listItem {
+  margin-bottom: 10px; /* Optional: Adds space between list items */
 }
 
 .front,

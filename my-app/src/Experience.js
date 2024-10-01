@@ -82,11 +82,11 @@ const Experience = () => {
                         <Card.Body>
                         <Card.Title>Azure Arc SQL Server Team</Card.Title>
                         <Card.Text>
-                             <ul>
+                             <ul className={styles.list}>
                                 <br></br>
-                                <li>Developed automated tooling to generate analysis reports for simulations to ensure mission objectives are met</li>
+                                <li className={styles.listItem}>Developed automated tooling to generate analysis reports for simulations to ensure mission objectives are met</li>
                                 <br></br>
-                                <li>Engineered over 15 configurations of the rocket’s Monte-Carlo simulations, ensuring efficacy and safety</li>
+                                <li className={styles.listItem}>Engineered over 15 configurations of the rocket’s Monte-Carlo simulations, ensuring efficacy and safety</li>
                             </ul>
                             <br></br>
                             <motion.div
@@ -107,11 +107,11 @@ const Experience = () => {
                         <Card.Body>
                         <Card.Title>New Glenn Guidance & Control</Card.Title>
                         <Card.Text>
-                            <ul>
+                            <ul className={styles.list}>
                                 <br></br>
-                                <li>Developed automated tooling to generate analysis reports for simulations to ensure mission objectives are met</li>
+                                <li className={styles.listItem}>Developed automated tooling to generate analysis reports for simulations to ensure mission objectives are met</li>
                                 <br></br>
-                                <li>Engineered over 15 configurations of the rocket’s Monte-Carlo simulations, ensuring efficacy and safety</li>
+                                <li className={styles.listItem}>Engineered over 15 configurations of the rocket’s Monte-Carlo simulations, ensuring efficacy and safety</li>
                             </ul>
                             <br></br>
                             <motion.div
@@ -133,12 +133,12 @@ const Experience = () => {
                         <Card.Body>
                         <Card.Title>Azure Arc SQL Server Team</Card.Title>
                         <Card.Text>
-                            <ul>
+                            <ul className={styles.list}>
                                 <br></br>
-                                <li>Migrated Backup/Restore settings into SQL Server instances for Arc-enabled SQL Servers to allow 16,000+
+                                <li className={styles.listItem}>Migrated Backup/Restore settings into SQL Server instances for Arc-enabled SQL Servers to allow 16,000+
                                 enterprise partners and <span style={{ color: 'green' }}>over 140,000 SQL Server instances</span> to have configuration settings for backup properties</li>
                                 <br></br>
-                                <li>Developed and integrated back end and front end solutions for the Azure Portal, using C#, REST APIs, .NET,
+                                <li className={styles.listItem}>Developed and integrated back end and front end solutions for the Azure Portal, using C#, REST APIs, .NET,
                                 React, and TypeScript to enhance the Backup and Restore tab for SQL Server instances</li>
                             </ul>
                         </Card.Text>
@@ -152,12 +152,12 @@ const Experience = () => {
                         <Card.Header>HCR Lab</Card.Header>
                         <Card.Body>
                         <Card.Title>Stretch Robot</Card.Title>
-                            <ul>
+                            <ul className={styles.list}>
                                 <br></br>
-                                <li>Collaborated with Hello Robot researchers to develop and deploy an improved interface for the Stretch Robot,
+                                <li className={styles.listItem}>Collaborated with Hello Robot researchers to develop and deploy an improved interface for the Stretch Robot,
                                 enhancing client independence by reducing task completion time by over 80%</li>
                                 <br></br>
-                                <li>Co-authoring the paper “Inquiries during Programming by Demonstration to Reduce User Burden” to facilitate
+                                <li className={styles.listItem}>Co-authoring the paper “Inquiries during Programming by Demonstration to Reduce User Burden” to facilitate
                                 easier control of the robot for individuals with motor impairments</li>
                             </ul>
                         </Card.Body>
@@ -171,11 +171,11 @@ const Experience = () => {
                         <Card.Body>
                         <Card.Title>Light Card Title</Card.Title>
                         <Card.Text>
-                            <ul>
+                            <ul className={styles.list}>
                                 <br></br>
-                                <li>Developed automated tooling to generate analysis reports for simulations to ensure mission objectives are met</li>
+                                <li className={styles.listItem}>Developed automated tooling to generate analysis reports for simulations to ensure mission objectives are met</li>
                                 <br></br>
-                                <li>Engineered over 15 configurations of the rocket’s Monte-Carlo simulations, ensuring efficacy and safety</li>
+                                <li className={styles.listItem}>Engineered over 15 configurations of the rocket’s Monte-Carlo simulations, ensuring efficacy and safety</li>
                             </ul>
                         </Card.Text>
                         </Card.Body>
@@ -189,11 +189,11 @@ const Experience = () => {
                         <Card.Body>
                         <Card.Title>Code Ninjas</Card.Title>
                         <Card.Text>
-                            <ul>
+                            <ul className={styles.list}>
                                 <br></br>
-                                <li>Developed automated tooling to generate analysis reports for simulations to ensure mission objectives are met</li>
+                                <li className={styles.listItem}>Developed automated tooling to generate analysis reports for simulations to ensure mission objectives are met</li>
                                 <br></br>
-                                <li>Engineered over 15 configurations of the rocket’s Monte-Carlo simulations, ensuring efficacy and safety</li>
+                                <li className={styles.listItem}>Engineered over 15 configurations of the rocket’s Monte-Carlo simulations, ensuring efficacy and safety</li>
                             </ul>
                         </Card.Text>
                         </Card.Body>
