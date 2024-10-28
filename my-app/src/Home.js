@@ -18,21 +18,24 @@ export default function Home() {
   const [open, set] = useState(true)
   const [flip, setFlip] = useState(false);
   const alignCenter = { display: 'flex', alignItems: 'center' }
+  const words = ['Student', 'Developer', 'Leader'];
+  const [visibleWord, setVisibleWord] = useState('');
+  const [rotation, setRotation] = useState(0);
+  const [position, setPosition] = useState({ top: 0, left: 0 });
 
   useEffect(() => {
     // Set an interval to flip the card every 5 seconds (adjust as needed)
     const interval = setInterval(() => {
       setFlip((prevFlip) => !prevFlip); // Toggle the flip state
     }, 5000); // Flip every 5 seconds
-
-    // Clean up the interval when the component unmounts
+    
     return () => clearInterval(interval);
   }, []);
 
   return (
     <div className="p-0">
-      <Parallax pages={3}>
-      <WavyBackground className="max-w-4xl mx-auto pb-40">
+      <Parallax pages={4}>
+      <WavyBackground className="max-w-4xl mx-auto pb-100">
       <ParallaxLayer
         offset={0}
         speed={0}
@@ -70,7 +73,7 @@ export default function Home() {
                 alt="Pfp"
                 width="250"
                 height="250"
-                style={{ marginTop: '-120px' }}
+                style={{ marginTop: '-190px' }}
               />
             </motion.div>
 
@@ -89,13 +92,13 @@ export default function Home() {
                 src={pic}
                 width="250"
                 height="250"
-                style={{ marginTop: '-120px' }}
+                style={{ marginTop: '-190px' }}
                 alt="Profile Pic"
               />
             </motion.div>
           </motion.div>
         </motion.div>
-        <div style={{marginLeft: '50px', marginTop: '-250px' }}>
+        <div style={{marginLeft: '50px', marginTop: '-380px' }}>
           <Trail open={open}>
             <span>Johannes</span>
             <span>Sluis</span>
@@ -118,12 +121,12 @@ export default function Home() {
         <Divider flexItem orientation="horizontal" sx={{ bgcolor: "secondary.light" }} />
         </ParallaxLayer>
         
-        <ParallaxLayer offset={1.75} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#f2f6fc' }}>
+        <ParallaxLayer offset={2} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#ffffff' }}>
           <div id='resume-section'>
             <Experience/>
           </div>
         </ParallaxLayer>
-        <ParallaxLayer offset={2.75} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#f2f6fc' }}>
+        <ParallaxLayer offset={2.75} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#ffffff' }}>
         </ParallaxLayer>
       </Parallax>
     </div>
