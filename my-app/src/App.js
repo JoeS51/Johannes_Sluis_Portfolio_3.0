@@ -11,7 +11,7 @@ import ResponsiveAppBar from './Components/Navbar'
 import Home from './Home'
 import Main from './Main'
 import Experience from './Experience'
-import { SlideTabsExample } from './Components/SlideTabs.js'
+import { SlideTabs } from './Components/SlideTabs.js'
 
 export default function App() {
   const [open, set] = useState(true)
@@ -19,7 +19,7 @@ export default function App() {
   return (
     <div>
       {/* <ResponsiveAppBar/> */}
-      <SlideTabsExample/>
+      {/* <SlideTabs/> */}
       <Home/>
     </div>
   )

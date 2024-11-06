@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { useTrail, a } from '@react-spring/web'
 import styles from './styles.module.css'
 import Trail from './Components/Trail'
@@ -13,6 +13,7 @@ import Divider from '@mui/material/Divider';
 import Signature from './Components/Signature'
 import { WavyBackground } from './Components/Wave'
 import { motion } from "framer-motion";
+import { SlideTabs } from './Components/SlideTabs.js'
 
 export default function Home() {
   const [open, set] = useState(true)
@@ -22,6 +23,7 @@ export default function Home() {
   const [visibleWord, setVisibleWord] = useState('');
   const [rotation, setRotation] = useState(0);
   const [position, setPosition] = useState({ top: 0, left: 0 });
+  const parallaxRef = useRef();
 
   useEffect(() => {
     // Set an interval to flip the card every 5 seconds (adjust as needed)
@@ -33,8 +35,9 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="p-0">
-      <Parallax pages={4}>
+    <div className="p-0" id="home">
+      <SlideTabs parallaxRef={parallaxRef} />
+      <Parallax ref={parallaxRef} pages={4}>
       <WavyBackground className="max-w-4xl mx-auto pb-100">
       <ParallaxLayer
         offset={0}
@@ -73,7 +76,7 @@ export default function Home() {
                 alt="Pfp"
                 width="250"
                 height="250"
-                style={{ marginTop: '-190px' }}
+                style={{ marginTop: '-100px' }}
               />
             </motion.div>
 
@@ -92,13 +95,13 @@ export default function Home() {
                 src={pic}
                 width="250"
                 height="250"
-                style={{ marginTop: '-190px' }}
+                style={{ marginTop: '-100px' }}
                 alt="Profile Pic"
               />
             </motion.div>
           </motion.div>
         </motion.div>
-        <div style={{marginLeft: '50px', marginTop: '-380px' }}>
+        <div style={{marginLeft: '50px', marginTop: '-220px' }}>
           <Trail open={open}>
             <span>Johannes</span>
             <span>Sluis</span>
@@ -121,7 +124,7 @@ export default function Home() {
         <Divider flexItem orientation="horizontal" sx={{ bgcolor: "secondary.light" }} />
         </ParallaxLayer>
         
-        <ParallaxLayer offset={2} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#ffffff' }}>
+        <ParallaxLayer offset={2} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#aeb0ae' }}>
           <div id='resume-section'>
             <Experience/>
           </div>
