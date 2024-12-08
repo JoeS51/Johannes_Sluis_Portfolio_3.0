@@ -117,13 +117,13 @@ export default function Home() {
               <span>About Me 😃</span>
             </Trail>
             {/* <img src={pic} width="200" height="200" style={{ margin: '20px 0' }}/> */}
-            <h1 style={{ marginTop: '100px' }}>Hi, I'm Johannes (Joe) Sluis! I'm a Senior at the University of Washington, majoring in Computer Science with a minor in Business Administration. While I have strong experience in front-end development, I'm eager to broaden my skill set and explore new areas of software engineering. As I approach graduation, I'm focused on learning as much as possible to prepare for the next chapter in my career.<br></br><br></br>Feel free to message me with any questions or opportunities!
+            <h1 style={{ marginTop: '100px' }}>Hi, I'm Johannes (Joe) Sluis! I'm a Senior at the University of Washington, majoring in Computer Science with a minor in Business Administration. While I have strong experience in front-end development, I'm eager to broaden my skill set and explore new areas of software engineering. As I approach graduation, I'm focused on learning as much as possible!<br></br><br></br>Feel free to message me with any questions or opportunities!
             </h1>
           </div>
           <Divider flexItem orientation="horizontal" sx={{ bgcolor: "secondary.light" }} />
         </ParallaxLayer>
 
-        <ParallaxLayer offset={1.5} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#F5F5F5' }}>
+        <ParallaxLayer offset={1.75} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#FFF' }}>
           <div id='resume-section' style={{ display: "flex", flexDirection: "column", gap: "150px" }}>
             <Trail open={open} style={{ marginBottom: '400px' }}>
               <center><span>Experience 📊</span></center>
