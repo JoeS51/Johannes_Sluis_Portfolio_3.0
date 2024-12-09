@@ -22,7 +22,7 @@ export const SlideTabs = ({ parallaxRef }) => {
         <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={0}>Home</Tab>
         <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={1}>About Me</Tab>
         <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={2}>Experience</Tab>
-        <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={3}>Projects</Tab>
+        <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={3.3}>Projects</Tab>
         <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={3.5}>Contact</Tab>
         <Cursor position={position} />
       </ul>
@@ -37,7 +37,7 @@ const Tab = ({ children, setPosition, parallaxRef, offset }) => {
   const handleClick = (event) => {
     event.preventDefault();
     if (parallaxRef.current) {
-      parallaxRef.current.scrollTo(offset);
+      parallaxRef.current.scrollTo(offset * 0.95);
     }
   };
 
@@ -58,9 +58,8 @@ const Tab = ({ children, setPosition, parallaxRef, offset }) => {
         setIsHovered(false);
       }}
       onClick={handleClick}
-      className={`relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase transition-colors duration-200 md:px-5 md:py-3 md:text-base ${
-        isHovered ? 'text-white mix-blend-difference' : 'text-black'
-      }`}
+      className={`relative z-10 block cursor-pointer px-3 py-1.5 text-xs uppercase transition-colors duration-200 md:px-5 md:py-3 md:text-base ${isHovered ? 'text-white mix-blend-difference' : 'text-black'
+        }`}
     >
       {children}
     </li>

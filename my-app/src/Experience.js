@@ -92,6 +92,12 @@ const Experience = () => {
                                     <motion.div
                                         animate={{ rotate: [0, 360] }} // Rotate from 0 to 360 degrees
                                         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                                        style={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            transformOrigin: "center", // Ensures rotation happens around the center
+                                        }}
                                     >
                                         <img src={Azure} height={100} width={100} />
                                     </motion.div>
