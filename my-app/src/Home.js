@@ -144,9 +144,9 @@ export default function Home() {
             <Divider
               sx={{
                 bgcolor: "#e0e0e0",
-                height: "4px", // Thickness of the border
-                width: "70%", // Adjust to match your layout
-                margin: "0 auto", // Center the divider
+                height: "4px",
+                width: "70%",
+                margin: "0 auto",
                 marginTop: "250px"
               }}
             />

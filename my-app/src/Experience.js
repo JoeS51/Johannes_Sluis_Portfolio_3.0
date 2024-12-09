@@ -22,6 +22,8 @@ import Azure from './Pictures/azure.png'
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import Ace from './Pictures/ace.png'
 import ListItemButton from '@mui/material/ListItemButton';
+import robot from './Pictures/robot.png'
+import ninja from './Pictures/ninja.png'
 
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
@@ -162,11 +164,17 @@ const Experience = () => {
                                     <br></br>
                                     <li className={styles.listItem}>Collaborated with Hello Robot researchers to develop and deploy an improved interface for the Stretch Robot,
                                         enhancing client independence by reducing task completion time by over 80%</li>
-                                    <br></br>
+
                                     <li className={styles.listItem}>Co-authoring the paper “Inquiries during Programming by Demonstration to Reduce User Burden” to facilitate
                                         easier control of the robot for individuals with motor impairments</li>
                                 </ul>
                             </Card.Body>
+                            <motion.div
+                                animate={{ x: [200, 300, 200] }}  // Move 30px to the right and back
+                                transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+                            >
+                                <img src={robot} height={100} width={100} />
+                            </motion.div>
                         </Card>
                     </Grow>
                 }
@@ -175,13 +183,13 @@ const Experience = () => {
                         <Card border="light" style={{ width: '40rem' }}>
                             <Card.Header>Cledge</Card.Header>
                             <Card.Body>
-                                <Card.Title>Light Card Title</Card.Title>
+                                <Card.Title>Full Stack Developer</Card.Title>
                                 <Card.Text>
                                     <ul className={styles.list}>
                                         <br></br>
-                                        <li className={styles.listItem}>Developed automated tooling to generate analysis reports for simulations to ensure mission objectives are met</li>
+                                        <li className={styles.listItem}>Spearheaded the development of key features for our accessible college counseling platform, resulting in a successful demonstration at the 2023 Dempsey competition and securing a $25,000 grantfor our start-up</li>
                                         <br></br>
-                                        <li className={styles.listItem}>Engineered over 15 configurations of the rocket’s Monte-Carlo simulations, ensuring efficacy and safety</li>
+                                        <li className={styles.listItem}>Enhanced our platform's experience for our 100+ users with Next.js, REST API and Azure Cosmo DB</li>
                                     </ul>
                                 </Card.Text>
                             </Card.Body>
@@ -197,11 +205,23 @@ const Experience = () => {
                                 <Card.Text>
                                     <ul className={styles.list}>
                                         <br></br>
-                                        <li className={styles.listItem}>Developed automated tooling to generate analysis reports for simulations to ensure mission objectives are met</li>
+                                        <li className={styles.listItem}>Taught the game development process to over 100 different students through platforms ranging from scratch to the Unity game engine where students created complex games to eventually publish them on the appstore and itch.io</li>
                                         <br></br>
-                                        <li className={styles.listItem}>Engineered over 15 configurations of the rocket’s Monte-Carlo simulations, ensuring efficacy and safety</li>
                                     </ul>
                                 </Card.Text>
+                                <motion.div
+                                    animate={{
+                                        x: [200, 300, 200],
+                                        y: [0, -50, 0], // Moves up, then down
+                                    }}
+                                    transition={{
+                                        duration: 1,
+                                        repeat: Infinity,
+                                        repeatType: "loop",
+                                    }}
+                                >
+                                    <img src={ninja} width={100} height={100} />
+                                </motion.div>
                             </Card.Body>
                         </Card>
                     </Grow>
