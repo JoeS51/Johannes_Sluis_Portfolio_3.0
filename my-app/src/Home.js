@@ -14,6 +14,7 @@ import Signature from './Components/Signature'
 import { WavyBackground } from './Components/Wave'
 import { motion } from "framer-motion";
 import { SlideTabs } from './Components/SlideTabs.js'
+import Projects from './Components/Projects.js'
 
 export default function Home() {
   const [open, set] = useState(true)
@@ -152,6 +153,7 @@ export default function Home() {
             />
             <Trail open={open} style={{ marginBottom: '400px' }}>
               <center><span>Projects 💻</span></center>
+              <Projects></Projects>
             </Trail>
           </div>
         </ParallaxLayer>
