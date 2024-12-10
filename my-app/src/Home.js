@@ -15,7 +15,9 @@ import { WavyBackground } from './Components/Wave'
 import { motion } from "framer-motion";
 import { SlideTabs } from './Components/SlideTabs.js'
 import Projects from './Components/Projects.js'
-
+import Algoviz from './Pictures/algoviz.JPG'
+import Contact from './Components/Contact.js'
+import DarkMode from './Components/DarkMode.js'
 export default function Home() {
   const [open, set] = useState(true)
   const [flip, setFlip] = useState(false);
@@ -38,6 +40,7 @@ export default function Home() {
   return (
     <div className="p-0" id="home">
       <SlideTabs parallaxRef={parallaxRef} />
+      <DarkMode />
       <Parallax ref={parallaxRef} pages={5}>
         <WavyBackground className="max-w-4xl mx-auto pb-100">
           <ParallaxLayer
@@ -153,10 +156,13 @@ export default function Home() {
             />
             <Trail open={open} style={{ marginBottom: '400px' }}>
               <center><span>Projects 💻</span></center>
-              <Projects></Projects>
             </Trail>
+
+            <Projects></Projects>
+            <Contact />
           </div>
         </ParallaxLayer>
+
       </Parallax>
     </div >
   )

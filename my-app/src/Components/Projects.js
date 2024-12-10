@@ -9,46 +9,89 @@ import {
     CardActionArea,
 } from "@mui/material";
 import { motion } from "framer-motion";
+import algoviz from '../Pictures/algoviz.JPG'
+import jenni from '../Pictures/jenni.JPG'
+import spotlite from '../Pictures/spotlite.JPG'
 
 const projects = [
     {
         title: "Portfolio Website",
         description: "A personal portfolio showcasing my projects and skills.",
-        image: "/images/portfolio.png",
+        image: jenni,
         link: "https://example.com/portfolio",
     },
     {
         title: "Chat Application",
         description: "A real-time chat app with WebSocket integration.",
-        image: "/images/chatapp.png",
+        image: spotlite,
         link: "https://example.com/chatapp",
     },
     {
         title: "AI Productivity Tool",
         description: "An AI-powered app for boosting productivity.",
-        image: "/images/ai-productivity.png",
+        image: algoviz,
         link: "https://example.com/ai-tool",
     },
+    {
+        title: "test",
+        description: "test",
+        image: algoviz,
+        link: "test"
+    }
 ];
 
 const ProjectCard = () => {
     return (
-        <Box sx={{ flexGrow: 1, padding: 4 }}>
-            <Grid container spacing={4}>
+        <Box sx={{ flexGrow: 1, padding: 4, display: 'flex', justifyContent: 'center' }}>
+            <Grid
+                container
+                spacing={2}
+                sx={{
+                    maxWidth: 1200,
+                    justifyContent: 'center',
+                    alignItems: 'stretch',
+                    gap: "10px",
+                }}
+            >
                 {projects.map((project, index) => (
-                    <Grid item xs={12} sm={6} md={4} key={index}>
+                    <Grid
+                        item
+                        xs={12}
+                        sm={6}
+                        md={4}
+                        key={index}
+                        sx={{
+                            display: 'flex',
+                            justifyContent: 'center'
+                        }}
+                    >
                         <motion.div
                             whileHover={{ scale: 1.1 }}
                             whileTap={{ scale: 0.95 }}
                             initial={{ opacity: 0, y: 50 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}
+                            style={{ width: '100%', height: '100%' }}
                         >
-                            <Card sx={{ maxWidth: 345, borderRadius: "16px", boxShadow: 6 }}>
+                            <Card
+                                sx={{
+                                    width: '100%',
+                                    maxWidth: 345,
+                                    height: '100%',
+                                    borderRadius: "16px",
+                                    boxShadow: 6,
+                                    display: 'flex',
+                                    flexDirection: 'column'
+                                }}
+                            >
                                 <CardActionArea
                                     href={project.link}
                                     target="_blank"
-                                    sx={{ height: "100%" }}
+                                    sx={{
+                                        height: '100%',
+                                        display: 'flex',
+                                        flexDirection: 'column'
+                                    }}
                                 >
                                     <CardMedia
                                         component="img"
@@ -56,7 +99,7 @@ const ProjectCard = () => {
                                         image={project.image}
                                         alt={project.title}
                                     />
-                                    <CardContent>
+                                    <CardContent sx={{ flexGrow: 1 }}>
                                         <Typography
                                             variant="h6"
                                             component="div"

@@ -26,6 +26,7 @@
     "react-scroll": "^1.9.0",
     "react-spring": "^9.7.4",
     "simplex-noise": "^4.0.3",
+    "styled-components": "^6.1.13",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
     "use-spring": "^0.2.4",
