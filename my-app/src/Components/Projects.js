@@ -15,25 +15,25 @@ import spotlite from '../Pictures/spotlite.JPG'
 
 const projects = [
     {
-        title: "Portfolio Website",
+        title: "Jenni.AI Mini Tools",
         description: "A personal portfolio showcasing my projects and skills.",
         image: jenni,
         link: "https://example.com/portfolio",
     },
     {
-        title: "Chat Application",
+        title: "SpotLite",
         description: "A real-time chat app with WebSocket integration.",
         image: spotlite,
         link: "https://example.com/chatapp",
     },
     {
-        title: "AI Productivity Tool",
+        title: "AlgoViz",
         description: "An AI-powered app for boosting productivity.",
         image: algoviz,
         link: "https://example.com/ai-tool",
     },
     {
-        title: "test",
+        title: "Stretch Robot Project",
         description: "test",
         image: algoviz,
         link: "test"
