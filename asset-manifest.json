@@ -1,0 +1,27 @@
+{
+  "files": {
+    "main.css": "/Johannes_Sluis_Portfolio_3.0/static/css/main.4710e3ce.css",
+    "main.js": "/Johannes_Sluis_Portfolio_3.0/static/js/main.976b327b.js",
+    "static/js/453.68693753.chunk.js": "/Johannes_Sluis_Portfolio_3.0/static/js/453.68693753.chunk.js",
+    "static/media/pfp.png": "/Johannes_Sluis_Portfolio_3.0/static/media/pfp.e4138045f3cd27749b52.png",
+    "static/media/azure.png": "/Johannes_Sluis_Portfolio_3.0/static/media/azure.5a694f18b0e4f276ce48.png",
+    "static/media/resume.pdf": "/Johannes_Sluis_Portfolio_3.0/static/media/resume.6a353d253e7c192a18b1.pdf",
+    "static/media/algoviz.JPG": "/Johannes_Sluis_Portfolio_3.0/static/media/algoviz.e65a0a87c91cd115c761.JPG",
+    "static/media/hcr_logo.svg": "/Johannes_Sluis_Portfolio_3.0/static/media/hcr_logo.5e94c33d4f10bf8ea041c603557fd738.svg",
+    "static/media/robot.png": "/Johannes_Sluis_Portfolio_3.0/static/media/robot.0b8530b43b2d5c1c87b4.png",
+    "static/media/spotlite.JPG": "/Johannes_Sluis_Portfolio_3.0/static/media/spotlite.a4efa832a56a953848e5.JPG",
+    "static/media/ninja.png": "/Johannes_Sluis_Portfolio_3.0/static/media/ninja.db5ef487004e3deb2ddd.png",
+    "static/media/jenni.JPG": "/Johannes_Sluis_Portfolio_3.0/static/media/jenni.97754432572ae002f038.JPG",
+    "static/media/profilepic.jpeg": "/Johannes_Sluis_Portfolio_3.0/static/media/profilepic.49b3a7e7e299f640c925.jpeg",
+    "static/media/ace.png": "/Johannes_Sluis_Portfolio_3.0/static/media/ace.dd42c5e2efe7b71b0a67.png",
+    "static/media/bo.jpeg": "/Johannes_Sluis_Portfolio_3.0/static/media/bo.772efb2826561cd4e198.jpeg",
+    "index.html": "/Johannes_Sluis_Portfolio_3.0/index.html",
+    "main.4710e3ce.css.map": "/Johannes_Sluis_Portfolio_3.0/static/css/main.4710e3ce.css.map",
+    "main.976b327b.js.map": "/Johannes_Sluis_Portfolio_3.0/static/js/main.976b327b.js.map",
+    "453.68693753.chunk.js.map": "/Johannes_Sluis_Portfolio_3.0/static/js/453.68693753.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.4710e3ce.css",
+    "static/js/main.976b327b.js"
+  ]
+}
