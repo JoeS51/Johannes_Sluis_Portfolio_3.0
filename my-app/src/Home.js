@@ -39,9 +39,10 @@ export default function Home() {
 
   return (
     <div className="p-0" id="home">
+      <Contact />
       <SlideTabs parallaxRef={parallaxRef} />
       {/*<DarkMode />*/}
-      <Parallax ref={parallaxRef} pages={5}>
+      <Parallax ref={parallaxRef} pages={6}>
         <WavyBackground className="max-w-4xl mx-auto pb-100">
           <ParallaxLayer
             offset={0}
@@ -163,6 +164,23 @@ export default function Home() {
           </div>
         </ParallaxLayer>
 
+        <ParallaxLayer offset={5} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#FFF' }}>
+          <div id='resume-section' style={{ display: "flex", flexDirection: "column", gap: "150px" }}>
+            <Divider
+              sx={{
+                bgcolor: "#e0e0e0",
+                height: "4px",
+                width: "70%",
+                margin: "0 auto",
+                marginTop: "250px"
+              }}
+            />
+            <Trail open={open} style={{ marginBottom: '400px' }}>
+              <center><span>Contact 💻</span></center>
+            </Trail>
+
+          </div>
+        </ParallaxLayer>
       </Parallax>
     </div >
   )
