@@ -22,8 +22,8 @@ export const SlideTabs = ({ parallaxRef }) => {
         <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={0}>Home</Tab>
         <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={1}>About Me</Tab>
         <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={2}>Experience</Tab>
-        <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={3.3}>Projects</Tab>
-        <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={3.5}>Contact</Tab>
+        <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={3.4}>Projects</Tab>
+        <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={5}>Contact</Tab>
         <Cursor position={position} />
       </ul>
     </nav>

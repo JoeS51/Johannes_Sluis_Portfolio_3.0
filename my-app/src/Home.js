@@ -6,7 +6,6 @@ import { Parallax, ParallaxLayer } from '@react-spring/parallax'
 import ResponsiveAppBar from './Components/Navbar'
 import pfp from './Pictures/pfp.png'
 import resume from './Pictures/resume.pdf'
-import Stack from '@mui/material/Stack';
 import pic from './Pictures/profilepic.jpeg';
 import Experience from './Experience'
 import Divider from '@mui/material/Divider';
@@ -18,6 +17,9 @@ import Projects from './Components/Projects.js'
 import Algoviz from './Pictures/algoviz.JPG'
 import Contact from './Components/Contact.js'
 import DarkMode from './Components/DarkMode.js'
+import { TextField, Stack, Box, Button, FormControl, FormGroup } from '@mui/material'
+import { Form } from 'react-router-dom'
+
 export default function Home() {
   const [open, set] = useState(true)
   const [flip, setFlip] = useState(false);
@@ -26,7 +28,17 @@ export default function Home() {
   const [visibleWord, setVisibleWord] = useState('');
   const [rotation, setRotation] = useState(0);
   const [position, setPosition] = useState({ top: 0, left: 0 });
+  const [subject, setSubject] = useState("")
+  const [message, setMessage] = useState("")
   const parallaxRef = useRef();
+
+  const subjectChange = (e) => {
+    setSubject(e.target.value)
+  }
+
+  const messageChange = (e) => {
+    setMessage(e.target.value)
+  }
 
   useEffect(() => {
     // Set an interval to flip the card every 5 seconds (adjust as needed)
@@ -164,7 +176,7 @@ export default function Home() {
           </div>
         </ParallaxLayer>
 
-        <ParallaxLayer offset={5} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#FFF' }}>
+        <ParallaxLayer offset={4.5} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: 'transparent' }}>
           <div id='resume-section' style={{ display: "flex", flexDirection: "column", gap: "150px" }}>
             <Divider
               sx={{
@@ -176,9 +188,32 @@ export default function Home() {
               }}
             />
             <Trail open={open} style={{ marginBottom: '400px' }}>
-              <center><span>Contact 💻</span></center>
+              <center><span>Contact</span></center>
+              <Box sx={{ padding: 5 }}>
+                <Stack
+                  spacing={2}
+                >
+                  <TextField
+                    label="Subject"
+                    value={subject}
+                    onChange={subjectChange}
+                  />
+                  <TextField
+                    label="Message"
+                    minRows={5}
+                    value={message}
+                    onChange={messageChange}
+                    multiline
+                  />
+                  <Button
+                    color='success'
+                    variant='outlined'
+                  >
+                    Send
+                  </Button>
+                </Stack>
+              </Box>
             </Trail>
-
           </div>
         </ParallaxLayer>
       </Parallax>
