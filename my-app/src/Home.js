@@ -20,6 +20,7 @@ import DarkMode from './Components/DarkMode.js'
 import { TextField, Stack, Box, Button, FormControl, FormGroup } from '@mui/material'
 import { Form } from 'react-router-dom'
 import emailjs, { send } from "emailjs-com";
+import { FidgetSpinner } from 'react-loader-spinner'
 
 export default function Home() {
   const [open, set] = useState(true)
@@ -31,6 +32,8 @@ export default function Home() {
   const [position, setPosition] = useState({ top: 0, left: 0 });
   const [subject, setSubject] = useState("")
   const [message, setMessage] = useState("")
+  const [contactButton, setContactButton] = useState("Send");
+  const [loading, setLoading] = useState(false)
   const parallaxRef = useRef();
 
   const subjectChange = (e) => {
@@ -43,7 +46,7 @@ export default function Home() {
 
   const sendEmail = (e) => {
     e.preventDefault();
-
+    setLoading(true)
     const templateParams = {
       subject,
       message,
@@ -61,6 +64,11 @@ export default function Home() {
           console.log(result.text);
           setSubject("")
           setMessage("")
+          setContactButton('👏🏼 Sent 👏🏼');
+          setLoading(false)
+          setTimeout(() => {
+            setContactButton('Send');
+          }, 3000);
         },
         (error) => {
           console.log(error.text);
@@ -91,7 +99,7 @@ export default function Home() {
           >
             <div className={styles.container} id='root'>
               <motion.div
-                style={{ width: '250px', height: '250px', perspective: '1000px' }} // Maintain perspective
+                style={{ width: '250px', height: '250px', perspective: '1000px' }}
               >
                 <motion.div
                   style={{
@@ -100,10 +108,10 @@ export default function Home() {
                     position: 'relative',
                     transformStyle: 'preserve-3d',
                   }}
-                  animate={{ rotateY: flip ? 360 : 0 }} // Flip 180 degrees based on the flip state
+                  animate={{ rotateY: flip ? 360 : 0 }}
                   transition={{
-                    duration: 2, // Duration of the flip animation
-                    ease: 'easeInOut', // Smooth ease in and out of the flip
+                    duration: 2,
+                    ease: 'easeInOut',
                   }}
                 >
                   {/* Front of the card */}
@@ -216,7 +224,7 @@ export default function Home() {
               }}
             />
             <Trail open={open} style={{ marginBottom: '400px' }}>
-              <center><span>Contact</span></center>
+              <center><span>Contact 📨</span></center>
               <Box sx={{ padding: 5 }}>
                 <Stack
                   spacing={2}
@@ -238,7 +246,15 @@ export default function Home() {
                     variant='outlined'
                     onClick={sendEmail}
                   >
-                    Send
+                    {loading && <FidgetSpinner
+                      visible={true}
+                      height="30"
+                      width="30"
+                      ariaLabel="fidget-spinner-loading"
+                      wrapperStyle={{}}
+                      wrapperClass="fidget-spinner-wrapper"
+                    />}
+                    {contactButton}
                   </Button>
                 </Stack>
               </Box>
