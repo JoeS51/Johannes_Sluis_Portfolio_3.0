@@ -58,7 +58,7 @@ const StyledWrapper = styled.div`
   .card {
     width: fit-content;
     height: fit-content;
-    background-color: rgb(238, 238, 238);
+    background-color: transparent; 
     display: flex;
     align-items: center;
     justify-content: center;
