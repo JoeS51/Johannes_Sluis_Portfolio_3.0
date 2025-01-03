@@ -19,6 +19,7 @@ import Contact from './Components/Contact.js'
 import DarkMode from './Components/DarkMode.js'
 import { TextField, Stack, Box, Button, FormControl, FormGroup } from '@mui/material'
 import { Form } from 'react-router-dom'
+import emailjs, { send } from "emailjs-com";
 
 export default function Home() {
   const [open, set] = useState(true)
@@ -40,11 +41,38 @@ export default function Home() {
     setMessage(e.target.value)
   }
 
+  const sendEmail = (e) => {
+    e.preventDefault();
+
+    const templateParams = {
+      subject,
+      message,
+    };
+
+    emailjs
+      .send(
+        "service_5jo8tjd",
+        "template_cpwd3s8",
+        templateParams,
+        "N-gkjHJLoKESLpaki"
+      )
+      .then(
+        (result) => {
+          console.log(result.text);
+          setSubject("")
+          setMessage("")
+        },
+        (error) => {
+          console.log(error.text);
+          alert("Failed to send email.");
+        }
+      );
+  }
+
   useEffect(() => {
-    // Set an interval to flip the card every 5 seconds (adjust as needed)
     const interval = setInterval(() => {
-      setFlip((prevFlip) => !prevFlip); // Toggle the flip state
-    }, 5000); // Flip every 5 seconds
+      setFlip((prevFlip) => !prevFlip);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -208,6 +236,7 @@ export default function Home() {
                   <Button
                     color='success'
                     variant='outlined'
+                    onClick={sendEmail}
                   >
                     Send
                   </Button>
