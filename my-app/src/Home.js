@@ -167,7 +167,7 @@ export default function Home() {
         <ParallaxLayer id='about' offset={1} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#ffffff' }}>
           <div className={styles.topcontainer}>
             <Trail open={open}>
-              <span>About Me 😃</span>
+              <span>About Me 👨‍💻</span>
             </Trail>
             {/* <img src={pic} width="200" height="200" style={{ margin: '20px 0' }}/> */}
             <h1 style={{ marginTop: '100px' }}>Hi, I'm Johannes (Joe) Sluis! I'm a Senior at the University of Washington, majoring in Computer Science with a minor in Business Administration. While I have strong experience in front-end development, I'm eager to broaden my skill set and explore new areas of software engineering. As I approach graduation, I'm focused on learning as much as possible!<br></br><br></br>Feel free to message me with any questions or opportunities!
@@ -187,7 +187,7 @@ export default function Home() {
               }}
             />
             <Trail open={open} style={{ marginBottom: '400px' }}>
-              <center><span>Experience 📊</span></center>
+              <center><span>Experience 💹</span></center>
             </Trail>
             <Experience />
           </div>

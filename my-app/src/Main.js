@@ -6,9 +6,9 @@ import App from './App';
 
 export default function Main() {
   return (
-    <Routes> {/* The Switch decides which component to show based on the current URL.*/}
-      <Route exact path='/' element={<App/>}></Route>
-      <Route exact path='/random' element={<Random/>}></Route>
+    <Routes>
+      <Route exact path='/' element={<App />}></Route>
+      <Route exact path='/random' element={<Random />}></Route>
     </Routes>
   );
 }
