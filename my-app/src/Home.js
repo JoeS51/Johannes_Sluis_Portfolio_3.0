@@ -34,6 +34,7 @@ export default function Home() {
   const [message, setMessage] = useState("")
   const [contactButton, setContactButton] = useState("Send");
   const [loading, setLoading] = useState(false)
+  const [isMobile, setIsMobile] = useState(false)
   const parallaxRef = useRef();
 
   const subjectChange = (e) => {
@@ -78,6 +79,16 @@ export default function Home() {
   }
 
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    }
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile)
+    return () => window.removeEventListener('resize', checkMobile)
+  })
+
+  useEffect(() => {
     const interval = setInterval(() => {
       setFlip((prevFlip) => !prevFlip);
     }, 5000);
@@ -87,7 +98,7 @@ export default function Home() {
 
   return (
     <div className="p-0" id="home">
-      <Contact />
+      {!isMobile && (<Contact />)}
       <SlideTabs parallaxRef={parallaxRef} />
       {/*<DarkMode />*/}
       <Parallax ref={parallaxRef} pages={6}>
@@ -95,71 +106,85 @@ export default function Home() {
           <ParallaxLayer
             offset={0}
             speed={0}
-            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh' }}
+            style={{
+              display: 'flex', alignItems: 'center',
+              justifyContent: 'center',
+              minHeight: isMobile ? '130vh' : '100vh',
+            }}
           >
             <div className={styles.container} id='root'>
-              <motion.div
-                style={{ width: '250px', height: '250px', perspective: '1000px' }}
-              >
-                <motion.div
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'relative',
-                    transformStyle: 'preserve-3d',
-                  }}
-                  animate={{ rotateY: flip ? 360 : 0 }}
-                  transition={{
-                    duration: 2,
-                    ease: 'easeInOut',
-                  }}
-                >
-                  {/* Front of the card */}
-                  <motion.div
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      backfaceVisibility: 'hidden',
-                      position: 'absolute',
-                    }}
-                    className="front"
-                  >
-                    <img
-                      src={pfp}
-                      alt="Pfp"
-                      width="250"
-                      height="250"
-                      style={{ marginTop: '-100px' }}
-                    />
-                  </motion.div>
+              {!isMobile && (
 
-                  {/* Back of the card */}
+                < motion.div
+                  style={{ width: '250px', height: '250px', perspective: '1000px' }}
+                >
                   <motion.div
                     style={{
                       width: '100%',
                       height: '100%',
-                      backfaceVisibility: 'hidden',
-                      position: 'absolute',
-                      transform: 'rotateY(180deg)',
+                      position: 'relative',
+                      transformStyle: 'preserve-3d',
                     }}
-                    className="back"
+                    animate={{ rotateY: flip ? 360 : 0 }}
+                    transition={{
+                      duration: 2,
+                      ease: 'easeInOut',
+                    }}
                   >
-                    <img
-                      src={pic}
-                      width="250"
-                      height="250"
-                      style={{ marginTop: '-100px' }}
-                      alt="Profile Pic"
-                    />
+                    {/* Front of the card */}
+                    <motion.div
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        backfaceVisibility: 'hidden',
+                        position: 'absolute',
+                      }}
+                      className="front"
+                    >
+                      <img
+                        src={pfp}
+                        alt="Pfp"
+                        width="250"
+                        height="250"
+                        style={{ marginTop: '-100px' }}
+                      />
+                    </motion.div>
+
+                    {/* Back of the card */}
+                    <motion.div
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        backfaceVisibility: 'hidden',
+                        position: 'absolute',
+                        transform: 'rotateY(180deg)',
+                      }}
+                      className="back"
+                    >
+                      <img
+                        src={pic}
+                        width="250"
+                        height="250"
+                        style={{ marginTop: '-100px' }}
+                        alt="Profile Pic"
+                      />
+                    </motion.div>
                   </motion.div>
                 </motion.div>
-              </motion.div>
+              )}
               <div style={{ marginLeft: '50px', marginTop: '-220px' }}>
                 <Trail open={open}>
                   <span>Johannes</span>
                   <span>Sluis</span>
                   <span>Portfolio</span>
                 </Trail>
+                {isMobile && (
+                  <center><img
+                    src={pfp} // or `pic`, depending on your preference
+                    alt="Mobile View"
+                    style={{ marginTop: "20px", width: "150px", height: "150px" }} // Adjust size for mobile
+                  /></center>
+                )}
               </div>
             </div>
           </ParallaxLayer>
