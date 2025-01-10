@@ -191,12 +191,31 @@ export default function Home() {
         </WavyBackground>
         <ParallaxLayer id='about' offset={1} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#ffffff' }}>
           <div className={styles.topcontainer}>
-            <Trail open={open}>
-              <span>About Me 👨‍💻</span>
-            </Trail>
-            {/* <img src={pic} width="200" height="200" style={{ margin: '20px 0' }}/> */}
-            <h1 style={{ marginTop: '100px' }}>Hi, I'm Johannes (Joe) Sluis! I'm a Senior at the University of Washington, majoring in Computer Science with a minor in Business Administration. While I have strong experience in front-end development, I'm eager to broaden my skill set and explore new areas of software engineering. As I approach graduation, I'm focused on learning as much as possible!<br></br><br></br>Feel free to message me with any questions or opportunities!
-            </h1>
+            <motion.span
+              initial={{ opacity: 0.5, y: 100 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.8,
+                ease: "easeInOut"
+              }} >
+              <Trail open={open}>
+                <span>About Me 👨‍💻</span>
+              </Trail>
+            </motion.span>
+            <motion.h1
+              style={{ marginTop: '100px' }}
+              initial={{ opacity: 0.5, y: 100 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                delay: 0.2,
+                duration: 1.2,
+                ease: "easeInOut"
+              }}
+            >
+              Hi, I'm Johannes (Joe) Sluis! I'm a Senior at the University of Washington, majoring in Computer Science with a minor in Business Administration. While I have strong experience in front-end development, I'm eager to broaden my skill set and explore new areas of software engineering. As I approach graduation, I'm focused on learning as much as possible!<br></br><br></br>Feel free to message me with any questions or opportunities!
+            </motion.h1>
           </div>
           <Divider flexItem orientation="horizontal" sx={{ bgcolor: "black" }} />
         </ParallaxLayer>
