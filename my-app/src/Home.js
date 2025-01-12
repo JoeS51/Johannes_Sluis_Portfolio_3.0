@@ -230,10 +230,29 @@ export default function Home() {
                 marginTop: "250px"
               }}
             />
-            <Trail open={open} style={{ marginBottom: '400px' }}>
-              <center><span>Experience 💹</span></center>
-            </Trail>
-            <Experience />
+            <motion.span
+              initial={{ opacity: 0.5, y: 100 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                duration: 0.8,
+                ease: "easeInOut"
+              }} >
+              <Trail open={open} style={{ marginBottom: '400px' }}>
+                <center><span>Experience 💹</span></center>
+              </Trail>
+            </motion.span>
+            <motion.div
+              initial={{ opacity: 0.5, y: 100 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                delay: 0.2,
+                duration: 0.8,
+                ease: "easeInOut"
+              }}>
+              <Experience />
+            </motion.div>
           </div>
         </ParallaxLayer>
         <ParallaxLayer offset={3.25} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#FFF' }}>
@@ -247,12 +266,20 @@ export default function Home() {
                 marginTop: "250px"
               }}
             />
-            <Trail open={open} style={{ marginBottom: '400px' }}>
-              <center><span>Projects 💻</span></center>
-            </Trail>
-
+            <motion.span
+              initial={{ opacity: 0.5, y: 100 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{
+                delay: 0.2,
+                duration: 0.8,
+                ease: "easeInOut"
+              }}>
+              <Trail open={open} style={{ marginBottom: '400px' }}>
+                <center><span>Projects 💻</span></center>
+              </Trail>
+            </motion.span>
             <Projects></Projects>
-            {/* <Contact /> */}
           </div>
         </ParallaxLayer>
 
@@ -268,40 +295,60 @@ export default function Home() {
               }}
             />
             <Trail open={open} style={{ marginBottom: '400px' }}>
-              <center><span>Contact 📨</span></center>
-              <Box sx={{ padding: 5 }}>
-                <Stack
-                  spacing={2}
-                >
-                  <TextField
-                    label="Subject"
-                    value={subject}
-                    onChange={subjectChange}
-                  />
-                  <TextField
-                    label="Message"
-                    minRows={5}
-                    value={message}
-                    onChange={messageChange}
-                    multiline
-                  />
-                  <Button
-                    color='success'
-                    variant='outlined'
-                    onClick={sendEmail}
+              <motion.span
+                initial={{ opacity: 0.5, y: 100 }}
+                whileInView={{ opacity: 1, y: -50 }}
+                viewport={{ once: true }}
+                transition={{
+                  delay: 0.2,
+                  duration: 0.8,
+                  ease: "easeInOut"
+                }}>
+                <center><span>Contact 📨</span></center>
+              </motion.span>
+              <motion.div
+                initial={{ opacity: 0.5, y: 100 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  delay: 0.2,
+                  duration: 0.8,
+                  ease: "easeInOut"
+                }}>
+                <Box sx={{ padding: 5 }}>
+                  <Stack
+                    spacing={2}
                   >
-                    {loading && <FidgetSpinner
-                      visible={true}
-                      height="30"
-                      width="30"
-                      ariaLabel="fidget-spinner-loading"
-                      wrapperStyle={{}}
-                      wrapperClass="fidget-spinner-wrapper"
-                    />}
-                    {contactButton}
-                  </Button>
-                </Stack>
-              </Box>
+                    <TextField
+                      label="Subject"
+                      value={subject}
+                      onChange={subjectChange}
+                    />
+                    <TextField
+                      label="Message"
+                      minRows={5}
+                      value={message}
+                      onChange={messageChange}
+                      multiline
+                    />
+                    <Button
+                      color='success'
+                      variant='outlined'
+                      onClick={sendEmail}
+                    >
+                      {loading && <FidgetSpinner
+                        visible={true}
+                        height="30"
+                        width="30"
+                        ariaLabel="fidget-spinner-loading"
+                        wrapperStyle={{}}
+                        wrapperClass="fidget-spinner-wrapper"
+                      />}
+                      {contactButton}
+                    </Button>
+                  </Stack>
+                </Box>
+              </motion.div>
             </Trail>
           </div>
         </ParallaxLayer>
