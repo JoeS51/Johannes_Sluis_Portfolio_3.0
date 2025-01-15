@@ -3,14 +3,14 @@ import { useTrail, a } from '@react-spring/web'
 
 import styles from './styles.module.css'
 
-import Trail from './Components/Trail'
+import Trail from './Components/Trail.js'
 import { Parallax, ParallaxLayer } from '@react-spring/parallax'
 
-import ResponsiveAppBar from './Components/Navbar'
+import ResponsiveAppBar from './Components/Navbar.js'
 
-import Home from './Home'
-import Main from './Main'
-import Experience from './Experience'
+import Home from './Home.js'
+import Main from './Main.js'
+import Experience from './Experience.js'
 import { SlideTabs } from './Components/SlideTabs.js'
 
 export default function App() {
@@ -20,7 +20,7 @@ export default function App() {
     <div>
       {/* <ResponsiveAppBar/> */}
       {/* <SlideTabs/> */}
-      <Home/>
+      <Home />
     </div>
   )
 }

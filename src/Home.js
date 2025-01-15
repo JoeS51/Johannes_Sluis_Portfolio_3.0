@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react'
 import { useTrail, a } from '@react-spring/web'
 import styles from './styles.module.css'
-import Trail from './Components/Trail'
+import Trail from './Components/Trail.js'
 import { Parallax, ParallaxLayer } from '@react-spring/parallax'
-import ResponsiveAppBar from './Components/Navbar'
+import ResponsiveAppBar from './Components/Navbar.js'
 import pfp from './Pictures/pfp.png'
 import resume from './Pictures/resume.pdf'
 import pic from './Pictures/profilepic.jpeg';
-import Experience from './Experience'
+import Experience from './Experience.js'
 import Divider from '@mui/material/Divider';
-import Signature from './Components/Signature'
-import { WavyBackground } from './Components/Wave'
+import Signature from './Components/Signature.js'
+import { WavyBackground } from './Components/Wave.js'
 import { motion } from "framer-motion";
 import { SlideTabs } from './Components/SlideTabs.js'
 import Projects from './Components/Projects.js'
