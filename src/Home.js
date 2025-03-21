@@ -214,7 +214,8 @@ export default function Home() {
                 ease: "easeInOut"
               }}
             >
-              Hi, I'm Johannes (Joe) Sluis! I'm a Senior at the University of Washington, majoring in Computer Science with a minor in Business Administration. While I have strong experience in front-end development, I'm eager to broaden my skill set and explore new areas of software engineering. As I approach graduation, I'm focused on learning as much as possible!<br></br><br></br>Feel free to message me with any questions or opportunities!
+              Hi, I'm Johannes Sluis (or just Joe)! I'm a Senior at UW, studying Computer Science. I'm eager to broaden my skill set to not get replaced by AI.
+              I'm always trying to build cool projects.<br></br><br></br>Feel free to message me with any questions or opportunities!
             </motion.h1>
           </div>
           <Divider flexItem orientation="horizontal" sx={{ bgcolor: "black" }} />

@@ -12,32 +12,52 @@ import { motion } from "framer-motion";
 import algoviz from '../Pictures/algoviz.JPG'
 import jenni from '../Pictures/jenni.JPG'
 import spotlite from '../Pictures/spotlite.JPG'
+import robot from '../Pictures/hello_robot.jpg'
+import manuscript from '../Pictures/manuscript.png'
+import simple from '../Pictures/simpledb.jpg'
+import stimma from '../Pictures/stimma.png'
+import stimma2 from '../Pictures/stimma2.png'
 
 const projects = [
     {
-        title: "Jenni.AI Mini Tools",
-        description: "A personal portfolio showcasing my projects and skills.",
-        image: jenni,
-        link: "https://example.com/portfolio",
+        title: "Manuscript Checker AI",
+        description: "A manuscript checker AI that checks for plagiarism and other issues.",
+        image: manuscript,
+        link: "https://www.manuscriptcheck.ai/"
     },
     {
-        title: "SpotLite",
-        description: "A real-time chat app with WebSocket integration.",
-        image: spotlite,
+        title: "Jenni.AI Preview Tools",
+        description: "A personal portfolio showcasing my projects and skills.",
+        image: jenni,
+        link: "https://jenni.ai/",
+    },
+    {
+        title: "SimpleDB",
+        description: "A simple database system that allows users to store and retrieve data.",
+        image: simple,
+        imageStyle: { objectFit: 'contain', maxHeight: '300px' },
         link: "https://example.com/chatapp",
+    },
+    {
+        title: "Stimma",
+        description: "A platform for creating and sharing AI-generated content.",
+        image: stimma2,
+        secondaryImage: stimma,
+        imageStyle: { objectFit: 'contain', maxHeight: '200px' },
+        link: "stimma.us"
     },
     {
         title: "AlgoViz",
         description: "An AI-powered app for boosting productivity.",
         image: algoviz,
-        link: "https://example.com/ai-tool",
+        link: "https://github.com/hcp-uw/algo-visualizer"
     },
     {
-        title: "Stretch Robot Project",
-        description: "test",
-        image: algoviz,
-        link: "test"
-    }
+        title: "SpotLite",
+        description: "A real-time chat app with WebSocket integration.",
+        image: spotlite,
+        link: "https://github.com/JoeS51/Dubhacks24",
+    },
 ];
 
 const ProjectCard = () => {
@@ -98,7 +118,20 @@ const ProjectCard = () => {
                                         height="180"
                                         image={project.image}
                                         alt={project.title}
+                                        sx={{
+                                            ...(project.imageStyle || {}),
+                                            borderBottom: project.secondaryImage ? '1px solid #e0e0e0' : 'none'
+                                        }}
                                     />
+                                    {project.secondaryImage && (
+                                        <CardMedia
+                                            component="img"
+                                            height="180"
+                                            image={project.secondaryImage}
+                                            alt={`${project.title} secondary`}
+                                            sx={project.imageStyle || {}}
+                                        />
+                                    )}
                                     <CardContent sx={{ flexGrow: 1 }}>
                                         <Typography
                                             variant="h6"
