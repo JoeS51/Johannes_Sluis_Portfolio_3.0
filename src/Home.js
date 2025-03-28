@@ -101,7 +101,7 @@ export default function Home() {
       {!isMobile && (<Contact />)}
       <SlideTabs parallaxRef={parallaxRef} />
       {/*<DarkMode />*/}
-      <Parallax ref={parallaxRef} pages={6}>
+      <Parallax ref={parallaxRef} pages={7}>
         <WavyBackground className="max-w-4xl mx-auto pb-100">
           <ParallaxLayer
             offset={0}
@@ -214,13 +214,14 @@ export default function Home() {
                 ease: "easeInOut"
               }}
             >
-              Hi, I'm Johannes Sluis (or just Joe)! I'm a Senior at UW, studying Computer Science. I'm eager to broaden my skill set to not get replaced by AI.
-              I'm always trying to build cool projects.<br></br><br></br>Feel free to message me with any questions or opportunities!
+              Hi, I'm Johannes Sluis (or just Joe)! I'm a Senior at UW studying Computer Science, building as much as I can in my free time.
+              <br></br>
+              I've interned at Microsoft and Blue Origin and have always been drawn to startups. Right now, I'm a founding engineer at <a href="https://pracareer.net/">Pracareer</a>, a platform that helps Japanese students land their dream job.
             </motion.h1>
           </div>
           <Divider flexItem orientation="horizontal" sx={{ bgcolor: "black" }} />
         </ParallaxLayer>
-        <ParallaxLayer offset={1.75} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#FFF' }}>
+        <ParallaxLayer offset={1.9} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#FFF' }}>
           <div id='resume-section' style={{ display: "flex", flexDirection: "column", gap: "150px" }}>
             <Divider
               sx={{
@@ -256,7 +257,7 @@ export default function Home() {
             </motion.div>
           </div>
         </ParallaxLayer>
-        <ParallaxLayer offset={3.25} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#FFF' }}>
+        <ParallaxLayer offset={3.75} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#FFF' }}>
           <div id='resume-section' style={{ display: "flex", flexDirection: "column", gap: "150px" }}>
             <Divider
               sx={{
@@ -284,7 +285,7 @@ export default function Home() {
           </div>
         </ParallaxLayer>
 
-        <ParallaxLayer offset={4.5} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: 'transparent' }}>
+        <ParallaxLayer offset={5.25} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: 'transparent' }}>
           <div id='resume-section' style={{ display: "flex", flexDirection: "column", gap: "150px" }}>
             <Divider
               sx={{
