@@ -215,13 +215,13 @@ export default function Home() {
               }}
             >
               Hi, I'm Johannes Sluis (or just Joe)! I'm a Senior at UW studying Computer Science, building as much as I can in my free time.
-              <br></br>
-              I've interned at Microsoft and Blue Origin and have always been drawn to startups. Right now, I'm a founding engineer at <a href="https://pracareer.net/">Pracareer</a>, a platform that helps Japanese students land their dream job.
+              <br></br><br></br>
+              I've interned at cool companies like Microsoft and Blue Origin, and worked for one of the world’s top lean AI companies (Jenni AI), gaining invaluable experience. Now, I’m a founding engineer at <a href="https://pracareer.net/">Pracareer</a>, a platform dedicated to helping Japanese students land their dream jobs.
             </motion.h1>
           </div>
           <Divider flexItem orientation="horizontal" sx={{ bgcolor: "black" }} />
         </ParallaxLayer>
-        <ParallaxLayer offset={1.9} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#FFF' }}>
+        <ParallaxLayer offset={1.8} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#FFF' }}>
           <div id='resume-section' style={{ display: "flex", flexDirection: "column", gap: "150px" }}>
             <Divider
               sx={{
