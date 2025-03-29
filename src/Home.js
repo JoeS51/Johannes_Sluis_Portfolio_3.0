@@ -174,7 +174,7 @@ export default function Home() {
               )}
               <div style={{
                 marginLeft: isMobile ? '0' : '50px',
-                marginTop: isMobile ? '-400px' : '-220px',
+                marginTop: isMobile ? (window.innerWidth <= 375 ? '-90px' : '-400px') : '-220px',
                 textAlign: isMobile ? 'center' : 'left'
               }}>
                 <Trail open={open}>
@@ -252,7 +252,7 @@ export default function Home() {
                 ease: "easeInOut"
               }} >
               <Trail open={open} style={{ marginBottom: '400px' }}>
-                <center><span>Experience 💹</span></center>
+                <center><span>{isMobile ? "Exp. 💹" : "Experience 💹"}</span></center>
               </Trail>
             </motion.span>
             <motion.div
