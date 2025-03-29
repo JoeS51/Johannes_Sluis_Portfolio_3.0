@@ -172,18 +172,29 @@ export default function Home() {
                   </motion.div>
                 </motion.div>
               )}
-              <div style={{ marginLeft: '50px', marginTop: '-220px' }}>
+              <div style={{
+                marginLeft: isMobile ? '0' : '50px',
+                marginTop: isMobile ? '-400px' : '-220px',
+                textAlign: isMobile ? 'center' : 'left'
+              }}>
                 <Trail open={open}>
                   <span>Johannes</span>
                   <span>Sluis</span>
                   <span>Portfolio</span>
                 </Trail>
                 {isMobile && (
-                  <center><img
-                    src={pfp} // or `pic`, depending on your preference
-                    alt="Mobile View"
-                    style={{ marginTop: "20px", width: "150px", height: "150px" }} // Adjust size for mobile
-                  /></center>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    marginTop: '30px',
+                    marginBottom: '50px'
+                  }}>
+                    <img
+                      src={pfp}
+                      alt="Mobile View"
+                      style={{ width: "180px", height: "180px" }}
+                    />
+                  </div>
                 )}
               </div>
             </div>
@@ -216,7 +227,7 @@ export default function Home() {
             >
               Hi, I'm Johannes Sluis (or just Joe)! I'm a Senior at UW studying Computer Science, building as much as I can in my free time.
               <br></br><br></br>
-              I've interned at cool companies like Microsoft and Blue Origin, and worked for one of the world’s top lean AI companies (Jenni AI), gaining invaluable experience. Now, I’m a founding engineer at <a href="https://pracareer.net/">Pracareer</a>, a platform dedicated to helping Japanese students land their dream jobs.
+              I've interned at cool companies like Microsoft and Blue Origin, and worked for one of the world's top lean AI companies (Jenni AI), gaining invaluable experience. Now, I'm a founding engineer at <a href="https://pracareer.net/">Pracareer</a>, a platform dedicated to helping Japanese students land their dream jobs.
             </motion.h1>
           </div>
           <Divider flexItem orientation="horizontal" sx={{ bgcolor: "black" }} />
