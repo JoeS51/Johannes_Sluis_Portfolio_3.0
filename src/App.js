@@ -12,6 +12,7 @@ import Home from './Home.js'
 import Main from './Main.js'
 import Experience from './Experience.js'
 import { SlideTabs } from './Components/SlideTabs.js'
+import ResponsiveHome from './ResponsiveHome.js'
 
 export default function App() {
   const [open, set] = useState(true)
@@ -20,7 +21,8 @@ export default function App() {
     <div>
       {/* <ResponsiveAppBar/> */}
       {/* <SlideTabs/> */}
-      <Home />
+      {/* <Home /> */}
+      <ResponsiveHome />
     </div>
   )
 }

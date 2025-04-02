@@ -1,7 +1,8 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import { Link } from "react-scroll";
 
-export const SlideTabs = ({ parallaxRef }) => {
+export const SlideTabs = () => {
   const [position, setPosition] = useState({
     left: 0,
     width: 0,
@@ -35,25 +36,29 @@ export const SlideTabs = ({ parallaxRef }) => {
           overflow: 'hidden'
         }}
       >
-        <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={0} isMobile={isMobile}>Home</Tab>
-        <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={1} isMobile={isMobile}>About</Tab>
-        <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={isMobile ? 2.2 : 1.8} isMobile={isMobile}>{isMobile ? "Exp." : "Experience"}</Tab>
-        <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={isMobile ? 3.2 : 2.9} isMobile={isMobile}>Projects</Tab>
-        <Tab setPosition={setPosition} parallaxRef={parallaxRef} offset={isMobile ? 5.25 : 4.8} isMobile={isMobile}>Contact</Tab>
+        <Tab setPosition={setPosition} sectionId="home" isMobile={isMobile}>Home</Tab>
+        <Tab setPosition={setPosition} sectionId="about" isMobile={isMobile}>About</Tab>
+        <Tab setPosition={setPosition} sectionId="experience" isMobile={isMobile}>{isMobile ? "Exp." : "Experience"}</Tab>
+        <Tab setPosition={setPosition} sectionId="projects" isMobile={isMobile}>Projects</Tab>
+        <Tab setPosition={setPosition} sectionId="contact" isMobile={isMobile}>Contact</Tab>
         <Cursor position={position} />
       </ul>
     </nav>
   );
 };
 
-const Tab = ({ children, setPosition, parallaxRef, offset, isMobile }) => {
+const Tab = ({ children, setPosition, sectionId, isMobile }) => {
   const ref = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  const handleClick = (event) => {
-    event.preventDefault();
-    if (parallaxRef.current) {
-      parallaxRef.current.scrollTo(offset * 0.95);
+  const handleClick = () => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      window.scrollTo({
+        top: element.offsetTop - 50, // Adjust the offset if needed
+        behavior: 'smooth',
+        duration: 2000
+      });
     }
   };
 
