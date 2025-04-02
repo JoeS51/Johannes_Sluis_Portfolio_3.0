@@ -81,6 +81,8 @@ export default function Home() {
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
+      console.log(window.innerWidth)
+      console.log(isMobile)
     }
 
     checkMobile();
@@ -200,7 +202,7 @@ export default function Home() {
             </div>
           </ParallaxLayer>
         </WavyBackground>
-        <ParallaxLayer id='about' offset={1} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#ffffff' }}>
+        <ParallaxLayer id='about' offset={1} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: 'transparent', zIndex: 3 }}>
           <div className={styles.topcontainer}>
             <motion.span
               initial={{ opacity: 0.5, y: 100 }}
@@ -232,14 +234,27 @@ export default function Home() {
           </div>
           <Divider flexItem orientation="horizontal" sx={{ bgcolor: "black" }} />
         </ParallaxLayer>
-        <ParallaxLayer offset={1.8} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#FFF' }}>
-          <div id='resume-section' style={{ display: "flex", flexDirection: "column", gap: "150px" }}>
+        <ParallaxLayer
+          offset={1.5}
+          speed={0}
+          style={{
+            ...alignCenter,
+            justifyContent: 'center',
+            backgroundColor: '#FFF',
+            height: '100vh',
+            zIndex: 2
+          }}>
+          <div id='resume-section' style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "100px"
+          }}>
             <Divider
               sx={{
                 bgcolor: "#e0e0e0",
-                height: "4px", // Thickness of the border
-                width: "70%", // Adjust to match your layout
-                margin: "0 auto", // Center the divider
+                height: "4px",
+                width: "300px",
+                margin: "0 auto",
                 marginTop: "250px"
               }}
             />
@@ -268,15 +283,22 @@ export default function Home() {
             </motion.div>
           </div>
         </ParallaxLayer>
-        <ParallaxLayer offset={3.75} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: '#FFF' }}>
+        <ParallaxLayer
+          offset={isMobile ? 3.2 : 2.9}
+          speed={0}
+          style={{
+            ...alignCenter,
+            justifyContent: 'center',
+            backgroundColor: '#FFF'
+          }}>
           <div id='resume-section' style={{ display: "flex", flexDirection: "column", gap: "150px" }}>
             <Divider
               sx={{
                 bgcolor: "#e0e0e0",
                 height: "4px",
-                width: "70%",
+                width: "300px",
                 margin: "0 auto",
-                marginTop: "250px"
+                marginTop: "400px"
               }}
             />
             <motion.span
@@ -296,7 +318,7 @@ export default function Home() {
           </div>
         </ParallaxLayer>
 
-        <ParallaxLayer offset={5.25} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: 'transparent' }}>
+        <ParallaxLayer offset={isMobile ? 5.25 : 4.15} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: 'transparent' }}>
           <div id='resume-section' style={{ display: "flex", flexDirection: "column", gap: "150px" }}>
             <Divider
               sx={{
