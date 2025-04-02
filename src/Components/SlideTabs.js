@@ -54,11 +54,21 @@ const Tab = ({ children, setPosition, sectionId, isMobile }) => {
   const handleClick = () => {
     const element = document.getElementById(sectionId);
     if (element) {
-      window.scrollTo({
-        top: element.offsetTop - 50, // Adjust the offset if needed
-        behavior: 'smooth',
-        duration: 2000
-      });
+      if (sectionId === 'home') {
+        window.scrollTo({
+          top: 0,
+          behavior: 'smooth'
+        });
+      } else {
+        const offset = -100;
+        const elementPosition = element.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - offset;
+
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      }
     }
   };
 

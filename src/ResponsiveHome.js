@@ -139,7 +139,7 @@ const ResponsiveHome = () => {
                 height: "4px",
                 width: "300px",
                 margin: "0 auto",
-                marginBottom: "4rem"
+                marginBottom: "10rem"
             }}
         />
     );
@@ -178,7 +178,7 @@ const ResponsiveHome = () => {
                         className="text-center"
                     >
                         <Trail open={open}>
-                            <span className="text-5xl md:text-6xl font-bold">About Me 👨‍💻</span>
+                            <span className="text-7xl md:text-8xl font-black" style={{ lineHeight: '1.1' }}>About Me 👨‍💻</span>
                         </Trail>
                     </motion.div>
 
@@ -187,17 +187,24 @@ const ResponsiveHome = () => {
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ duration: 0.8, delay: 0.2 }}
-                        className="mt-8 text-lg text-center"
+                        className="mt-24 text-center"
                     >
-                        <p className="mb-4">
+                        <p className="mb-8 text-3xl md:text-4xl" style={{ lineHeight: '1.3' }}>
                             Hi, I'm Johannes Sluis (or just Joe)! I'm a Senior at UW studying Computer Science,
                             building as much as I can in my free time.
                         </p>
-                        <p>
+                        <p className="text-3xl md:text-4xl" style={{ lineHeight: '1.3' }}>
                             I've interned at cool companies like Microsoft and Blue Origin, and worked for one of
                             the world's top lean AI companies (Jenni AI), gaining invaluable experience. Now,
-                            I'm a founding engineer at <a href="https://pracareer.net/" className="text-blue-600 hover:text-blue-800">Pracareer</a>,
-                            a platform dedicated to helping Japanese students land their dream jobs.
+                            I'm a founding engineer at{' '}
+                            <a
+                                href="https://pracareer.net/"
+                                className="text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                                style={{ textDecoration: 'none' }}
+                            >
+                                Pracareer
+                            </a>,
+                            {' '}a platform dedicated to helping Japanese students land their dream jobs.
                         </p>
                     </motion.div>
                 </div>
@@ -209,7 +216,7 @@ const ResponsiveHome = () => {
                     <SectionDivider />
                     <motion.div className="text-center mb-16">
                         <Trail open={open}>
-                            <span className="text-5xl md:text-6xl font-bold">
+                            <span className="text-7xl md:text-8xl font-black" style={{ lineHeight: '1.1' }}>
                                 {isMobile ? "Exp. 💹" : "Experience 💹"}
                             </span>
                         </Trail>
@@ -224,7 +231,7 @@ const ResponsiveHome = () => {
                     <SectionDivider />
                     <motion.div className="text-center mb-16">
                         <Trail open={open}>
-                            <span className="text-5xl md:text-6xl font-bold">Projects 💻</span>
+                            <span className="text-7xl md:text-8xl font-black" style={{ lineHeight: '1.1' }}>Projects 💻</span>
                         </Trail>
                     </motion.div>
                     <Projects />
@@ -237,7 +244,7 @@ const ResponsiveHome = () => {
                     <SectionDivider />
                     <motion.div className="text-center mb-16">
                         <Trail open={open}>
-                            <span className="text-5xl md:text-6xl font-bold">Contact 📨</span>
+                            <span className="text-7xl md:text-8xl font-black" style={{ lineHeight: '1.1' }}>Contact 📨</span>
                         </Trail>
                     </motion.div>
 
