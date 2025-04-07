@@ -16,10 +16,16 @@ import Projects from './Components/Projects.js'
 import Algoviz from './Pictures/algoviz.JPG'
 import Contact from './Components/Contact.js'
 import DarkMode from './Components/DarkMode.js'
-import { TextField, Stack, Box, Button, FormControl, FormGroup } from '@mui/material'
+import { TextField, Stack, Box, Button, FormControl, FormGroup, Paper, Typography, IconButton, Tooltip, Zoom } from '@mui/material'
 import { Form } from 'react-router-dom'
 import emailjs, { send } from "emailjs-com"
 import { FidgetSpinner } from 'react-loader-spinner'
+import SendIcon from '@mui/icons-material/Send';
+import EmailIcon from '@mui/icons-material/Email';
+import SubjectIcon from '@mui/icons-material/Subject';
+import MessageIcon from '@mui/icons-material/Message';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ErrorIcon from '@mui/icons-material/Error';
 
 // For the profile picture flip animation
 const ProfileImage = ({ flip }) => (
@@ -89,6 +95,10 @@ const ResponsiveHome = () => {
     const [message, setMessage] = useState("");
     const [contactButton, setContactButton] = useState("Send");
     const [loading, setLoading] = useState(false);
+    const [formStatus, setFormStatus] = useState("idle"); // idle, success, error
+    const [formAnimation, setFormAnimation] = useState(false);
+    const [subjectFocused, setSubjectFocused] = useState(false);
+    const [messageFocused, setMessageFocused] = useState(false);
 
     useEffect(() => {
         const checkMobile = () => {
@@ -109,6 +119,7 @@ const ResponsiveHome = () => {
     const sendEmail = (e) => {
         e.preventDefault();
         setLoading(true);
+        setFormStatus("idle");
         const templateParams = { subject, message };
 
         emailjs.send(
@@ -122,11 +133,19 @@ const ResponsiveHome = () => {
                 setMessage("");
                 setContactButton('👏🏼 Sent 👏🏼');
                 setLoading(false);
-                setTimeout(() => setContactButton('Send'), 3000);
+                setFormStatus("success");
+                setFormAnimation(true);
+                setTimeout(() => {
+                    setContactButton('Send');
+                    setFormStatus("idle");
+                    setFormAnimation(false);
+                }, 3000);
             },
             (error) => {
                 console.error(error);
-                alert("Failed to send email.");
+                setFormStatus("error");
+                setLoading(false);
+                setTimeout(() => setFormStatus("idle"), 3000);
             }
         );
     };
@@ -239,7 +258,7 @@ const ResponsiveHome = () => {
             </section>
 
             {/* Contact Section */}
-            <section id="contact" className="py-20 px-4 md:px-8 bg-transparent">
+            <section id="contact" className="py-20 pb-10 px-4 md:px-8 bg-transparent relative z-10">
                 <div className="max-w-4xl mx-auto">
                     <SectionDivider />
                     <motion.div className="text-center mb-16">
@@ -248,43 +267,170 @@ const ResponsiveHome = () => {
                         </Trail>
                     </motion.div>
 
-                    <Box className="max-w-lg mx-auto">
-                        <Stack spacing={3}>
-                            <TextField
-                                label="Subject"
-                                value={subject}
-                                onChange={(e) => setSubject(e.target.value)}
-                                fullWidth
-                            />
-                            <TextField
-                                label="Message"
-                                value={message}
-                                onChange={(e) => setMessage(e.target.value)}
-                                multiline
-                                rows={5}
-                                fullWidth
-                            />
-                            <Button
-                                color="success"
-                                variant="outlined"
-                                onClick={sendEmail}
-                                className="py-3"
-                            >
-                                {loading && (
-                                    <FidgetSpinner
-                                        visible={true}
-                                        height="30"
-                                        width="30"
-                                        ariaLabel="fidget-spinner-loading"
-                                        wrapperStyle={{}}
-                                        wrapperClass="fidget-spinner-wrapper"
+                    <motion.div
+                        initial={{ opacity: 0, y: 50 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.8 }}
+                    >
+                        <div className="max-w-lg mx-auto p-8">
+                            <Stack spacing={4}>
+                                <motion.div
+                                    animate={{
+                                        scale: subjectFocused ? 1.02 : 1,
+                                        boxShadow: subjectFocused ? '0 8px 16px rgba(0,0,0,0.1)' : '0 4px 8px rgba(0,0,0,0.05)'
+                                    }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <TextField
+                                        label="Subject"
+                                        value={subject}
+                                        onChange={(e) => setSubject(e.target.value)}
+                                        fullWidth
+                                        onFocus={() => setSubjectFocused(true)}
+                                        onBlur={() => setSubjectFocused(false)}
+                                        InputProps={{
+                                            startAdornment: (
+                                                <SubjectIcon sx={{ mr: 1, color: subjectFocused ? 'primary.main' : 'text.secondary' }} />
+                                            ),
+                                        }}
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: '12px',
+                                                transition: 'all 0.3s ease',
+                                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                                backdropFilter: 'blur(4px)',
+                                                '&:hover': {
+                                                    '& .MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: 'primary.main',
+                                                    },
+                                                },
+                                            },
+                                        }}
                                     />
+                                </motion.div>
+
+                                <motion.div
+                                    animate={{
+                                        scale: messageFocused ? 1.02 : 1,
+                                        boxShadow: messageFocused ? '0 8px 16px rgba(0,0,0,0.1)' : '0 4px 8px rgba(0,0,0,0.05)'
+                                    }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <TextField
+                                        label="Message"
+                                        value={message}
+                                        onChange={(e) => setMessage(e.target.value)}
+                                        multiline
+                                        rows={5}
+                                        fullWidth
+                                        onFocus={() => setMessageFocused(true)}
+                                        onBlur={() => setMessageFocused(false)}
+                                        InputProps={{
+                                            startAdornment: (
+                                                <MessageIcon sx={{ mr: 1, color: messageFocused ? 'primary.main' : 'text.secondary' }} />
+                                            ),
+                                        }}
+                                        sx={{
+                                            '& .MuiOutlinedInput-root': {
+                                                borderRadius: '12px',
+                                                transition: 'all 0.3s ease',
+                                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                                backdropFilter: 'blur(4px)',
+                                                '&:hover': {
+                                                    '& .MuiOutlinedInput-notchedOutline': {
+                                                        borderColor: 'primary.main',
+                                                    },
+                                                },
+                                            },
+                                        }}
+                                    />
+                                </motion.div>
+
+                                <motion.div
+                                    animate={{
+                                        scale: formAnimation ? 1.05 : 1,
+                                        y: formAnimation ? -5 : 0
+                                    }}
+                                    transition={{ duration: 0.3 }}
+                                >
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        onClick={sendEmail}
+                                        disabled={loading || !subject || !message}
+                                        endIcon={loading ? (
+                                            <FidgetSpinner
+                                                visible={true}
+                                                height="20"
+                                                width="20"
+                                                ariaLabel="fidget-spinner-loading"
+                                                wrapperStyle={{}}
+                                                wrapperClass="fidget-spinner-wrapper"
+                                            />
+                                        ) : formStatus === "success" ? (
+                                            <CheckCircleIcon />
+                                        ) : formStatus === "error" ? (
+                                            <ErrorIcon />
+                                        ) : (
+                                            <SendIcon />
+                                        )}
+                                        sx={{
+                                            borderRadius: '12px',
+                                            py: 1.5,
+                                            px: 4,
+                                            fontSize: '1rem',
+                                            fontWeight: 'bold',
+                                            boxShadow: '0 4px 14px 0 rgba(0,118,255,0.39)',
+                                            background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                                            transition: 'all 0.3s ease',
+                                            '&:hover': {
+                                                background: 'linear-gradient(45deg, #1976D2 30%, #1CB5E0 90%)',
+                                                boxShadow: '0 6px 20px 0 rgba(0,118,255,0.5)',
+                                            },
+                                            '&:disabled': {
+                                                background: 'rgba(0, 0, 0, 0.12)',
+                                                color: 'rgba(0, 0, 0, 0.26)',
+                                            }
+                                        }}
+                                    >
+                                        {loading ? "Sending..." : formStatus === "success" ? "Message Sent!" : formStatus === "error" ? "Try Again" : "Send Message"}
+                                    </Button>
+                                </motion.div>
+
+                                {formStatus === "success" && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -20 }}
+                                        className="text-center text-green-600 font-medium"
+                                    >
+                                        <CheckCircleIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+                                        Your message has been sent successfully!
+                                    </motion.div>
                                 )}
-                                {contactButton}
-                            </Button>
-                        </Stack>
-                    </Box>
+
+                                {formStatus === "error" && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -20 }}
+                                        className="text-center text-red-600 font-medium"
+                                    >
+                                        <ErrorIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+                                        There was an error sending your message. Please try again.
+                                    </motion.div>
+                                )}
+                            </Stack>
+                        </div>
+                    </motion.div>
                 </div>
+            </section>
+
+            {/* Bottom Wavy Background Section */}
+            <section className="h-96 relative overflow-hidden -mt-10 z-10">
+                <WavyBackground className="max-w-4xl mx-auto">
+                </WavyBackground>
             </section>
         </div>
     );
