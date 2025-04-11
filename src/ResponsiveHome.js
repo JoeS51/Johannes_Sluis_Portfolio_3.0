@@ -474,14 +474,6 @@ const ResponsiveHome = () => {
                     </motion.div>
                 </div>
             </section>
-
-            {/* Bottom Wavy Background Section */}
-            <section className="h-96 relative overflow-hidden -mt-10 z-10" style={{
-                backgroundColor: document.documentElement.classList.contains('dark-mode') ? '#121212' : 'var(--background-color)'
-            }}>
-                <WavyBackground className="max-w-4xl mx-auto">
-                </WavyBackground>
-            </section>
         </div>
     );
 };
