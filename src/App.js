@@ -20,13 +20,15 @@ export default function App() {
   const [open, set] = useState(true)
   const alignCenter = { display: 'flex', alignItems: 'center' }
   return (
-    <div style={{
-      backgroundColor: document.documentElement.classList.contains('dark-mode') ? '#121212' : 'var(--background-color)',
-      color: 'var(--text-color)',
-      minHeight: '100vh',
-      width: '100%',
-      transition: 'background-color var(--transition-speed) ease, color var(--transition-speed) ease'
-    }}>
+    <div
+      className={document.documentElement.classList.contains('dark-mode') ? 'dark-mode-bg' : ''}
+      style={{
+        backgroundColor: document.documentElement.classList.contains('dark-mode') ? '#121212' : 'var(--background-color)',
+        color: 'var(--text-color)',
+        minHeight: '100vh',
+        width: '100%',
+        transition: 'background-color var(--transition-speed) ease, color var(--transition-speed) ease'
+      }}>
       {/* <ResponsiveAppBar/> */}
       {/* <SlideTabs/> */}
       {/* <Home /> */}

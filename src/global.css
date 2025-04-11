@@ -114,3 +114,12 @@
 .dark-mode .bg-white {
     background-color: var(--card-bg) !important;
 }
+
+/* Specific hard-coded dark mode background to ensure consistent color */
+.dark-mode-bg {
+    background-color: #121212 !important;
+}
+
+.dark-mode .dark-mode-bg {
+    background-color: #121212 !important;
+}
