@@ -7,6 +7,7 @@ import pfp from './Pictures/pfp.png'
 import resume from './Pictures/resume.pdf'
 import pic from './Pictures/profilepic.jpeg'
 import Experience from './Experience.js'
+import MobileExperience from './MobileExperience.js'
 import Divider from '@mui/material/Divider'
 import Signature from './Components/Signature.js'
 import { WavyBackground } from './Components/Wave.js'
@@ -211,7 +212,9 @@ const ResponsiveHome = () => {
                         className="text-center"
                     >
                         <Trail open={open}>
-                            <span className="text-7xl md:text-8xl font-black" style={{ lineHeight: '1.1' }}>About Me 👨‍💻</span>
+                            <span className={`${isMobile ? 'text-5xl' : 'text-7xl md:text-8xl'} font-black`} style={{ lineHeight: '1.1', letterSpacing: isMobile ? '0.01em' : '0.02em', whiteSpace: 'nowrap' }}>
+                                About Me 👨‍💻
+                            </span>
                         </Trail>
                     </motion.div>
 
@@ -249,12 +252,12 @@ const ResponsiveHome = () => {
                     <SectionDivider />
                     <motion.div className="text-center mb-16">
                         <Trail open={open}>
-                            <span className="text-7xl md:text-8xl font-black" style={{ lineHeight: '1.1' }}>
-                                {isMobile ? "Exp. 💹" : "Experience 💹"}
+                            <span className={`${isMobile ? 'text-5xl' : 'text-7xl md:text-8xl'} font-black`} style={{ lineHeight: '1.1', letterSpacing: isMobile ? '0.01em' : '0.02em' }}>
+                                Experience 💹
                             </span>
                         </Trail>
                     </motion.div>
-                    <Experience />
+                    {isMobile ? <MobileExperience /> : <Experience />}
                 </div>
             </section>
 
@@ -264,7 +267,9 @@ const ResponsiveHome = () => {
                     <SectionDivider />
                     <motion.div className="text-center mb-16">
                         <Trail open={open}>
-                            <span className="text-7xl md:text-8xl font-black" style={{ lineHeight: '1.1' }}>Projects 💻</span>
+                            <span className={`${isMobile ? 'text-5xl' : 'text-7xl md:text-8xl'} font-black`} style={{ lineHeight: '1.1', letterSpacing: isMobile ? '0.01em' : '0.02em', whiteSpace: 'nowrap' }}>
+                                Projects 💻
+                            </span>
                         </Trail>
                     </motion.div>
                     <Projects />
@@ -277,7 +282,9 @@ const ResponsiveHome = () => {
                     <SectionDivider />
                     <motion.div className="text-center mb-16">
                         <Trail open={open}>
-                            <span className="text-7xl md:text-8xl font-black" style={{ lineHeight: '1.1' }}>Contact 📨</span>
+                            <span className={`${isMobile ? 'text-5xl' : 'text-7xl md:text-8xl'} font-black`} style={{ lineHeight: '1.1', letterSpacing: isMobile ? '0.01em' : '0.02em', whiteSpace: 'nowrap' }}>
+                                Contact 📨
+                            </span>
                         </Trail>
                     </motion.div>
 
