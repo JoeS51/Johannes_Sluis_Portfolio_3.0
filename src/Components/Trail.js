@@ -6,7 +6,7 @@ import styles from '../styles.module.css'
 const Trail = ({ open, children }) => {
   const items = React.Children.toArray(children)
   const trail = useTrail(items.length, {
-    config: { mass: 5, tension: 2000, friction: 200 },
+    config: { mass: 5, tension: 200, friction: 200 },
     opacity: open ? 1 : 0,
     x: open ? 0 : 20,
     height: open ? 110 : 0,
