@@ -115,7 +115,7 @@ const MobileExperience = () => {
                     position: 'absolute',
                     left: '20px',
                     top: 0,
-                    bottom: 0,
+                    height: 'calc(100% - 50px)',
                     width: '3px',
                     background: 'linear-gradient(to bottom, #ccc, #333)',
                     zIndex: 0
