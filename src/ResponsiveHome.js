@@ -28,9 +28,13 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 
 // For the profile picture flip animation
-const ProfileImage = ({ flip }) => (
+const ProfileImage = ({ flip, isMobile }) => (
     <motion.div
-        style={{ width: '250px', height: '250px', perspective: '1000px' }}
+        style={{
+            width: isMobile ? '250px' : '250px',
+            height: isMobile ? '250px' : '250px',
+            perspective: '1000px'
+        }}
     >
         <motion.div
             style={{
@@ -58,9 +62,9 @@ const ProfileImage = ({ flip }) => (
                 <img
                     src={pfp}
                     alt="Pfp"
-                    width="250"
-                    height="250"
-                    style={{ marginTop: '-100px' }}
+                    width={isMobile ? "250" : "250"}
+                    height={isMobile ? "250" : "250"}
+                    style={{ marginTop: isMobile ? '-50px' : '-100px' }}
                 />
             </motion.div>
 
@@ -77,9 +81,9 @@ const ProfileImage = ({ flip }) => (
             >
                 <img
                     src={pic}
-                    width="250"
-                    height="250"
-                    style={{ marginTop: '-100px' }}
+                    width={isMobile ? "250" : "250"}
+                    height={isMobile ? "250" : "250"}
+                    style={{ marginTop: isMobile ? '-50px' : '-100px' }}
                     alt="Profile Pic"
                 />
             </motion.div>
@@ -170,19 +174,29 @@ const ResponsiveHome = () => {
 
             {/* Hero Section */}
             <section id="home" className="min-h-screen relative overflow-hidden">
-                <WavyBackground className="max-w-4xl mx-auto">
-                    <div className="flex flex-row items-center justify-center min-h-screen px-4 md:px-8 gap-12">
-                        {!isMobile && <ProfileImage flip={flip} />}
-                        {/* Hero Text */}
-                        <div className="flex flex-col justify-center" style={{ marginTop: '-220px' }}>
-                            <Trail open={open}>
-                                <span className="text-7xl md:text-8xl font-black" style={{ lineHeight: '1.1' }}>Johannes</span>
-                                <span className="text-7xl md:text-8xl font-black" style={{ lineHeight: '1.1' }}>Sluis</span>
-                                <span className="text-7xl md:text-8xl font-black" style={{ lineHeight: '1.1' }}>Portfolio</span>
-                            </Trail>
+                <div className="max-w-4xl mx-auto relative z-10">
+                    <div className="flex flex-col items-center justify-center min-h-screen px-4 md:px-8">
+                        {isMobile && (
+                            <div className="mb-4 flex justify-center" style={{ marginTop: '-100px', width: '100%' }}>
+                                <div className="flex justify-center" style={{ width: '250px' }}>
+                                    <ProfileImage flip={flip} isMobile={isMobile} />
+                                </div>
+                            </div>
+                        )}
+                        <div className="flex flex-row items-center justify-center gap-12">
+                            {!isMobile && <ProfileImage flip={flip} isMobile={isMobile} />}
+                            {/* Hero Text */}
+                            <div className={`flex flex-col ${isMobile ? 'justify-center items-center w-full' : 'justify-center'}`} style={{ marginTop: isMobile ? '-75px' : '-220px' }}>
+                                <Trail open={open}>
+                                    <span className="text-7xl md:text-8xl font-black text-center" style={{ lineHeight: '1.1' }}>Johannes</span>
+                                    <span className="text-7xl md:text-8xl font-black text-center" style={{ lineHeight: '1.1' }}>Sluis</span>
+                                    <span className="text-7xl md:text-8xl font-black text-center" style={{ lineHeight: '1.1' }}>Portfolio</span>
+                                </Trail>
+                            </div>
                         </div>
                     </div>
-                </WavyBackground>
+                </div>
+                <WavyBackground className="absolute inset-0" />
             </section>
 
             {/* About Section */}
