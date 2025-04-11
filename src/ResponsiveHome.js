@@ -16,7 +16,7 @@ import { SlideTabs } from './Components/SlideTabs.js'
 import Projects from './Components/Projects.js'
 import Algoviz from './Pictures/algoviz.JPG'
 import Contact from './Components/Contact.js'
-import DarkMode from './Components/DarkMode.js'
+import DarkModeToggle from './Components/DarkMode.js'
 import { TextField, Stack, Box, Button, FormControl, FormGroup, Paper, Typography, IconButton, Tooltip, Zoom } from '@mui/material'
 import { Form } from 'react-router-dom'
 import emailjs, { send } from "emailjs-com"
@@ -159,7 +159,7 @@ const ResponsiveHome = () => {
     const SectionDivider = () => (
         <Divider
             sx={{
-                bgcolor: "#e0e0e0",
+                bgcolor: "var(--divider-color)",
                 height: "4px",
                 width: "300px",
                 margin: "0 auto",
@@ -169,9 +169,13 @@ const ResponsiveHome = () => {
     );
 
     return (
-        <div className="min-h-screen bg-white">
+        <div className="min-h-screen" style={{
+            backgroundColor: document.documentElement.classList.contains('dark-mode') ? '#121212' : 'var(--background-color)',
+            color: 'var(--text-color)'
+        }}>
             {!isMobile && <Contact />}
             <SlideTabs />
+            <DarkModeToggle />
 
             {/* Hero Section */}
             <section id="home" className="min-h-screen relative overflow-hidden">
@@ -188,7 +192,7 @@ const ResponsiveHome = () => {
                             {!isMobile && <ProfileImage flip={flip} isMobile={isMobile} />}
                             {/* Hero Text */}
                             <div className={`flex flex-col ${isMobile ? 'justify-center items-center w-full' : 'justify-center'}`} style={{ marginTop: isMobile ? '-75px' : '-220px' }}>
-                                <Trail open={open}>
+                                <Trail open={open} animationConfig={{ mass: 5, tension: 80, friction: 60 }}>
                                     <span className="text-7xl md:text-8xl font-black text-center" style={{ lineHeight: '1.1' }}>Johannes</span>
                                     <span className="text-7xl md:text-8xl font-black text-center" style={{ lineHeight: '1.1' }}>Sluis</span>
                                     <span className="text-7xl md:text-8xl font-black text-center" style={{ lineHeight: '1.1' }}>Portfolio</span>
@@ -201,7 +205,9 @@ const ResponsiveHome = () => {
             </section>
 
             {/* About Section */}
-            <section id="about" className="py-20 px-4 md:px-8 bg-transparent">
+            <section id="about" className="py-20 px-4 md:px-8 bg-transparent" style={{
+                backgroundColor: document.documentElement.classList.contains('dark-mode') ? '#121212' : 'var(--background-color)'
+            }}>
                 <div className="max-w-4xl mx-auto">
                     <SectionDivider />
                     <motion.div
@@ -211,8 +217,8 @@ const ResponsiveHome = () => {
                         transition={{ duration: 0.8 }}
                         className="text-center"
                     >
-                        <Trail open={open}>
-                            <span className={`${isMobile ? 'text-5xl' : 'text-7xl md:text-8xl'} font-black`} style={{ lineHeight: '1.1', letterSpacing: isMobile ? '0.01em' : '0.02em', whiteSpace: 'nowrap' }}>
+                        <Trail open={open} animationConfig={{ mass: 5, tension: 80, friction: 60 }}>
+                            <span className={`${isMobile ? 'text-5xl' : 'text-7xl md:text-8xl'} font-black ${styles['highlight-text']}`} style={{ lineHeight: '1.1', letterSpacing: isMobile ? '0.01em' : '0.02em', whiteSpace: 'nowrap' }}>
                                 About Me 👨‍💻
                             </span>
                         </Trail>
@@ -235,7 +241,7 @@ const ResponsiveHome = () => {
                             I'm a founding engineer at{' '}
                             <a
                                 href="https://pracareer.net/"
-                                className="text-blue-600 hover:text-blue-800 transition-colors duration-200"
+                                className={`hover:text-blue-800 transition-colors duration-200 ${styles['highlight-text']}`}
                                 style={{ textDecoration: 'none' }}
                             >
                                 Pracareer
@@ -247,12 +253,14 @@ const ResponsiveHome = () => {
             </section>
 
             {/* Experience Section */}
-            <section id="experience" className="py-20 px-4 md:px-8 bg-white">
+            <section id="experience" className="py-20 px-4 md:px-8 bg-transparent" style={{
+                backgroundColor: document.documentElement.classList.contains('dark-mode') ? '#121212' : 'var(--background-color)'
+            }}>
                 <div className="max-w-6xl mx-auto">
                     <SectionDivider />
                     <motion.div className="text-center mb-16">
-                        <Trail open={open}>
-                            <span className={`${isMobile ? 'text-5xl' : 'text-7xl md:text-8xl'} font-black`} style={{ lineHeight: '1.1', letterSpacing: isMobile ? '0.01em' : '0.02em' }}>
+                        <Trail open={open} animationConfig={{ mass: 5, tension: 80, friction: 60 }}>
+                            <span className={`${isMobile ? 'text-5xl' : 'text-7xl md:text-8xl'} font-black ${styles['highlight-text']}`} style={{ lineHeight: '1.1', letterSpacing: isMobile ? '0.01em' : '0.02em' }}>
                                 Experience 💹
                             </span>
                         </Trail>
@@ -262,12 +270,14 @@ const ResponsiveHome = () => {
             </section>
 
             {/* Projects Section */}
-            <section id="projects" className="py-20 px-4 md:px-8 bg-white">
+            <section id="projects" className="py-20 px-4 md:px-8 bg-transparent" style={{
+                backgroundColor: document.documentElement.classList.contains('dark-mode') ? '#121212' : 'var(--background-color)'
+            }}>
                 <div className="max-w-6xl mx-auto">
                     <SectionDivider />
                     <motion.div className="text-center mb-16">
-                        <Trail open={open}>
-                            <span className={`${isMobile ? 'text-5xl' : 'text-7xl md:text-8xl'} font-black`} style={{ lineHeight: '1.1', letterSpacing: isMobile ? '0.01em' : '0.02em', whiteSpace: 'nowrap' }}>
+                        <Trail open={open} animationConfig={{ mass: 5, tension: 80, friction: 60 }}>
+                            <span className={`${isMobile ? 'text-5xl' : 'text-7xl md:text-8xl'} font-black ${styles['highlight-text']}`} style={{ lineHeight: '1.1', letterSpacing: isMobile ? '0.01em' : '0.02em', whiteSpace: 'nowrap' }}>
                                 Projects 💻
                             </span>
                         </Trail>
@@ -277,12 +287,14 @@ const ResponsiveHome = () => {
             </section>
 
             {/* Contact Section */}
-            <section id="contact" className="py-20 pb-10 px-4 md:px-8 bg-transparent relative z-10">
+            <section id="contact" className="py-20 pb-10 px-4 md:px-8 bg-transparent relative z-10" style={{
+                backgroundColor: document.documentElement.classList.contains('dark-mode') ? '#121212' : 'var(--background-color)'
+            }}>
                 <div className="max-w-4xl mx-auto">
                     <SectionDivider />
                     <motion.div className="text-center mb-16">
-                        <Trail open={open}>
-                            <span className={`${isMobile ? 'text-5xl' : 'text-7xl md:text-8xl'} font-black`} style={{ lineHeight: '1.1', letterSpacing: isMobile ? '0.01em' : '0.02em', whiteSpace: 'nowrap' }}>
+                        <Trail open={open} animationConfig={{ mass: 5, tension: 80, friction: 60 }}>
+                            <span className={`${isMobile ? 'text-5xl' : 'text-7xl md:text-8xl'} font-black ${styles['highlight-text']}`} style={{ lineHeight: '1.1', letterSpacing: isMobile ? '0.01em' : '0.02em', whiteSpace: 'nowrap' }}>
                                 Contact 📨
                             </span>
                         </Trail>
@@ -302,6 +314,7 @@ const ResponsiveHome = () => {
                                         boxShadow: subjectFocused ? '0 8px 16px rgba(0,0,0,0.1)' : '0 4px 8px rgba(0,0,0,0.05)'
                                     }}
                                     transition={{ duration: 0.3 }}
+                                    className={styles['hover-lift']}
                                 >
                                     <TextField
                                         label="Subject"
@@ -319,13 +332,19 @@ const ResponsiveHome = () => {
                                             '& .MuiOutlinedInput-root': {
                                                 borderRadius: '12px',
                                                 transition: 'all 0.3s ease',
-                                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                                backgroundColor: 'var(--card-bg)',
                                                 backdropFilter: 'blur(4px)',
                                                 '&:hover': {
                                                     '& .MuiOutlinedInput-notchedOutline': {
-                                                        borderColor: 'primary.main',
+                                                        borderColor: 'var(--primary-color)',
                                                     },
                                                 },
+                                            },
+                                            '& .MuiInputLabel-root': {
+                                                color: 'var(--text-color)',
+                                            },
+                                            '& .MuiOutlinedInput-input': {
+                                                color: 'var(--text-color)',
                                             },
                                         }}
                                     />
@@ -337,6 +356,7 @@ const ResponsiveHome = () => {
                                         boxShadow: messageFocused ? '0 8px 16px rgba(0,0,0,0.1)' : '0 4px 8px rgba(0,0,0,0.05)'
                                     }}
                                     transition={{ duration: 0.3 }}
+                                    className={styles['hover-lift']}
                                 >
                                     <TextField
                                         label="Message"
@@ -356,13 +376,19 @@ const ResponsiveHome = () => {
                                             '& .MuiOutlinedInput-root': {
                                                 borderRadius: '12px',
                                                 transition: 'all 0.3s ease',
-                                                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                                                backgroundColor: 'var(--card-bg)',
                                                 backdropFilter: 'blur(4px)',
                                                 '&:hover': {
                                                     '& .MuiOutlinedInput-notchedOutline': {
-                                                        borderColor: 'primary.main',
+                                                        borderColor: 'var(--primary-color)',
                                                     },
                                                 },
+                                            },
+                                            '& .MuiInputLabel-root': {
+                                                color: 'var(--text-color)',
+                                            },
+                                            '& .MuiOutlinedInput-input': {
+                                                color: 'var(--text-color)',
                                             },
                                         }}
                                     />
@@ -403,11 +429,12 @@ const ResponsiveHome = () => {
                                             fontSize: '1rem',
                                             fontWeight: 'bold',
                                             boxShadow: '0 4px 14px 0 rgba(0,118,255,0.39)',
-                                            background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                                            background: 'linear-gradient(45deg, var(--primary-color) 30%, var(--secondary-color) 90%)',
                                             transition: 'all 0.3s ease',
                                             '&:hover': {
-                                                background: 'linear-gradient(45deg, #1976D2 30%, #1CB5E0 90%)',
+                                                background: 'linear-gradient(45deg, var(--primary-color) 30%, var(--secondary-color) 90%)',
                                                 boxShadow: '0 6px 20px 0 rgba(0,118,255,0.5)',
+                                                transform: 'translateY(-2px)',
                                             },
                                             '&:disabled': {
                                                 background: 'rgba(0, 0, 0, 0.12)',
@@ -449,7 +476,9 @@ const ResponsiveHome = () => {
             </section>
 
             {/* Bottom Wavy Background Section */}
-            <section className="h-96 relative overflow-hidden -mt-10 z-10">
+            <section className="h-96 relative overflow-hidden -mt-10 z-10" style={{
+                backgroundColor: document.documentElement.classList.contains('dark-mode') ? '#121212' : 'var(--background-color)'
+            }}>
                 <WavyBackground className="max-w-4xl mx-auto">
                 </WavyBackground>
             </section>

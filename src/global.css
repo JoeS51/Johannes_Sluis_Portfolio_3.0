@@ -1,3 +1,116 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* 
+  Global CSS overrides for Bootstrap components to ensure they work with dark mode
+  This file should be imported in index.js after Bootstrap CSS
+*/
+
+/* Card component in dark mode */
+.dark-mode .card {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+    border-color: var(--divider-color) !important;
+    transition: all var(--transition-speed) ease;
+}
+
+.dark-mode .card-header {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+    color: var(--text-color) !important;
+    border-bottom-color: var(--divider-color) !important;
+}
+
+.dark-mode .card-body {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+}
+
+.dark-mode .card-title,
+.dark-mode .card-text {
+    color: var(--text-color) !important;
+}
+
+/* List group components in dark mode */
+.dark-mode .list-group-item {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+    border-color: var(--divider-color) !important;
+}
+
+.dark-mode .list-group-item-action:hover,
+.dark-mode .list-group-item-action:focus {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Button overrides for dark mode */
+.dark-mode .btn-primary {
+    background-color: var(--primary-color) !important;
+    border-color: var(--primary-color) !important;
+}
+
+.dark-mode .btn-secondary {
+    background-color: var(--secondary-color) !important;
+    border-color: var(--secondary-color) !important;
+}
+
+/* Form controls in dark mode */
+.dark-mode .form-control {
+    background-color: var(--card-bg) !important;
+    color: var(--text-color) !important;
+    border-color: var(--divider-color) !important;
+}
+
+.dark-mode .form-control:focus {
+    border-color: var(--primary-color) !important;
+    box-shadow: 0 0 0 0.25rem rgba(var(--primary-color-rgb), 0.25) !important;
+}
+
+/* Dropdown menus in dark mode */
+.dark-mode .dropdown-menu {
+    background-color: var(--card-bg) !important;
+    border-color: var(--divider-color) !important;
+}
+
+.dark-mode .dropdown-item {
+    color: var(--text-color) !important;
+}
+
+.dark-mode .dropdown-item:hover,
+.dark-mode .dropdown-item:focus {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+}
+
+/* Ensure all text elements inherit the text color */
+.dark-mode p,
+.dark-mode h1,
+.dark-mode h2,
+.dark-mode h3,
+.dark-mode h4,
+.dark-mode h5,
+.dark-mode h6,
+.dark-mode span,
+.dark-mode label {
+    color: var(--text-color) !important;
+}
+
+/* Override specific Bootstrap classes that might have hard-coded colors */
+.dark-mode .text-dark {
+    color: var(--text-color) !important;
+}
+
+.dark-mode .text-muted {
+    color: rgba(255, 255, 255, 0.6) !important;
+}
+
+.dark-mode .border {
+    border-color: var(--divider-color) !important;
+}
+
+.dark-mode .bg-light {
+    background-color: var(--card-bg) !important;
+}
+
+.dark-mode .bg-white {
+    background-color: var(--card-bg) !important;
+}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import Card from 'react-bootstrap/Card';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
@@ -31,74 +31,128 @@ import { motion } from 'framer-motion';
 
 import Grow from '@mui/material/Grow';
 
+// Custom card styles for dark mode
+const darkModeCardStyle = {
+    backgroundColor: 'var(--card-bg)',
+    color: 'var(--text-color)',
+    borderColor: 'var(--divider-color)',
+    transition: 'background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease'
+};
+
+const darkModeCardHeaderStyle = {
+    backgroundColor: 'rgba(0,0,0,0.1)',
+    color: 'var(--text-color)',
+    borderBottomColor: 'var(--divider-color)',
+    transition: 'all 0.3s ease'
+};
 
 const Experience = () => {
     const [job, setJob] = React.useState("Microsoft1");
+    const [isDarkMode, setIsDarkMode] = React.useState(false);
+
+    useEffect(() => {
+        // Check if dark mode is active
+        const checkDarkMode = () => {
+            setIsDarkMode(document.documentElement.classList.contains('dark-mode'));
+        };
+
+        checkDarkMode();
+
+        // Set up observer to detect class changes on documentElement
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    checkDarkMode();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, { attributes: true });
+
+        return () => observer.disconnect();
+    }, []);
+
     return (
         <div>
             <Stack direction="row"
-                divider={<Divider orientation="vertical" flexItem />}
+                divider={<Divider orientation="vertical" flexItem sx={{ bgcolor: 'var(--divider-color)' }} />}
                 spacing={2}>
-                <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
-                    <ListItemButton onClick={() => setJob("Microsoft1")} selected={job == "Microsoft1"}>
+                <List sx={{
+                    width: '100%',
+                    maxWidth: 360,
+                    bgcolor: 'var(--card-bg)',
+                    color: 'var(--text-color)',
+                    borderRadius: '8px',
+                    transition: 'all 0.3s ease',
+                    '& .MuiListItemButton-root.Mui-selected': {
+                        backgroundColor: 'var(--primary-color)',
+                    },
+                    '& .MuiListItemText-secondary': {
+                        color: isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)'
+                    }
+                }}>
+                    <ListItemButton onClick={() => setJob("Microsoft1")} selected={job === "Microsoft1"}>
                         <ListItemAvatar>
-                            <Avatar variant='square' src={Msft} />
+                            <Avatar variant='square' src={Msft} sx={{ bgcolor: '#fff', p: '2px' }} />
                         </ListItemAvatar>
                         <ListItemText primary="Microsoft | SWE Intern" secondary="June 2024 - Sep. 2024" />
                     </ListItemButton>
-                    <ListItemButton onClick={() => setJob("Blue")} selected={job == "Blue"}>
+                    <ListItemButton onClick={() => setJob("Blue")} selected={job === "Blue"}>
                         <ListItemAvatar>
-                            <Avatar variant='square' src={Blue} />
+                            <Avatar variant='square' src={Blue} sx={{ bgcolor: '#fff', p: '2px' }} />
                         </ListItemAvatar>
                         <ListItemText primary="Blue Origin | SWE Intern" secondary="Sep. 2023 - Dec. 2023" />
                     </ListItemButton>
-                    <ListItemButton onClick={() => setJob("Microsoft2")} selected={job == "Microsoft2"}>
+                    <ListItemButton onClick={() => setJob("Microsoft2")} selected={job === "Microsoft2"}>
                         <ListItemAvatar>
-                            <Avatar variant='square' src={Msft} />
+                            <Avatar variant='square' src={Msft} sx={{ bgcolor: '#fff', p: '2px' }} />
                         </ListItemAvatar>
                         <ListItemText primary="Microsoft | SWE Intern" secondary="June 2023 - Sep. 2023" />
                     </ListItemButton>
-                    <ListItemButton onClick={() => setJob("Hcr")} selected={job == "Hcr"}>
+                    <ListItemButton onClick={() => setJob("Hcr")} selected={job === "Hcr"}>
                         <ListItemAvatar>
-                            <Avatar variant='square' src={hcr} />
+                            <Avatar variant='square' src={hcr} sx={{ bgcolor: '#fff', p: '2px' }} />
                         </ListItemAvatar>
                         <ListItemText primary="HCR Lab | Researcher" secondary="June 2022 - Present" />
                     </ListItemButton>
-                    <ListItemButton onClick={() => setJob("Cledge")} selected={job == "Cledge"}>
+                    <ListItemButton onClick={() => setJob("Cledge")} selected={job === "Cledge"}>
                         <ListItemAvatar>
-                            <Avatar variant='square' src={Cledge} />
+                            <Avatar variant='square' src={Cledge} sx={{ bgcolor: '#fff', p: '2px' }} />
                         </ListItemAvatar>
                         <ListItemText primary="Cledge | Software Developer" secondary="Oct. 2022 - June 2023" />
                     </ListItemButton>
-                    <ListItemButton onClick={() => setJob("Codeninjas")} selected={job == "Codeninjas"}>
+                    <ListItemButton onClick={() => setJob("Codeninjas")} selected={job === "Codeninjas"}>
                         <ListItemAvatar>
-                            <Avatar variant='square' src={Codeninjas} />
+                            <Avatar variant='square' src={Codeninjas} sx={{ bgcolor: '#fff', p: '2px' }} />
                         </ListItemAvatar>
                         <ListItemText primary="Code Ninjas | Lead Instructor" secondary="Aug. 2019 - July 2022" />
                     </ListItemButton>
                 </List>
-                {job == "Microsoft1" &&
-                    <Grow in={job == "Microsoft1"} {...(job == "Microsoft1" ? { timeout: 750 } : {})}>
-                        <Card border="light" style={{ width: '40rem' }}>
-                            <Card.Header>Microsoft</Card.Header>
+                {job === "Microsoft1" &&
+                    <Grow in={job === "Microsoft1"} {...(job === "Microsoft1" ? { timeout: 750 } : {})}>
+                        <Card border="light" style={{
+                            width: '40rem',
+                            ...(isDarkMode ? darkModeCardStyle : {})
+                        }}>
+                            <Card.Header style={isDarkMode ? darkModeCardHeaderStyle : {}}>Microsoft</Card.Header>
                             <Card.Body>
-                                <Card.Title>Azure Arc SQL Server Team</Card.Title>
+                                <Card.Title style={{ color: 'var(--text-color)' }}>Azure Arc SQL Server Team</Card.Title>
                                 <Card.Text>
                                     <ul className={styles.list}>
                                         <br></br>
                                         <li className={styles.listItem}>Developed automated tooling to generate analysis reports for simulations to ensure mission objectives are met</li>
                                         <br></br>
-                                        <li className={styles.listItem}>Engineered over 15 configurations of the rocket’s Monte-Carlo simulations, ensuring efficacy and safety</li>
+                                        <li className={styles.listItem}>Engineered over 15 configurations of the rocket's Monte-Carlo simulations, ensuring efficacy and safety</li>
                                     </ul>
                                     <br></br>
                                     <motion.div
-                                        animate={{ rotate: [0, 360] }} // Rotate from 0 to 360 degrees
+                                        animate={{ rotate: [0, 360] }}
                                         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
                                         style={{
                                             display: "flex",
                                             alignItems: "center",
                                             justifyContent: "center",
-                                            transformOrigin: "center", // Ensures rotation happens around the center
+                                            transformOrigin: "center",
                                         }}
                                     >
                                         <img src={Azure} height={100} width={100} />
@@ -108,18 +162,21 @@ const Experience = () => {
                         </Card>
                     </Grow>
                 }
-                {job == "Blue" &&
-                    <Grow in={job == "Blue"} {...(job == "Blue" ? { timeout: 750 } : {})}>
-                        <Card border="light" style={{ width: '40rem' }}>
-                            <Card.Header>Blue Origin</Card.Header>
+                {job === "Blue" &&
+                    <Grow in={job === "Blue"} {...(job === "Blue" ? { timeout: 750 } : {})}>
+                        <Card border="light" style={{
+                            width: '40rem',
+                            ...(isDarkMode ? darkModeCardStyle : {})
+                        }}>
+                            <Card.Header style={isDarkMode ? darkModeCardHeaderStyle : {}}>Blue Origin</Card.Header>
                             <Card.Body>
-                                <Card.Title>New Glenn Guidance & Control</Card.Title>
+                                <Card.Title style={{ color: 'var(--text-color)' }}>New Glenn Guidance & Control</Card.Title>
                                 <Card.Text>
                                     <ul className={styles.list}>
                                         <br></br>
                                         <li className={styles.listItem}>Developed automated tooling to generate analysis reports for simulations to ensure mission objectives are met</li>
                                         <br></br>
-                                        <li className={styles.listItem}>Engineered over 15 configurations of the rocket’s Monte-Carlo simulations, ensuring efficacy and safety</li>
+                                        <li className={styles.listItem}>Engineered over 15 configurations of the rocket's Monte-Carlo simulations, ensuring efficacy and safety</li>
                                     </ul>
                                     <br></br>
                                     <motion.div
@@ -134,12 +191,15 @@ const Experience = () => {
                         </Card>
                     </Grow>
                 }
-                {job == "Microsoft2" &&
-                    <Grow in={job == "Microsoft2"} {...(job == "Microsoft2" ? { timeout: 750 } : {})}>
-                        <Card border="light" style={{ width: '40rem' }}>
-                            <Card.Header>Microsoft</Card.Header>
+                {job === "Microsoft2" &&
+                    <Grow in={job === "Microsoft2"} {...(job === "Microsoft2" ? { timeout: 750 } : {})}>
+                        <Card border="light" style={{
+                            width: '40rem',
+                            ...(isDarkMode ? darkModeCardStyle : {})
+                        }}>
+                            <Card.Header style={isDarkMode ? darkModeCardHeaderStyle : {}}>Microsoft</Card.Header>
                             <Card.Body>
-                                <Card.Title>Azure Arc SQL Server Team</Card.Title>
+                                <Card.Title style={{ color: 'var(--text-color)' }}>Azure Arc SQL Server Team</Card.Title>
                                 <Card.Text>
                                     <ul className={styles.list}>
                                         <br></br>
@@ -154,18 +214,21 @@ const Experience = () => {
                         </Card>
                     </Grow>
                 }
-                {job == "Hcr" &&
-                    <Grow in={job == "Hcr"} {...(job == "Hcr" ? { timeout: 750 } : {})}>
-                        <Card border="light" style={{ width: '40rem' }}>
-                            <Card.Header>HCR Lab</Card.Header>
+                {job === "Hcr" &&
+                    <Grow in={job === "Hcr"} {...(job === "Hcr" ? { timeout: 750 } : {})}>
+                        <Card border="light" style={{
+                            width: '40rem',
+                            ...(isDarkMode ? darkModeCardStyle : {})
+                        }}>
+                            <Card.Header style={isDarkMode ? darkModeCardHeaderStyle : {}}>HCR Lab</Card.Header>
                             <Card.Body>
-                                <Card.Title>Stretch Robot</Card.Title>
+                                <Card.Title style={{ color: 'var(--text-color)' }}>Stretch Robot</Card.Title>
                                 <ul className={styles.list}>
                                     <br></br>
                                     <li className={styles.listItem}>Collaborated with Hello Robot researchers to develop and deploy an improved interface for the Stretch Robot,
                                         enhancing client independence by reducing task completion time by over 80%</li>
 
-                                    <li className={styles.listItem}>Co-authoring the paper “Inquiries during Programming by Demonstration to Reduce User Burden” to facilitate
+                                    <li className={styles.listItem}>Co-authoring the paper "Inquiries during Programming by Demonstration to Reduce User Burden" to facilitate
                                         easier control of the robot for individuals with motor impairments</li>
                                 </ul>
                             </Card.Body>
@@ -178,12 +241,15 @@ const Experience = () => {
                         </Card>
                     </Grow>
                 }
-                {job == "Cledge" &&
-                    <Grow in={job == "Cledge"} {...(job == "Cledge" ? { timeout: 750 } : {})}>
-                        <Card border="light" style={{ width: '40rem' }}>
-                            <Card.Header>Cledge</Card.Header>
+                {job === "Cledge" &&
+                    <Grow in={job === "Cledge"} {...(job === "Cledge" ? { timeout: 750 } : {})}>
+                        <Card border="light" style={{
+                            width: '40rem',
+                            ...(isDarkMode ? darkModeCardStyle : {})
+                        }}>
+                            <Card.Header style={isDarkMode ? darkModeCardHeaderStyle : {}}>Cledge</Card.Header>
                             <Card.Body>
-                                <Card.Title>Full Stack Developer</Card.Title>
+                                <Card.Title style={{ color: 'var(--text-color)' }}>Full Stack Developer</Card.Title>
                                 <Card.Text>
                                     <ul className={styles.list}>
                                         <br></br>
@@ -196,12 +262,15 @@ const Experience = () => {
                         </Card>
                     </Grow>
                 }
-                {job == "Codeninjas" &&
-                    <Grow in={job == "Codeninjas"} {...(job == "Codeninjas" ? { timeout: 750 } : {})}>
-                        <Card border="light" style={{ width: '40rem' }}>
-                            <Card.Header>Lead Instructor</Card.Header>
+                {job === "Codeninjas" &&
+                    <Grow in={job === "Codeninjas"} {...(job === "Codeninjas" ? { timeout: 750 } : {})}>
+                        <Card border="light" style={{
+                            width: '40rem',
+                            ...(isDarkMode ? darkModeCardStyle : {})
+                        }}>
+                            <Card.Header style={isDarkMode ? darkModeCardHeaderStyle : {}}>Lead Instructor</Card.Header>
                             <Card.Body>
-                                <Card.Title>Code Ninjas</Card.Title>
+                                <Card.Title style={{ color: 'var(--text-color)' }}>Code Ninjas</Card.Title>
                                 <Card.Text>
                                     <ul className={styles.list}>
                                         <br></br>
@@ -228,7 +297,6 @@ const Experience = () => {
                 }
             </Stack>
         </div>
-
     );
 }
 

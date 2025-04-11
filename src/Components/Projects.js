@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
     Card,
     CardMedia,
@@ -61,6 +61,30 @@ const projects = [
 ];
 
 const ProjectCard = () => {
+    const [isDarkMode, setIsDarkMode] = useState(false);
+
+    useEffect(() => {
+        // Check if dark mode is active
+        const checkDarkMode = () => {
+            setIsDarkMode(document.documentElement.classList.contains('dark-mode'));
+        };
+
+        checkDarkMode();
+
+        // Set up observer to detect class changes on documentElement
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.attributeName === 'class') {
+                    checkDarkMode();
+                }
+            });
+        });
+
+        observer.observe(document.documentElement, { attributes: true });
+
+        return () => observer.disconnect();
+    }, []);
+
     return (
         <Box sx={{ flexGrow: 1, padding: 4, display: 'flex', justifyContent: 'center' }}>
             <Grid
@@ -99,9 +123,15 @@ const ProjectCard = () => {
                                     maxWidth: 345,
                                     height: '100%',
                                     borderRadius: "16px",
-                                    boxShadow: 6,
+                                    boxShadow: 'var(--card-shadow)',
                                     display: 'flex',
-                                    flexDirection: 'column'
+                                    flexDirection: 'column',
+                                    backgroundColor: 'var(--card-bg)',
+                                    color: 'var(--text-color)',
+                                    transition: 'all 0.3s ease',
+                                    '&:hover': {
+                                        boxShadow: '0 8px 20px rgba(0,0,0,0.2)',
+                                    }
                                 }}
                             >
                                 <CardActionArea
@@ -120,7 +150,7 @@ const ProjectCard = () => {
                                         alt={project.title}
                                         sx={{
                                             ...(project.imageStyle || {}),
-                                            borderBottom: project.secondaryImage ? '1px solid #e0e0e0' : 'none'
+                                            borderBottom: project.secondaryImage ? `1px solid var(--divider-color)` : 'none'
                                         }}
                                     />
                                     {project.secondaryImage && (
@@ -132,24 +162,26 @@ const ProjectCard = () => {
                                             sx={project.imageStyle || {}}
                                         />
                                     )}
-                                    <CardContent sx={{ flexGrow: 1 }}>
+                                    <CardContent sx={{ flexGrow: 1, bgcolor: 'var(--card-bg)' }}>
                                         <Typography
                                             variant="h6"
                                             component="div"
                                             gutterBottom
                                             sx={{
-                                                color: "#323DD6",
+                                                color: isDarkMode ? 'var(--primary-color)' : '#323DD6',
                                                 fontWeight: "bold",
                                                 textAlign: "center",
+                                                transition: 'color 0.3s ease'
                                             }}
                                         >
                                             {project.title}
                                         </Typography>
                                         <Typography
                                             variant="body2"
-                                            color="text.secondary"
                                             sx={{
                                                 textAlign: "center",
+                                                color: isDarkMode ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+                                                transition: 'color 0.3s ease'
                                             }}
                                         >
                                             {project.description}

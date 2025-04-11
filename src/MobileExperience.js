@@ -117,7 +117,7 @@ const MobileExperience = () => {
                     top: 0,
                     height: 'calc(100% - 50px)',
                     width: '3px',
-                    background: 'linear-gradient(to bottom, #ccc, #333)',
+                    background: 'var(--timeline-bg)',
                     zIndex: 0
                 }}
             />
@@ -156,6 +156,7 @@ const MobileExperience = () => {
                         initial={{ opacity: 0, x: 50 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.1, duration: 0.5 }}
+                        whileHover={{ scale: 1.03, y: -5 }}
                         whileTap={{ scale: 0.98 }}
                     >
                         <Paper
@@ -166,7 +167,14 @@ const MobileExperience = () => {
                                 borderRadius: '12px',
                                 borderLeft: `4px solid ${job.color}`,
                                 cursor: 'pointer',
-                                position: 'relative'
+                                position: 'relative',
+                                bgcolor: 'var(--card-bg)',
+                                color: 'var(--text-color)',
+                                boxShadow: 'var(--card-shadow)',
+                                transition: 'all 0.3s ease',
+                                '&:hover': {
+                                    boxShadow: '0 10px 20px rgba(0,0,0,0.2)',
+                                }
                             }}
                             onClick={() => {
                                 toggleExpand(job.id);
@@ -177,17 +185,33 @@ const MobileExperience = () => {
                                 <Avatar
                                     src={job.logo}
                                     variant="rounded"
-                                    sx={{ width: 40, height: 40, mr: 2 }}
+                                    sx={{
+                                        width: 40,
+                                        height: 40,
+                                        mr: 2,
+                                        bgcolor: '#ffffff',
+                                        p: '2px',
+                                        boxShadow: '0 2px 4px rgba(0,0,0,0.1)'
+                                    }}
                                 />
                                 <Box sx={{ flexGrow: 1 }}>
                                     <Typography variant="h6" component="div" sx={{ fontWeight: 'bold' }}>
                                         {job.company}
                                     </Typography>
-                                    <Typography variant="body2" color="text.secondary">
+                                    <Typography variant="body2" sx={{ color: 'text.secondary', opacity: 0.8 }}>
                                         {job.period}
                                     </Typography>
                                 </Box>
-                                <IconButton size="small">
+                                <IconButton
+                                    size="small"
+                                    sx={{
+                                        color: 'var(--text-color)',
+                                        '&:hover': {
+                                            color: job.color,
+                                            bgcolor: 'rgba(0,0,0,0.05)'
+                                        }
+                                    }}
+                                >
                                     {expandedId === job.id ? <ExpandLessIcon /> : <ExpandMoreIcon />}
                                 </IconButton>
                             </Box>
@@ -199,7 +223,10 @@ const MobileExperience = () => {
                                     backgroundColor: `${job.color}22`,
                                     color: job.color,
                                     fontWeight: 'bold',
-                                    mb: 1
+                                    mb: 1,
+                                    '&:hover': {
+                                        backgroundColor: `${job.color}33`,
+                                    }
                                 }}
                             />
 
@@ -211,8 +238,8 @@ const MobileExperience = () => {
                                         exit={{ opacity: 0, height: 0 }}
                                         transition={{ duration: 0.3 }}
                                     >
-                                        <Divider sx={{ my: 1.5 }} />
-                                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1 }}>
+                                        <Divider sx={{ my: 1.5, bgcolor: 'var(--divider-color)' }} />
+                                        <Typography variant="subtitle1" sx={{ fontWeight: 'bold', mb: 1, color: job.color }}>
                                             {job.team}
                                         </Typography>
                                         <Stack spacing={1.5}>
@@ -226,7 +253,14 @@ const MobileExperience = () => {
                                                     <Typography variant="body2" sx={{
                                                         p: 1.5,
                                                         borderRadius: '8px',
-                                                        backgroundColor: 'rgba(0,0,0,0.03)'
+                                                        backgroundColor: 'rgba(0,0,0,0.03)',
+                                                        borderLeft: `2px solid ${job.color}`,
+                                                        color: 'var(--text-color)',
+                                                        transition: 'all 0.3s ease',
+                                                        '&:hover': {
+                                                            backgroundColor: 'rgba(0,0,0,0.05)',
+                                                            transform: 'translateX(3px)'
+                                                        }
                                                     }}>
                                                         • {detail}
                                                     </Typography>

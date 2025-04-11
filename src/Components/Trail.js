@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useTrail, a } from '@react-spring/web'
 
 import styles from '../styles.module.css'
 
-const Trail = ({ open, children }) => {
+const Trail = ({ open, children, animationConfig }) => {
   const items = React.Children.toArray(children)
   const trail = useTrail(items.length, {
-    config: { mass: 5, tension: 200, friction: 200 },
+    config: animationConfig || { mass: 5, tension: 120, friction: 80 },
     opacity: open ? 1 : 0,
     x: open ? 0 : 20,
     height: open ? 110 : 0,
     from: { opacity: 0, x: 20, height: 0 },
-    delay: 200
+    delay: 300
   })
   return (
     <div>

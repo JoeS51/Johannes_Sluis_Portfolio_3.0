@@ -1,9 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 
 const Contact = () => {
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    // Check if dark mode is active
+    const checkDarkMode = () => {
+      setIsDarkMode(document.documentElement.classList.contains('dark-mode'));
+    };
+
+    checkDarkMode();
+
+    // Set up observer to detect class changes on documentElement
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          checkDarkMode();
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
-    <StyledWrapper>
+    <StyledWrapper isDarkMode={isDarkMode}>
       <div className="card">
         {/* GitHub */}
         <a
@@ -64,13 +88,13 @@ const StyledWrapper = styled.div`
     justify-content: center;
     padding: 15px;
     gap: 15px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: ${props => props.isDarkMode ? '0px 0px 10px rgba(255, 255, 255, 0.1)' : '0px 0px 10px rgba(0, 0, 0, 0.1)'};
   }
 
   .socialContainer {
     width: 40px;
     height: 40px;
-    background-color: rgb(44, 44, 44);
+    background-color: ${props => props.isDarkMode ? '#3a3a3a' : 'rgb(44, 44, 44)'};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -82,7 +106,7 @@ const StyledWrapper = styled.div`
   .socialSvg {
     width: 20px;
     height: 20px;
-    fill: white;
+    fill: ${props => props.isDarkMode ? '#f5f5f5' : 'white'};
     transition: fill 0.3s ease;
   }
 

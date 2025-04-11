@@ -24,6 +24,30 @@ export const WavyBackground = ({
     ctx,
     canvas;
   const canvasRef = useRef(null);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    // Check if dark mode is active
+    const checkDarkMode = () => {
+      setIsDarkMode(document.documentElement.classList.contains('dark-mode'));
+    };
+
+    checkDarkMode();
+
+    // Set up observer to detect class changes on documentElement
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          checkDarkMode();
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, { attributes: true });
+
+    return () => observer.disconnect();
+  }, []);
+
   const getSpeed = () => {
     switch (speed) {
       case "slow":
@@ -50,13 +74,38 @@ export const WavyBackground = ({
     render();
   };
 
-  const waveColors = colors ?? [
+  // Define separate color palettes for light and dark modes
+  const lightModeColors = colors ?? [
     "#a7fcab",  // Light mint green
     "#b7fcb4",  // Slightly lighter mint green
     "#c2f0fc",  // Soft blue
     "#bdecff",  // Light cyan
     "#bdf5ff",  // Pale aqua
   ];
+
+  const darkModeColors = [
+    "#3f51b5",  // Indigo
+    "#5c6bc0",  // Light indigo
+    "#303f9f",  // Dark indigo
+    "#7986cb",  // Light purple
+    "#3d5afe",  // Bright blue
+  ];
+
+  // Add more color options for better variety in dark mode
+  const extendedDarkModeColors = [
+    "#3f51b5",  // Indigo
+    "#5c6bc0",  // Light indigo
+    "#303f9f",  // Dark indigo
+    "#7986cb",  // Light purple
+    "#3d5afe",  // Bright blue
+    "#5e35b1",  // Deep purple
+    "#7e57c2",  // Medium purple
+    "#2196f3",  // Blue
+    "#42a5f5",  // Light blue
+  ];
+
+  const waveColors = isDarkMode ? extendedDarkModeColors : lightModeColors;
+
   const drawWave = (n) => {
     nt += getSpeed();
     for (i = 0; i < n; i++) {
@@ -74,7 +123,7 @@ export const WavyBackground = ({
 
   let animationId;
   const render = () => {
-    ctx.fillStyle = backgroundFill || "white";
+    ctx.fillStyle = isDarkMode ? '#121212' : (backgroundFill || "white");
     ctx.globalAlpha = waveOpacity || 0.5;
     ctx.fillRect(0, 0, w, h);
     drawWave(5);
@@ -86,7 +135,7 @@ export const WavyBackground = ({
     return () => {
       cancelAnimationFrame(animationId);
     };
-  }, []);
+  }, [isDarkMode]); // Re-initialize when dark mode changes
 
   const [isSafari, setIsSafari] = useState(false);
   useEffect(() => {
@@ -99,7 +148,8 @@ export const WavyBackground = ({
   return (
     (<div
       className={cn("flex flex-col items-center justify-center", containerClassName)}
-      >
+      style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 0 }}
+    >
       <canvas
         className="absolute inset-0 z-0"
         ref={canvasRef}

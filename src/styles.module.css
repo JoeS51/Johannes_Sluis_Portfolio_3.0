@@ -3,11 +3,12 @@
   width: 100%;
   height: 80px;
   line-height: 80px;
-  color: black;
+  color: var(--text-color);
   font-size: 6em;
   font-weight: 800;
   letter-spacing: -0.05em;
   will-change: transform, opacity;
+  transition: color var(--transition-speed) ease;
 }
 
 .trailsText>div {
@@ -33,6 +34,8 @@
   /* Center children horizontally */
   padding-top: 80px;
   /* Add padding at the top if needed */
+  background-color: var(--background-color);
+  transition: background-color var(--transition-speed) ease;
 }
 
 .topcontainer span {
@@ -42,6 +45,7 @@
   /* Center text inside span */
   width: 100%;
   /* Make span take full width */
+  color: var(--text-color);
 }
 
 .topcontainer h1 {
@@ -54,6 +58,7 @@
   padding: 0 20px;
   /* Optional: Add padding to the left and right */
   box-sizing: border-box;
+  color: var(--text-color);
 }
 
 
@@ -66,6 +71,14 @@
   width: 25%;
   text-align: center;
   border-radius: 10px;
+  background-color: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
 }
 
 .parallax {
@@ -75,12 +88,13 @@
 .background-container-grid {
   width: 100%;
   height: 100%;
-  background-color: rgb(255, 255, 255);
-  color: rgb(0, 0, 0);
+  background-color: var(--background-color);
+  color: var(--text-color);
   display: flex;
   justify-content: center;
   align-items: center;
   padding-top: 200px;
+  transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease;
 }
 
 .containergrid {
@@ -95,14 +109,50 @@
   margin-left: 20px;
   /* Adds indentation */
   font-size: 18px;
+  color: var(--text-color);
 }
 
 .listItem {
   margin-bottom: 10px;
   /* Optional: Adds space between list items */
+  color: var(--text-color);
 }
 
 .front,
 .back {
   backface-visibility: hidden;
+}
+
+/* Add professional hover effects */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Text highlight effect */
+.highlight-text {
+  position: relative;
+  display: inline-block;
+}
+
+.highlight-text::after {
+  content: '';
+  position: absolute;
+  width: 100%;
+  transform: scaleX(0);
+  height: 2px;
+  bottom: 0;
+  left: 0;
+  background-color: var(--primary-color);
+  transform-origin: bottom right;
+  transition: transform 0.3s ease-out;
+}
+
+.highlight-text:hover::after {
+  transform: scaleX(1);
+  transform-origin: bottom left;
 }
