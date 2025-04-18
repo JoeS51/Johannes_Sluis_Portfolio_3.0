@@ -3,17 +3,23 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import Random from './Random';
+import Articles from './Articles';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const router = createBrowserRouter([
-  {path: "/",
+  {
+    path: "/",
     element: <App />
   },
   {
     path: "/random",
     element: <Random />
+  },
+  {
+    path: "/articles",
+    element: <Articles />
   }
 ])
 
