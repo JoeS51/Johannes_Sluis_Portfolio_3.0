@@ -1,32 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { IconButton, Tooltip } from '@mui/material';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { motion } from 'framer-motion';
+import { useDarkMode } from './DarkModeContext';
 
 const DarkModeToggle = () => {
-  // Check for saved theme preference or default to 'light'
-  const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem('theme');
-    return savedTheme || 'light';
-  });
-
-  // Update theme state and localStorage when changed
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    localStorage.setItem('theme', newTheme);
-  };
-
-  // Apply theme to document when theme changes
-  useEffect(() => {
-    const root = document.documentElement;
-    if (theme === 'dark') {
-      root.classList.add('dark-mode');
-    } else {
-      root.classList.remove('dark-mode');
-    }
-  }, [theme]);
+  const { theme, isDarkMode, toggleTheme } = useDarkMode();
 
   return (
     <motion.div

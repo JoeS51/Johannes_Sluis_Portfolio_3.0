@@ -17,6 +17,7 @@ import Projects from './Components/Projects.js'
 import Algoviz from './Pictures/algoviz.JPG'
 import Contact from './Components/Contact.js'
 import DarkModeToggle from './Components/DarkMode.js'
+import { useDarkMode } from './Components/DarkModeContext.js'
 import { TextField, Stack, Box, Button, FormControl, FormGroup, Paper, Typography, IconButton, Tooltip, Zoom } from '@mui/material'
 import { Form } from 'react-router-dom'
 import emailjs, { send } from "emailjs-com"
@@ -93,6 +94,7 @@ const ProfileImage = ({ flip, isMobile }) => (
 );
 
 const ResponsiveHome = () => {
+    const { isDarkMode } = useDarkMode();
     const [open, setOpen] = useState(true);
     const [flip, setFlip] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
@@ -170,7 +172,7 @@ const ResponsiveHome = () => {
 
     return (
         <div className="min-h-screen" style={{
-            backgroundColor: document.documentElement.classList.contains('dark-mode') ? '#121212' : 'var(--background-color)',
+                            backgroundColor: isDarkMode ? '#121212' : 'var(--background-color)',
             color: 'var(--text-color)'
         }}>
             {!isMobile && <Contact />}
@@ -206,7 +208,7 @@ const ResponsiveHome = () => {
 
             {/* About Section */}
             <section id="about" className="py-20 px-4 md:px-8 bg-transparent" style={{
-                backgroundColor: document.documentElement.classList.contains('dark-mode') ? '#121212' : 'var(--background-color)'
+                backgroundColor: isDarkMode ? '#121212' : 'var(--background-color)'
             }}>
                 <div className="max-w-4xl mx-auto">
                     <SectionDivider />
@@ -254,7 +256,7 @@ const ResponsiveHome = () => {
 
             {/* Experience Section */}
             <section id="experience" className="py-20 px-4 md:px-8 bg-transparent" style={{
-                backgroundColor: document.documentElement.classList.contains('dark-mode') ? '#121212' : 'var(--background-color)'
+                backgroundColor: isDarkMode ? '#121212' : 'var(--background-color)'
             }}>
                 <div className="max-w-6xl mx-auto">
                     <SectionDivider />
@@ -271,7 +273,7 @@ const ResponsiveHome = () => {
 
             {/* Projects Section */}
             <section id="projects" className="py-20 px-4 md:px-8 bg-transparent" style={{
-                backgroundColor: document.documentElement.classList.contains('dark-mode') ? '#121212' : 'var(--background-color)'
+                backgroundColor: isDarkMode ? '#121212' : 'var(--background-color)'
             }}>
                 <div className="max-w-6xl mx-auto">
                     <SectionDivider />
@@ -288,7 +290,7 @@ const ResponsiveHome = () => {
 
             {/* Contact Section */}
             <section id="contact" className="py-20 pb-10 px-4 md:px-8 bg-transparent relative z-10" style={{
-                backgroundColor: document.documentElement.classList.contains('dark-mode') ? '#121212' : 'var(--background-color)'
+                backgroundColor: isDarkMode ? '#121212' : 'var(--background-color)'
             }}>
                 <div className="max-w-4xl mx-auto">
                     <SectionDivider />

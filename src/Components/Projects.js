@@ -9,6 +9,7 @@ import {
     CardActionArea,
 } from "@mui/material";
 import { motion } from "framer-motion";
+import { useDarkMode } from './DarkModeContext';
 import algoviz from '../Pictures/algoviz.JPG'
 import jenni from '../Pictures/jenni.JPG'
 import spotlite from '../Pictures/spotlite.JPG'
@@ -61,29 +62,7 @@ const projects = [
 ];
 
 const ProjectCard = () => {
-    const [isDarkMode, setIsDarkMode] = useState(false);
-
-    useEffect(() => {
-        // Check if dark mode is active
-        const checkDarkMode = () => {
-            setIsDarkMode(document.documentElement.classList.contains('dark-mode'));
-        };
-
-        checkDarkMode();
-
-        // Set up observer to detect class changes on documentElement
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.attributeName === 'class') {
-                    checkDarkMode();
-                }
-            });
-        });
-
-        observer.observe(document.documentElement, { attributes: true });
-
-        return () => observer.disconnect();
-    }, []);
+    const { isDarkMode } = useDarkMode();
 
     return (
         <Box sx={{ flexGrow: 1, padding: 4, display: 'flex', justifyContent: 'center' }}>
