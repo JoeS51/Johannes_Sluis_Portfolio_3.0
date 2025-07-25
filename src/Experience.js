@@ -4,6 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import CardGroup from 'react-bootstrap/CardGroup';
 import styles from './styles.module.css'
+import { useDarkMode } from './Components/DarkModeContext.js';
 
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -48,29 +49,7 @@ const darkModeCardHeaderStyle = {
 
 const Experience = () => {
     const [job, setJob] = React.useState("Microsoft1");
-    const [isDarkMode, setIsDarkMode] = React.useState(false);
-
-    useEffect(() => {
-        // Check if dark mode is active
-        const checkDarkMode = () => {
-            setIsDarkMode(document.documentElement.classList.contains('dark-mode'));
-        };
-
-        checkDarkMode();
-
-        // Set up observer to detect class changes on documentElement
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach((mutation) => {
-                if (mutation.attributeName === 'class') {
-                    checkDarkMode();
-                }
-            });
-        });
-
-        observer.observe(document.documentElement, { attributes: true });
-
-        return () => observer.disconnect();
-    }, []);
+    const { isDarkMode } = useDarkMode();
 
     return (
         <div>

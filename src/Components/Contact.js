@@ -1,30 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useDarkMode } from './DarkModeContext';
 
 const Contact = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    // Check if dark mode is active
-    const checkDarkMode = () => {
-      setIsDarkMode(document.documentElement.classList.contains('dark-mode'));
-    };
-
-    checkDarkMode();
-
-    // Set up observer to detect class changes on documentElement
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'class') {
-          checkDarkMode();
-        }
-      });
-    });
-
-    observer.observe(document.documentElement, { attributes: true });
-
-    return () => observer.disconnect();
-  }, []);
+  const { isDarkMode } = useDarkMode();
 
   return (
     <StyledWrapper isDarkMode={isDarkMode}>

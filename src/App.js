@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { useTrail, a } from '@react-spring/web'
 import styles from './styles.module.css'
 import Trail from './Components/Trail.js'
@@ -9,21 +9,20 @@ import Main from './Main.js'
 import Experience from './Experience.js'
 import { SlideTabs } from './Components/SlideTabs.js'
 import ResponsiveHome from './ResponsiveHome.js'
+import { DarkModeProvider, useDarkMode } from './Components/DarkModeContext.js'
 import './index.css'
 import './global.css'  // Import the global CSS for Bootstrap overrides
 
-// Check if a saved theme preference exists in localStorage
-const savedTheme = localStorage.getItem('theme') || 'light';
-document.documentElement.classList.toggle('dark-mode', savedTheme === 'dark');
-
-export default function App() {
+const AppContent = () => {
   const [open, set] = useState(true)
+  const { isDarkMode } = useDarkMode()
   const alignCenter = { display: 'flex', alignItems: 'center' }
+  
   return (
     <div
-      className={document.documentElement.classList.contains('dark-mode') ? 'dark-mode-bg' : ''}
+      className={isDarkMode ? 'dark-mode-bg' : ''}
       style={{
-        backgroundColor: document.documentElement.classList.contains('dark-mode') ? '#121212' : 'var(--background-color)',
+        backgroundColor: isDarkMode ? '#121212' : 'var(--background-color)',
         color: 'var(--text-color)',
         minHeight: '100vh',
         width: '100%',
@@ -34,6 +33,14 @@ export default function App() {
       {/* <Home /> */}
       <ResponsiveHome />
     </div>
+  )
+}
+
+export default function App() {
+  return (
+    <DarkModeProvider>
+      <AppContent />
+    </DarkModeProvider>
   )
 }
 

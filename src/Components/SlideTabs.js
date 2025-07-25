@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-scroll";
+import { useDarkMode } from './DarkModeContext';
 
 export const SlideTabs = () => {
   const [position, setPosition] = useState({
@@ -10,7 +11,7 @@ export const SlideTabs = () => {
   });
 
   const [isMobile, setIsMobile] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const { isDarkMode } = useDarkMode();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -20,28 +21,6 @@ export const SlideTabs = () => {
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  useEffect(() => {
-    // Check if dark mode is active
-    const checkDarkMode = () => {
-      setIsDarkMode(document.documentElement.classList.contains('dark-mode'));
-    };
-
-    checkDarkMode();
-
-    // Set up observer to detect class changes on documentElement
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'class') {
-          checkDarkMode();
-        }
-      });
-    });
-
-    observer.observe(document.documentElement, { attributes: true });
-
-    return () => observer.disconnect();
   }, []);
 
   return (

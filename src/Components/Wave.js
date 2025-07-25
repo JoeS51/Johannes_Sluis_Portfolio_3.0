@@ -2,6 +2,7 @@
 import { cn } from "../utils";
 import React, { useEffect, useRef, useState } from "react";
 import { createNoise3D } from "simplex-noise";
+import { useDarkMode } from './DarkModeContext';
 
 export const WavyBackground = ({
   children,
@@ -24,29 +25,7 @@ export const WavyBackground = ({
     ctx,
     canvas;
   const canvasRef = useRef(null);
-  const [isDarkMode, setIsDarkMode] = useState(false);
-
-  useEffect(() => {
-    // Check if dark mode is active
-    const checkDarkMode = () => {
-      setIsDarkMode(document.documentElement.classList.contains('dark-mode'));
-    };
-
-    checkDarkMode();
-
-    // Set up observer to detect class changes on documentElement
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === 'class') {
-          checkDarkMode();
-        }
-      });
-    });
-
-    observer.observe(document.documentElement, { attributes: true });
-
-    return () => observer.disconnect();
-  }, []);
+  const { isDarkMode } = useDarkMode();
 
   const getSpeed = () => {
     switch (speed) {
