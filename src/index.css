@@ -213,3 +213,69 @@ a:hover {
   color: var(--text-color);
   border-color: var(--divider-color);
 }
+
+/* Enhanced Responsive Design - Media Queries */
+@media screen and (max-width: 767px) {
+  /* Mobile styles */
+  .trailsText {
+    font-size: 3em;
+    line-height: 60px;
+    height: 60px;
+  }
+  
+  h1 {
+    font-size: 1.75rem;
+  }
+  
+  h2 {
+    font-size: 1.5rem;
+  }
+  
+  .container {
+    padding: 0 16px;
+  }
+  
+  .card {
+    width: 90%;
+    margin: 8px;
+  }
+}
+
+@media screen and (min-width: 768px) and (max-width: 1023px) {
+  /* Tablet styles */
+  .trailsText {
+    font-size: 4.5em;
+    line-height: 70px;
+    height: 70px;
+  }
+  
+  .card {
+    width: 45%;
+  }
+  
+  .containergrid {
+    width: 70vw;
+  }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1199px) {
+  /* Desktop styles */
+  .trailsText {
+    font-size: 5.5em;
+  }
+  
+  .containergrid {
+    width: 60vw;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  /* Large screen styles */
+  .trailsText {
+    font-size: 6em;
+  }
+  
+  .containergrid {
+    width: 50vw;
+  }
+}
