@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import Navigation from '../components/Navigation';
-import MarkdownContent from '../components/blog/MarkdownContent';
-import TableOfContents from '../components/blog/TableOfContents';
+import Navigation from '../Components/Navigation';
+import MarkdownContent from '../Components/blog/MarkdownContent';
+import TableOfContents from '../Components/blog/TableOfContents';
 import { getAdjacentPosts, getPostBySlug } from '../lib/posts';
 import '../styles/blog.css';
 

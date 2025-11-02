@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
-import Navigation from '../components/Navigation';
-import BlogCard from '../components/blog/BlogCard';
+import BlogCard from '../Components/blog/BlogCard';
 import { getAllPosts, getAllTags } from '../lib/posts';
+import Navigation from '../Components/Navigation';
 import '../styles/blog.css';
-
+import MarkdownContent from '../Components/blog/MarkdownContent';
 const POSTS_PER_PAGE = 10;
 
 const Blog = () => {
