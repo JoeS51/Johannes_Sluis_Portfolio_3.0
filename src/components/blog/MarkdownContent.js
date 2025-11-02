@@ -1,0 +1,61 @@
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+
+const MarkdownContent = ({ content }) => {
+  return (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      components={{
+        h1: ({ children }) => <h1 className="blog-heading-1">{children}</h1>,
+        h2: ({ children }) => <h2 className="blog-heading-2">{children}</h2>,
+        h3: ({ children }) => <h3 className="blog-heading-3">{children}</h3>,
+        h4: ({ children }) => <h4 className="blog-heading-4">{children}</h4>,
+        p: ({ children }) => <p className="blog-paragraph">{children}</p>,
+        a: ({ href, children }) => (
+          <a
+            href={href}
+            className="blog-link"
+            target={href && href.startsWith('http') ? '_blank' : undefined}
+            rel={href && href.startsWith('http') ? 'noopener noreferrer' : undefined}
+          >
+            {children}
+          </a>
+        ),
+        ul: ({ children }) => <ul className="blog-list">{children}</ul>,
+        ol: ({ children }) => <ol className="blog-ordered-list">{children}</ol>,
+        li: ({ children }) => <li className="blog-list-item">{children}</li>,
+        blockquote: ({ children }) => <blockquote className="blog-quote">{children}</blockquote>,
+        code: ({ inline, className, children, ...props }) => {
+          if (!inline) {
+            return (
+              <pre className="blog-code-block">
+                <code {...props}>{children}</code>
+              </pre>
+            );
+          }
+
+          return (
+            <code className="blog-inline-code" {...props}>
+              {children}
+            </code>
+          );
+        },
+        table: ({ children }) => <div className="blog-table-wrapper"><table>{children}</table></div>,
+        thead: ({ children }) => <thead className="blog-table-head">{children}</thead>,
+        th: ({ children }) => <th className="blog-table-header">{children}</th>,
+        td: ({ children }) => <td className="blog-table-cell">{children}</td>,
+        hr: () => <hr className="blog-divider" />,
+        img: ({ src, alt }) => (
+          <figure className="blog-figure">
+            <img src={src} alt={alt} loading="lazy" />
+            {alt && <figcaption>{alt}</figcaption>}
+          </figure>
+        ),
+      }}
+    >
+      {content}
+    </ReactMarkdown>
+  );
+};
+
+export default MarkdownContent;
