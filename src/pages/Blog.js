@@ -3,7 +3,6 @@ import BlogCard from '../Components/blog/BlogCard';
 import { getAllPosts, getAllTags } from '../lib/posts';
 import Navigation from '../Components/Navigation.js';
 import '../styles/blog.css';
-import MarkdownContent from '../Components/blog/MarkdownContent';
 const POSTS_PER_PAGE = 10;
 
 const Blog = () => {

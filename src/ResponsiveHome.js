@@ -9,21 +9,17 @@ import pic from './Pictures/profilepic.jpeg'
 import Experience from './Experience.js'
 import MobileExperience from './MobileExperience.js'
 import Divider from '@mui/material/Divider'
-import Signature from './Components/Signature.js'
 import { WavyBackground } from './Components/Wave.js'
 import { motion } from "framer-motion"
 import { SlideTabs } from './Components/SlideTabs.js'
 import Projects from './Components/Projects.js'
-import Algoviz from './Pictures/algoviz.JPG'
 import Contact from './Components/Contact.js'
 import DarkModeToggle from './Components/DarkMode.js'
 import { useDarkMode } from './Components/DarkModeContext.js'
-import { TextField, Stack, Box, Button, FormControl, FormGroup, Paper, Typography, IconButton, Tooltip, Zoom } from '@mui/material'
-import { Form } from 'react-router-dom'
-import emailjs, { send } from "emailjs-com"
+import { TextField, Stack, Button } from '@mui/material'
+import emailjs from "emailjs-com"
 import { FidgetSpinner } from 'react-loader-spinner'
 import SendIcon from '@mui/icons-material/Send';
-import EmailIcon from '@mui/icons-material/Email';
 import SubjectIcon from '@mui/icons-material/Subject';
 import MessageIcon from '@mui/icons-material/Message';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -95,12 +91,11 @@ const ProfileImage = ({ flip, isMobile }) => (
 
 const ResponsiveHome = () => {
     const { isDarkMode } = useDarkMode();
-    const [open, setOpen] = useState(true);
+    const [open] = useState(true);
     const [flip, setFlip] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [subject, setSubject] = useState("");
     const [message, setMessage] = useState("");
-    const [contactButton, setContactButton] = useState("Send");
     const [loading, setLoading] = useState(false);
     const [formStatus, setFormStatus] = useState("idle"); // idle, success, error
     const [formAnimation, setFormAnimation] = useState(false);
@@ -138,12 +133,10 @@ const ResponsiveHome = () => {
             (result) => {
                 setSubject("");
                 setMessage("");
-                setContactButton('👏🏼 Sent 👏🏼');
                 setLoading(false);
                 setFormStatus("success");
                 setFormAnimation(true);
                 setTimeout(() => {
-                    setContactButton('Send');
                     setFormStatus("idle");
                     setFormAnimation(false);
                 }, 3000);
