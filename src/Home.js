@@ -9,17 +9,14 @@ import resume from './Pictures/resume.pdf'
 import pic from './Pictures/profilepic.jpeg';
 import Experience from './Experience.js'
 import Divider from '@mui/material/Divider';
-import Signature from './Components/Signature.js'
 import { WavyBackground } from './Components/Wave.js'
 import { motion } from "framer-motion";
 import { SlideTabs } from './Components/SlideTabs.js'
 import Projects from './Components/Projects.js'
-import Algoviz from './Pictures/algoviz.JPG'
 import Contact from './Components/Contact.js'
 import DarkMode from './Components/DarkMode.js'
-import { TextField, Stack, Box, Button, FormControl, FormGroup } from '@mui/material'
-import { Form } from 'react-router-dom'
-import emailjs, { send } from "emailjs-com";
+import { TextField, Stack, Button, Box } from '@mui/material'
+import emailjs from "emailjs-com";
 import { FidgetSpinner } from 'react-loader-spinner'
 
 export default function Home() {
