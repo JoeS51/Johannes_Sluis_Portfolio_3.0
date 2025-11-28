@@ -50,7 +50,7 @@ const Blog = () => {
       <main className="blog-main">
         <header className="blog-header">
           <h1 className="blog-title">Blog</h1>
-          <p className="blog-subtitle">Thoughts on design, development, and minimalism.</p>
+          <p className="blog-subtitle">Things I've learnt or built</p>
         </header>
 
         <section className="blog-filters">
