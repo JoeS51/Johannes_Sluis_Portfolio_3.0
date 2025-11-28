@@ -16,10 +16,10 @@ const posts = [
       title: 'Building React from Scratch',
       description: 'I built a lightweight version of react.js from scratch for fun.',
       date: '2025-11-01',
-      tags: ['Personal', 'Meta'],
+      tags: ['Side Project', 'Internals', 'JavaScript'],
       cover: null
     },
-    content: '[learnings here and link]',
+    content: '[TODO]',
   }
 ];
 
