@@ -1,10 +1,21 @@
 const posts = [
   {
+    slug: 'hello-world',
+    frontmatter: {
+      title: 'Hello World',
+      description: 'Kicking off the blog with thoughts on learning in public and what to expect.',
+      date: '2025-10-21',
+      tags: ['Personal', 'Meta'],
+      cover: null
+    },
+    content: '',
+  },
+  {
     slug: 'rust-azure-service-bus-email-worker',
     frontmatter: {
-      title: 'From Queue to Inbox: Rust + Azure Service Bus',
+      title: 'Emailing Service in Rust using Azure Service Bus',
       description:
-        'How I built a resilient Rust worker that reads Azure Service Bus messages and dispatches templated emails.',
+        'How I built a Rust worker that reads Azure Service Bus messages and dispatches emails.',
       date: '2025-02-15',
       tags: ['Rust', 'Azure', 'Backend'],
       cover: null
@@ -12,7 +23,7 @@ const posts = [
     content: `
 ## Why I needed this worker
 
-I wanted a single, reliable worker that listened to Azure Service Bus and fanned out transactional emails (welcome emails, weekly reports, and alerts). My earlier cron-based SMTP jobs were brittle, so I moved to an event-driven approach that could scale horizontally and survive transient cloud hiccups.
+I wanted a single, reliable worker that listened to Azure Service Bus and sent out emails (welcome emails, weekly reports, and alerts). I could have simply used EmailJS or something similar, but this was a good excuse to use Rust since I had recently finished the Rust handbook.
 
 ## Architecture at a glance
 
@@ -160,17 +171,6 @@ I want to add automatic retries with scheduled messages for noisy email provider
 `
   },
   {
-    slug: 'hello-world',
-    frontmatter: {
-      title: 'Hello World',
-      description: 'Kicking off the blog with thoughts on learning in public and what to expect.',
-      date: '2025-10-21',
-      tags: ['Personal', 'Meta'],
-      cover: null
-    },
-    content: '',
-  },
-  {
     slug: 'react-from-scratch',
     frontmatter: {
       title: 'Building React from Scratch',
@@ -180,7 +180,7 @@ I want to add automatic retries with scheduled messages for noisy email provider
       cover: null
     },
     content: '[TODO]',
-  }
+  },
 ];
 
 export default posts;
