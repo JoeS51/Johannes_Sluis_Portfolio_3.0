@@ -5,7 +5,7 @@ import Navigation from '../Components/Navigation.js';
 import MarkdownContent from '../Components/blog/MarkdownContent';
 import TableOfContents from '../Components/blog/TableOfContents';
 import { getAdjacentPosts, getPostBySlug } from '../lib/posts';
-import '../styles/blog.css';
+import '../Styles/blog.css';
 
 const formatDate = (dateString) => {
   const date = new Date(dateString);

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import BlogCard from '../Components/blog/BlogCard';
 import { getAllPosts, getAllTags } from '../lib/posts';
 import Navigation from '../Components/Navigation.js';
-import '../styles/blog.css';
+import '../Styles/blog.css';
 const POSTS_PER_PAGE = 10;
 
 const Blog = () => {
