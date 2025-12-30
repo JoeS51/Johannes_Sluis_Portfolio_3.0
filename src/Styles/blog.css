@@ -469,6 +469,14 @@
   font-size: 0.9rem;
 }
 
+.blog-code-block code {
+  display: block;
+  background: transparent;
+  color: inherit;
+  padding: 0;
+  margin: 0;
+}
+
 .blog-inline-code {
   background: rgba(15, 23, 42, 0.08);
   padding: 0.1rem 0.4rem;
