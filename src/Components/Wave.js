@@ -104,13 +104,15 @@ export const WavyBackground = ({
       ctx.lineWidth = waveWidth || 50;
       ctx.strokeStyle = waveColors[i % waveColors.length];
 
-      // Each wave has a staggered reveal - waves in back reveal slightly later
-      const waveDelay = i * 0.08; // 8% delay per wave
-      const waveProgress = Math.max(0, Math.min(1, (progress - waveDelay) / (1 - waveDelay * n / 2)));
+      // Each wave has a staggered start but same animation duration
+      // This keeps every wave moving at the same smooth pace
+      const waveDelay = i * 0.06; // 6% staggered start per wave
+      const waveAnimDuration = 0.7; // Each wave takes 70% of total time to complete
+      const waveProgress = Math.max(0, Math.min(1, (progress - waveDelay) / waveAnimDuration));
       const easedProgress = easeOutCubic(waveProgress);
 
-      // Calculate how far to draw this wave (with organic overshoot feel)
-      const maxX = easedProgress * (w + 100); // Slight overshoot
+      // Calculate how far to draw this wave
+      const maxX = easedProgress * w;
 
       for (let x = 0; x < Math.min(maxX, w); x += 5) {
         const y = noise(x / 800, 0.3 * i, ntRef.current) * 100;
