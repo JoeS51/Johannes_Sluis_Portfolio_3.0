@@ -25,74 +25,354 @@ import MessageIcon from '@mui/icons-material/Message';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 
-// For the profile picture flip animation
-const ProfileImage = ({ flip, isMobile }) => (
-    <motion.div
-        style={{
-            width: isMobile ? '250px' : '250px',
-            height: isMobile ? '250px' : '250px',
-            perspective: '1000px'
-        }}
-    >
-        <motion.div
+// Animated Gradient Text Component
+const GradientText = ({ children, className, style, isDarkMode }) => {
+    const gradientColors = isDarkMode
+        ? ['#21CBF3', '#2196F3', '#1565C0']
+        : ['#64748b', '#475569', '#334155'];
+
+    return (
+        <motion.span
+            className={className}
             style={{
-                width: '100%',
-                height: '100%',
-                position: 'relative',
-                transformStyle: 'preserve-3d',
+                ...style,
+                background: `linear-gradient(90deg, ${gradientColors[0]}, ${gradientColors[1]}, ${gradientColors[2]}, ${gradientColors[1]}, ${gradientColors[0]})`,
+                backgroundSize: '200% auto',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
             }}
-            animate={{ rotateY: flip ? 360 : 0 }}
+            animate={{
+                backgroundPosition: ['0% center', '200% center'],
+            }}
             transition={{
-                duration: 2,
-                ease: 'easeInOut',
+                duration: 3,
+                repeat: Infinity,
+                ease: 'linear',
             }}
         >
-            {/* Front of the card */}
-            <motion.div
-                style={{
-                    width: '100%',
-                    height: '100%',
-                    backfaceVisibility: 'hidden',
-                    position: 'absolute',
-                }}
-                className="front"
-            >
-                <img
-                    src={pfp}
-                    alt="Pfp"
-                    width={isMobile ? "250" : "250"}
-                    height={isMobile ? "250" : "250"}
-                    style={{ marginTop: isMobile ? '-50px' : '-100px' }}
-                />
-            </motion.div>
+            {children}
+        </motion.span>
+    );
+};
 
-            {/* Back of the card */}
+// Subtle Digital Glitch Profile Image Animation
+const ProfileImage = ({ isMobile }) => {
+    const { isDarkMode } = useDarkMode();
+    const size = 250;
+    const borderWidth = 4;
+    const [isGlitching, setIsGlitching] = useState(false);
+    const [showReal, setShowReal] = useState(false);
+
+    // Gradient colors based on theme
+    const gradientColors = isDarkMode
+        ? ['#21CBF3', '#2196F3', '#1565C0', '#21CBF3']  // Cyan/blue for dark mode
+        : ['#64748b', '#475569', '#334155', '#64748b']; // Monochrome with blue undertone for light mode
+
+    const gradientString = (deg) => `conic-gradient(from ${deg}deg, ${gradientColors.join(', ')})`;
+
+    // Trigger glitch effect periodically
+    useEffect(() => {
+        const interval = setInterval(() => {
+            // Start glitch + show real photo
+            setIsGlitching(true);
+            setShowReal(true);
+
+            // End glitch effect but keep real photo visible a bit longer
+            setTimeout(() => setIsGlitching(false), 600);
+
+            // Glitch again when transitioning back
+            setTimeout(() => setIsGlitching(true), 1800);
+
+            // Hide real photo
+            setTimeout(() => setShowReal(false), 2000);
+
+            // End second glitch
+            setTimeout(() => setIsGlitching(false), 2400);
+        }, 5000);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    return (
+        <div
+            style={{
+                width: `${size + borderWidth * 2}px`,
+                height: `${size + borderWidth * 2}px`,
+                position: 'relative',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+            }}
+        >
+            {/* Animated gradient border */}
             <motion.div
                 style={{
-                    width: '100%',
-                    height: '100%',
-                    backfaceVisibility: 'hidden',
                     position: 'absolute',
-                    transform: 'rotateY(180deg)',
+                    inset: 0,
+                    borderRadius: '4px',
+                    background: gradientString(0),
+                    zIndex: 0,
                 }}
-                className="back"
+                animate={{
+                    background: [
+                        gradientString(0),
+                        gradientString(90),
+                        gradientString(180),
+                        gradientString(270),
+                        gradientString(360),
+                    ],
+                }}
+                transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: 'linear',
+                }}
+            />
+            {/* Glow effect behind border */}
+            <motion.div
+                style={{
+                    position: 'absolute',
+                    inset: '-8px',
+                    borderRadius: '8px',
+                    background: gradientString(0),
+                    filter: 'blur(15px)',
+                    opacity: isDarkMode ? 0.5 : 0.7,
+                    zIndex: -1,
+                }}
+                animate={{
+                    background: [
+                        gradientString(0),
+                        gradientString(90),
+                        gradientString(180),
+                        gradientString(270),
+                        gradientString(360),
+                    ],
+                    opacity: isGlitching
+                        ? (isDarkMode ? [0.5, 0.8, 0.6, 0.5] : [0.7, 1, 0.8, 0.7])
+                        : (isDarkMode ? 0.5 : 0.7),
+                }}
+                transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: 'linear',
+                }}
+            />
+            <div
+                style={{
+                    width: `${size}px`,
+                    height: `${size}px`,
+                    position: 'relative',
+                    zIndex: 1,
+                    borderRadius: '2px',
+                    overflow: 'hidden',
+                }}
             >
-                <img
-                    src={pic}
-                    width={isMobile ? "250" : "250"}
-                    height={isMobile ? "250" : "250"}
-                    style={{ marginTop: isMobile ? '-50px' : '-100px' }}
-                    alt="Profile Pic"
-                />
-            </motion.div>
-        </motion.div>
-    </motion.div>
-);
+                <motion.div
+                    style={{
+                        width: '100%',
+                        height: '100%',
+                        position: 'relative',
+                        overflow: 'hidden',
+                    }}
+                    animate={{
+                        x: isGlitching ? [0, -3, 4, -2, 0] : 0,
+                    }}
+                    transition={{ duration: 0.3, ease: 'linear' }}
+                >
+                    {/* Base cartoon image */}
+                    <img
+                        src={pfp}
+                        alt="Profile"
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            position: 'absolute',
+                        }}
+                    />
+
+                    {/* Real photo - fades in/out smoothly */}
+                    <motion.img
+                        src={pic}
+                        alt="Real Profile"
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            objectFit: 'cover',
+                            position: 'absolute',
+                        }}
+                        animate={{
+                            opacity: showReal ? 1 : 0,
+                        }}
+                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    />
+
+                    {/* Cyan color shift layer (#21CBF3) */}
+                    <motion.div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundImage: `url(${showReal ? pic : pfp})`,
+                            backgroundSize: 'cover',
+                            mixBlendMode: 'screen',
+                            opacity: 0,
+                        }}
+                        animate={{
+                            x: isGlitching ? [0, 6, -3, 0] : 0,
+                            opacity: isGlitching ? [0, 0.35, 0.15, 0] : 0,
+                            filter: isGlitching
+                                ? ['none', 'url(#cyan-tint)', 'url(#cyan-tint)', 'none']
+                                : 'none',
+                        }}
+                        transition={{ duration: 0.5, ease: 'easeOut' }}
+                    />
+
+                    {/* Blue color shift layer (#2196F3) */}
+                    <motion.div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundImage: `url(${showReal ? pic : pfp})`,
+                            backgroundSize: 'cover',
+                            mixBlendMode: 'screen',
+                            opacity: 0,
+                        }}
+                        animate={{
+                            x: isGlitching ? [0, -5, 4, 0] : 0,
+                            opacity: isGlitching ? [0, 0.35, 0.15, 0] : 0,
+                            filter: isGlitching
+                                ? ['none', 'url(#blue-tint)', 'url(#blue-tint)', 'none']
+                                : 'none',
+                        }}
+                        transition={{ duration: 0.5, ease: 'easeOut', delay: 0.05 }}
+                    />
+
+                    {/* Cyan overlay flash */}
+                    <motion.div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundColor: '#21CBF3',
+                            mixBlendMode: 'overlay',
+                            pointerEvents: 'none',
+                        }}
+                        animate={{
+                            opacity: isGlitching ? [0, 0.2, 0.08, 0] : 0,
+                        }}
+                        transition={{ duration: 0.5, ease: 'easeOut' }}
+                    />
+
+                    {/* Blue overlay flash */}
+                    <motion.div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            backgroundColor: '#2196F3',
+                            mixBlendMode: 'overlay',
+                            pointerEvents: 'none',
+                        }}
+                        animate={{
+                            opacity: isGlitching ? [0, 0.12, 0.15, 0] : 0,
+                        }}
+                        transition={{ duration: 0.5, ease: 'easeOut', delay: 0.08 }}
+                    />
+
+                    {/* Scanlines (subtle) */}
+                    <div
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            background: `repeating-linear-gradient(
+                            0deg,
+                            transparent,
+                            transparent 3px,
+                            rgba(0, 0, 0, 0.02) 3px,
+                            rgba(0, 0, 0, 0.02) 4px
+                        )`,
+                            pointerEvents: 'none',
+                        }}
+                    />
+
+                    {/* Glitch slices with theme colors */}
+                    {isGlitching && (
+                        <>
+                            <motion.div
+                                style={{
+                                    position: 'absolute',
+                                    left: 0,
+                                    right: 0,
+                                    top: '22%',
+                                    height: '10%',
+                                    background: `linear-gradient(90deg, rgba(33, 203, 243, 0.35) 0%, transparent 100%)`,
+                                }}
+                                initial={{ x: -50, opacity: 0 }}
+                                animate={{ x: [0, 10, 0], opacity: [0, 0.5, 0] }}
+                                transition={{ duration: 0.4, ease: 'easeOut' }}
+                            />
+                            <motion.div
+                                style={{
+                                    position: 'absolute',
+                                    left: 0,
+                                    right: 0,
+                                    top: '58%',
+                                    height: '8%',
+                                    background: `linear-gradient(270deg, rgba(33, 150, 243, 0.35) 0%, transparent 100%)`,
+                                }}
+                                initial={{ x: 50, opacity: 0 }}
+                                animate={{ x: [0, -8, 0], opacity: [0, 0.5, 0] }}
+                                transition={{ duration: 0.35, ease: 'easeOut', delay: 0.08 }}
+                            />
+                        </>
+                    )}
+                </motion.div>
+
+                {/* SVG Filters for cyan/blue tints */}
+                <svg style={{ position: 'absolute', width: 0, height: 0 }}>
+                    <defs>
+                        <filter id="cyan-tint">
+                            <feColorMatrix
+                                type="matrix"
+                                values="0 0 0 0 0.13
+                                        0 1 0 0 0.3
+                                        0 0 1 0 0.4
+                                        0 0 0 1 0"
+                            />
+                        </filter>
+                        <filter id="blue-tint">
+                            <feColorMatrix
+                                type="matrix"
+                                values="0 0 0 0 0.13
+                                        0 0.6 0 0 0.2
+                                        0 0 1 0 0.4
+                                        0 0 0 1 0"
+                            />
+                        </filter>
+                    </defs>
+                </svg>
+            </div>
+        </div>
+    );
+};
 
 const ResponsiveHome = () => {
     const { isDarkMode } = useDarkMode();
     const [open] = useState(true);
-    const [flip, setFlip] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [subject, setSubject] = useState("");
     const [message, setMessage] = useState("");
@@ -109,13 +389,6 @@ const ResponsiveHome = () => {
         checkMobile();
         window.addEventListener('resize', checkMobile);
         return () => window.removeEventListener('resize', checkMobile);
-    }, []);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setFlip(prev => !prev);
-        }, 5000);
-        return () => clearInterval(interval);
     }, []);
 
     const sendEmail = (e) => {
@@ -165,7 +438,7 @@ const ResponsiveHome = () => {
 
     return (
         <div className="min-h-screen" style={{
-                            backgroundColor: isDarkMode ? '#121212' : 'var(--background-color)',
+            backgroundColor: isDarkMode ? '#121212' : 'var(--background-color)',
             color: 'var(--text-color)'
         }}>
             {!isMobile && <Contact />}
@@ -174,27 +447,32 @@ const ResponsiveHome = () => {
 
             {/* Hero Section */}
             <section id="home" className="min-h-screen relative overflow-hidden">
-                <div className="max-w-4xl mx-auto relative z-10">
-                    <div className="flex flex-col items-center justify-center min-h-screen px-4 md:px-8">
-                        {isMobile && (
-                            <div className="mb-4 flex justify-center" style={{ marginTop: '-100px', width: '100%' }}>
-                                <div className="flex justify-center" style={{ width: '250px' }}>
-                                    <ProfileImage flip={flip} isMobile={isMobile} />
-                                </div>
-                            </div>
-                        )}
-                        <div className="flex flex-row items-center justify-center gap-12">
-                            {!isMobile && <ProfileImage flip={flip} isMobile={isMobile} />}
-                            {/* Hero Text */}
-                            <div className={`flex flex-col ${isMobile ? 'justify-center items-center w-full' : 'justify-center'}`} style={{ marginTop: isMobile ? '-75px' : '-220px' }}>
+                <div className="max-w-5xl mx-auto relative z-10 h-screen flex items-center justify-center px-4 md:px-8" style={{ paddingBottom: '15vh' }}>
+                    {isMobile ? (
+                        /* Mobile layout - stacked */
+                        <div className="flex flex-col items-center justify-center gap-6">
+                            <ProfileImage isMobile={isMobile} />
+                            <div className="flex flex-col items-center">
                                 <Trail open={open} animationConfig={{ mass: 5, tension: 80, friction: 60 }}>
-                                    <span className="text-7xl md:text-8xl font-black text-center" style={{ lineHeight: '1.1' }}>Johannes</span>
-                                    <span className="text-7xl md:text-8xl font-black text-center" style={{ lineHeight: '1.1' }}>Sluis</span>
-                                    <span className="text-7xl md:text-8xl font-black text-center" style={{ lineHeight: '1.1' }}>Portfolio</span>
+                                    <GradientText className="text-6xl font-black text-center" style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Johannes</GradientText>
+                                    <GradientText className="text-6xl font-black text-center" style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Sluis</GradientText>
+                                    <GradientText className="text-6xl font-black text-center" style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Portfolio</GradientText>
                                 </Trail>
                             </div>
                         </div>
-                    </div>
+                    ) : (
+                        /* Desktop layout - side by side, vertically centered */
+                        <div className="flex flex-row items-center justify-center gap-12">
+                            <ProfileImage isMobile={isMobile} />
+                            <div className="flex flex-col justify-center" style={{ marginTop: '-45px' }}>
+                                <Trail open={open} animationConfig={{ mass: 5, tension: 80, friction: 60 }}>
+                                    <GradientText className="text-7xl md:text-8xl font-black" style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Johannes</GradientText>
+                                    <GradientText className="text-7xl md:text-8xl font-black" style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Sluis</GradientText>
+                                    <GradientText className="text-7xl md:text-8xl font-black" style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Portfolio</GradientText>
+                                </Trail>
+                            </div>
+                        </div>
+                    )}
                 </div>
                 <WavyBackground className="absolute inset-0" />
             </section>
