@@ -11,6 +11,7 @@ export const SlideTabs = () => {
   });
 
   const [isMobile, setIsMobile] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const { isDarkMode } = useDarkMode();
 
   useEffect(() => {
@@ -23,8 +24,23 @@ export const SlideTabs = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
+  // Trigger animation on mount
+  useEffect(() => {
+    const timer = setTimeout(() => setIsVisible(true), 50);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 flex justify-center items-center p-4">
+    <motion.nav
+      className="fixed top-0 left-0 w-full z-50 flex justify-center items-center p-4"
+      initial={{ opacity: 0 }}
+      animate={isVisible ? { opacity: 1 } : { opacity: 0 }}
+      transition={{
+        duration: 0.6,
+        ease: "easeOut",
+        delay: 0.25
+      }}
+    >
       <ul
         onMouseLeave={() => {
           setPosition((pv) => ({
@@ -49,7 +65,7 @@ export const SlideTabs = () => {
         <Tab setPosition={setPosition} sectionId="contact" isMobile={isMobile} isDarkMode={isDarkMode}>Contact</Tab>
         <Cursor position={position} isDarkMode={isDarkMode} />
       </ul>
-    </nav>
+    </motion.nav>
   );
 };
 
