@@ -4,6 +4,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { createNoise3D } from "simplex-noise";
 import { useDarkMode } from './DarkModeContext';
 
+// Easing function for organic feel
+const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3);
+
 export const WavyBackground = ({
   children,
   className,
@@ -17,15 +20,16 @@ export const WavyBackground = ({
   ...props
 }) => {
   const noise = createNoise3D();
-  let w,
-    h,
-    nt,
-    i,
-    x,
-    ctx,
-    canvas;
   const canvasRef = useRef(null);
+  const ctxRef = useRef(null);
+  const dimensionsRef = useRef({ w: 0, h: 0 });
+  const ntRef = useRef(0);
   const { isDarkMode } = useDarkMode();
+
+  // Wave entrance animation timing
+  const animationStartTime = useRef(null);
+  const entranceDuration = 1800; // 1.8 seconds for cinematic feel
+  const entranceDelay = 300; // Start with other elements
 
   const getSpeed = () => {
     switch (speed) {
@@ -39,18 +43,22 @@ export const WavyBackground = ({
   };
 
   const init = () => {
-    canvas = canvasRef.current;
-    ctx = canvas.getContext("2d");
-    w = ctx.canvas.width = window.innerWidth;
-    h = ctx.canvas.height = window.innerHeight;
+    const canvas = canvasRef.current;
+    ctxRef.current = canvas.getContext("2d");
+    const ctx = ctxRef.current;
+    dimensionsRef.current.w = ctx.canvas.width = window.innerWidth;
+    dimensionsRef.current.h = ctx.canvas.height = window.innerHeight;
     ctx.filter = `blur(${blur}px)`;
-    nt = 0;
+    ntRef.current = 0;
     window.onresize = function () {
-      w = ctx.canvas.width = window.innerWidth;
-      h = ctx.canvas.height = window.innerHeight;
-      ctx.filter = `blur(${blur}px)`;
+      if (ctxRef.current) {
+        dimensionsRef.current.w = ctxRef.current.canvas.width = window.innerWidth;
+        dimensionsRef.current.h = ctxRef.current.canvas.height = window.innerHeight;
+        ctxRef.current.filter = `blur(${blur}px)`;
+      }
     };
-    render();
+    // Start animation loop with requestAnimationFrame to get proper timestamp
+    animationIdRef.current = requestAnimationFrame(render);
   };
 
   // Define separate color palettes for light and dark modes
@@ -85,34 +93,66 @@ export const WavyBackground = ({
 
   const waveColors = isDarkMode ? extendedDarkModeColors : lightModeColors;
 
-  const drawWave = (n) => {
-    nt += getSpeed();
-    for (i = 0; i < n; i++) {
+  const drawWave = (n, progress) => {
+    const ctx = ctxRef.current;
+    const { w, h } = dimensionsRef.current;
+    if (!ctx || !w) return;
+
+    ntRef.current += getSpeed();
+    for (let i = 0; i < n; i++) {
       ctx.beginPath();
       ctx.lineWidth = waveWidth || 50;
       ctx.strokeStyle = waveColors[i % waveColors.length];
-      for (x = 0; x < w; x += 5) {
-        var y = noise(x / 800, 0.3 * i, nt) * 100;
-        ctx.lineTo(x, y + h * 0.8); // adjust for height, currently at 50% of the container
+
+      // Each wave has a staggered reveal - waves in back reveal slightly later
+      const waveDelay = i * 0.08; // 8% delay per wave
+      const waveProgress = Math.max(0, Math.min(1, (progress - waveDelay) / (1 - waveDelay * n / 2)));
+      const easedProgress = easeOutCubic(waveProgress);
+
+      // Calculate how far to draw this wave (with organic overshoot feel)
+      const maxX = easedProgress * (w + 100); // Slight overshoot
+
+      for (let x = 0; x < Math.min(maxX, w); x += 5) {
+        const y = noise(x / 800, 0.3 * i, ntRef.current) * 100;
+        ctx.lineTo(x, y + h * 0.8);
       }
       ctx.stroke();
       ctx.closePath();
     }
   };
 
-  let animationId;
-  const render = () => {
+  const animationIdRef = useRef(null);
+  const progressRef = useRef(0);
+
+  const render = (timestamp) => {
+    const ctx = ctxRef.current;
+    const { w, h } = dimensionsRef.current;
+    if (!ctx) return; // Safety check
+
+    // Handle entrance animation timing
+    if (animationStartTime.current === null) {
+      animationStartTime.current = timestamp + entranceDelay;
+    }
+
+    const elapsed = timestamp - animationStartTime.current;
+    progressRef.current = elapsed > 0 ? Math.min(1, elapsed / entranceDuration) : 0;
+
     ctx.fillStyle = isDarkMode ? '#121212' : (backgroundFill || "white");
     ctx.globalAlpha = waveOpacity || 0.5;
     ctx.fillRect(0, 0, w, h);
-    drawWave(5);
-    animationId = requestAnimationFrame(render);
+    drawWave(5, progressRef.current);
+    animationIdRef.current = requestAnimationFrame(render);
   };
 
   useEffect(() => {
+    // Reset animation on mount/theme change
+    animationStartTime.current = null;
+    progressRef.current = 0;
     init();
     return () => {
-      cancelAnimationFrame(animationId);
+      if (animationIdRef.current) {
+        cancelAnimationFrame(animationIdRef.current);
+      }
     };
   }, [isDarkMode]); // Re-initialize when dark mode changes
 
