@@ -25,11 +25,25 @@ import MessageIcon from '@mui/icons-material/Message';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ErrorIcon from '@mui/icons-material/Error';
 
-// Animated Gradient Text Component
+// Animated Gradient Text Component - Bold in light mode, animated in dark
 const GradientText = ({ children, className, style, isDarkMode }) => {
-    const gradientColors = isDarkMode
-        ? ['#21CBF3', '#2196F3', '#1565C0']
-        : ['#64748b', '#475569', '#334155'];
+    // Light mode: clean, bold, confident typography
+    if (!isDarkMode) {
+        return (
+            <span
+                className={className}
+                style={{
+                    ...style,
+                    color: '#1a1a1a',
+                }}
+            >
+                {children}
+            </span>
+        );
+    }
+
+    // Dark mode: animated gradient effect
+    const gradientColors = ['#21CBF3', '#2196F3', '#1565C0'];
 
     return (
         <motion.span
@@ -60,15 +74,12 @@ const GradientText = ({ children, className, style, isDarkMode }) => {
 const ProfileImage = ({ isMobile }) => {
     const { isDarkMode } = useDarkMode();
     const size = 250;
-    const borderWidth = 4;
+    const borderWidth = isDarkMode ? 4 : 0;
     const [isGlitching, setIsGlitching] = useState(false);
     const [showReal, setShowReal] = useState(false);
 
-    // Gradient colors based on theme
-    const gradientColors = isDarkMode
-        ? ['#21CBF3', '#2196F3', '#1565C0', '#21CBF3']  // Cyan/blue for dark mode
-        : ['#64748b', '#475569', '#334155', '#64748b']; // Monochrome with blue undertone for light mode
-
+    // Gradient colors for dark mode only
+    const gradientColors = ['#21CBF3', '#2196F3', '#1565C0', '#21CBF3'];
     const gradientString = (deg) => `conic-gradient(from ${deg}deg, ${gradientColors.join(', ')})`;
 
     // Trigger glitch effect periodically
@@ -103,61 +114,68 @@ const ProfileImage = ({ isMobile }) => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
+                // Light mode: elegant shadow only
+                boxShadow: !isDarkMode
+                    ? '0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 12px 24px -8px rgba(0, 0, 0, 0.1)'
+                    : 'none',
+                borderRadius: '4px',
             }}
         >
-            {/* Animated gradient border */}
-            <motion.div
-                style={{
-                    position: 'absolute',
-                    inset: 0,
-                    borderRadius: '4px',
-                    background: gradientString(0),
-                    zIndex: 0,
-                }}
-                animate={{
-                    background: [
-                        gradientString(0),
-                        gradientString(90),
-                        gradientString(180),
-                        gradientString(270),
-                        gradientString(360),
-                    ],
-                }}
-                transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: 'linear',
-                }}
-            />
-            {/* Glow effect behind border */}
-            <motion.div
-                style={{
-                    position: 'absolute',
-                    inset: '-8px',
-                    borderRadius: '8px',
-                    background: gradientString(0),
-                    filter: 'blur(15px)',
-                    opacity: isDarkMode ? 0.5 : 0.7,
-                    zIndex: -1,
-                }}
-                animate={{
-                    background: [
-                        gradientString(0),
-                        gradientString(90),
-                        gradientString(180),
-                        gradientString(270),
-                        gradientString(360),
-                    ],
-                    opacity: isGlitching
-                        ? (isDarkMode ? [0.5, 0.8, 0.6, 0.5] : [0.7, 1, 0.8, 0.7])
-                        : (isDarkMode ? 0.5 : 0.7),
-                }}
-                transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    ease: 'linear',
-                }}
-            />
+            {/* Animated gradient border - DARK MODE ONLY */}
+            {isDarkMode && (
+                <motion.div
+                    style={{
+                        position: 'absolute',
+                        inset: 0,
+                        borderRadius: '4px',
+                        background: gradientString(0),
+                        zIndex: 0,
+                    }}
+                    animate={{
+                        background: [
+                            gradientString(0),
+                            gradientString(90),
+                            gradientString(180),
+                            gradientString(270),
+                            gradientString(360),
+                        ],
+                    }}
+                    transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: 'linear',
+                    }}
+                />
+            )}
+            {/* Glow effect behind border - DARK MODE ONLY */}
+            {isDarkMode && (
+                <motion.div
+                    style={{
+                        position: 'absolute',
+                        inset: '-8px',
+                        borderRadius: '8px',
+                        background: gradientString(0),
+                        filter: 'blur(15px)',
+                        opacity: 0.5,
+                        zIndex: -1,
+                    }}
+                    animate={{
+                        background: [
+                            gradientString(0),
+                            gradientString(90),
+                            gradientString(180),
+                            gradientString(270),
+                            gradientString(360),
+                        ],
+                        opacity: isGlitching ? [0.5, 0.8, 0.6, 0.5] : 0.5,
+                    }}
+                    transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: 'linear',
+                    }}
+                />
+            )}
             <div
                 style={{
                     width: `${size}px`,
