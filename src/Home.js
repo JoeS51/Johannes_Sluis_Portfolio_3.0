@@ -7,6 +7,9 @@ import ResponsiveAppBar from './Components/Navbar.js'
 import pfp from './Pictures/pfp.png'
 import resume from './Pictures/resume.pdf'
 import pic from './Pictures/profilepic.jpeg';
+import microsoftLogo from './Pictures/microsoft.svg'
+import jenniLogo from './Pictures/jenni-logo.png'
+import blueOriginLogo from './Pictures/blue.png'
 import Experience from './Experience.js'
 import Divider from '@mui/material/Divider';
 import { WavyBackground } from './Components/Wave.js'
@@ -201,33 +204,145 @@ export default function Home() {
         </WavyBackground>
         <ParallaxLayer id='about' offset={1} speed={0} style={{ ...alignCenter, justifyContent: 'center', backgroundColor: 'transparent', zIndex: 3 }}>
           <div className={styles.topcontainer}>
-            <motion.span
-              initial={{ opacity: 0.5, y: 100 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                duration: 0.8,
-                ease: "easeInOut"
-              }} >
-              <Trail open={open}>
-                <span>About Me 👨‍💻</span>
-              </Trail>
-            </motion.span>
-            <motion.h1
-              style={{ marginTop: '100px' }}
-              initial={{ opacity: 0.5, y: 100 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{
-                delay: 0.2,
-                duration: 1.2,
-                ease: "easeInOut"
-              }}
-            >
-              Hi, I'm Johannes Sluis (or just Joe)! I'm a Senior at UW studying Computer Science, building as much as I can in my free time.
-              <br></br><br></br>
-              I've interned at cool companies like Microsoft and Blue Origin, and worked for one of the world's top lean AI companies (Jenni AI), gaining invaluable experience. Now, I'm a founding engineer at <a href="https://pracareer.net/">Pracareer</a>, a platform dedicated to helping Japanese students land their dream jobs.
-            </motion.h1>
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '36px',
+              width: '100%',
+              padding: '0 24px'
+            }}>
+              <motion.span
+                initial={{ opacity: 0.5, y: 80 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.8,
+                  ease: "easeInOut"
+                }}
+                style={{
+                  fontSize: 'clamp(40px, 7vw, 88px)',
+                  fontWeight: 800,
+                  letterSpacing: '0.01em',
+                  color: 'var(--text-color)'
+                }}
+              >
+                About
+              </motion.span>
+
+              <motion.p
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.1 }}
+                style={{
+                  margin: 0,
+                  fontSize: 'clamp(18px, 2.2vw, 28px)',
+                  maxWidth: '900px',
+                  textAlign: 'center',
+                  color: 'var(--text-color)',
+                  opacity: 0.9
+                }}
+              >
+                I build polished, high-impact products end-to-end - from idea to launch.
+              </motion.p>
+
+              <motion.div
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.2 }}
+                style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: '12px',
+                  justifyContent: 'center',
+                  maxWidth: '900px'
+                }}
+              >
+                {[
+                  {
+                    label: 'Microsoft software engineer',
+                    logo: microsoftLogo,
+                    alt: 'Microsoft logo',
+                    isCurrent: true
+                  },
+                  {
+                    label: 'Jenni AI intern',
+                    logo: jenniLogo,
+                    alt: 'Jenni AI logo',
+                    logoSize: 28
+                  },
+                  { label: 'Blue Origin intern', logo: blueOriginLogo, alt: 'Blue Origin logo' }
+                ].map((chip) => (
+                  <span
+                    key={chip.label}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '8px',
+                      padding: '10px 16px',
+                      borderRadius: '999px',
+                      border: chip.isCurrent ? '1px solid #60A5FA' : '1px solid var(--text-color)',
+                      backgroundColor: chip.isCurrent ? 'rgba(96, 165, 250, 0.14)' : 'transparent',
+                      color: 'var(--text-color)',
+                      fontWeight: 600,
+                      fontSize: '14px',
+                      letterSpacing: '0.01em'
+                    }}
+                  >
+                    <img
+                      src={chip.logo}
+                      alt={chip.alt}
+                      style={{
+                        width: `${chip.logoSize || 18}px`,
+                        height: `${chip.logoSize || 18}px`,
+                        objectFit: 'contain',
+                        borderRadius: '4px'
+                      }}
+                    />
+                    {chip.label}
+                    {chip.isCurrent && (
+                      <span
+                        style={{
+                          marginLeft: '4px',
+                          padding: '4px 8px',
+                          borderRadius: '999px',
+                          backgroundColor: '#3B82F6',
+                          color: '#fff',
+                          fontSize: '11px',
+                          fontWeight: 700,
+                          letterSpacing: '0.02em',
+                          textTransform: 'uppercase'
+                        }}
+                      >
+                        Current
+                      </span>
+                    )}
+                  </span>
+                ))}
+              </motion.div>
+
+              <motion.p
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+                style={{
+                  margin: 0,
+                  fontSize: 'clamp(18px, 2.1vw, 26px)',
+                  lineHeight: 1.6,
+                  maxWidth: '980px',
+                  textAlign: 'center',
+                  color: 'var(--text-color)'
+                }}
+              >
+                I'm Johannes Sluis (Joe), a UW Computer Science senior focused on thoughtful UI,
+                fast iteration, and shipping work that feels great to use. I care about the details
+                - the ones users notice and the ones they never have to.
+              </motion.p>
+            </div>
           </div>
           <Divider flexItem orientation="horizontal" sx={{ bgcolor: "black" }} />
         </ParallaxLayer>
@@ -388,4 +503,3 @@ export default function Home() {
     </div >
   )
 }
-

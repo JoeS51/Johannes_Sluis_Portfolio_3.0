@@ -6,6 +6,9 @@ import ResponsiveAppBar from './Components/Navbar.js'
 import pfp from './Pictures/pfp.png'
 import resume from './Pictures/resume.pdf'
 import pic from './Pictures/profilepic.jpeg'
+import microsoftLogo from './Pictures/microsoft.svg'
+import jenniLogo from './Pictures/jenni-logo.png'
+import blueOriginLogo from './Pictures/blue.png'
 import Experience from './Experience.js'
 import MobileExperience from './MobileExperience.js'
 import Divider from '@mui/material/Divider'
@@ -71,9 +74,9 @@ const GradientText = ({ children, className, style, isDarkMode }) => {
 };
 
 // Subtle Digital Glitch Profile Image Animation
-const ProfileImage = ({ isMobile }) => {
+const ProfileImage = ({ isMobile, sizeOverride }) => {
     const { isDarkMode } = useDarkMode();
-    const size = 250;
+    const size = sizeOverride || 250;
     const borderWidth = 4;
     const [isGlitching, setIsGlitching] = useState(false);
     const [showReal, setShowReal] = useState(false);
@@ -396,6 +399,9 @@ const ResponsiveHome = () => {
     const { isDarkMode } = useDarkMode();
     const [open] = useState(true);
     const [isMobile, setIsMobile] = useState(false);
+    const [viewportWidth, setViewportWidth] = useState(
+        typeof window !== 'undefined' ? window.innerWidth : 1024
+    );
     const [subject, setSubject] = useState("");
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
@@ -406,12 +412,34 @@ const ResponsiveHome = () => {
 
     useEffect(() => {
         const checkMobile = () => {
-            setIsMobile(window.innerWidth <= 768);
+            const width = window.innerWidth;
+            setViewportWidth(width);
+            setIsMobile(width <= 768);
         };
         checkMobile();
         window.addEventListener('resize', checkMobile);
         return () => window.removeEventListener('resize', checkMobile);
     }, []);
+
+    const isLargeMobile = isMobile && viewportWidth >= 430;
+    const mobileProfileSize = (() => {
+        if (!isMobile) return 250;
+        if (viewportWidth < 360) return 150;
+        if (viewportWidth < 400) return 170;
+        if (isLargeMobile) return 230;
+        if (viewportWidth < 480) return 190;
+        return 210;
+    })();
+    const heroPaddingBottom = isMobile ? (isLargeMobile ? '5vh' : '6vh') : '15vh';
+    const heroPaddingTop = isMobile ? (isLargeMobile ? '0vh' : '2vh') : '0';
+    const heroNameClass = isMobile
+        ? `${isLargeMobile ? 'text-7xl' : 'text-6xl'} font-black text-center`
+        : 'text-7xl md:text-8xl font-black';
+    const heroTrailHeight = isMobile ? (isLargeMobile ? 78 : 64) : 110;
+    const heroTrailStyle = isMobile
+        ? { letterSpacing: isLargeMobile ? '-0.015em' : '-0.02em' }
+        : undefined;
+    const mobileHeroShift = isMobile ? (isLargeMobile ? '-6vh' : '-5vh') : '0vh';
 
     const sendEmail = (e) => {
         e.preventDefault();
@@ -469,28 +497,44 @@ const ResponsiveHome = () => {
 
             {/* Hero Section */}
             <section id="home" className="min-h-screen relative overflow-hidden">
-                <div className="max-w-5xl mx-auto relative z-10 h-screen flex items-center justify-center px-4 md:px-8" style={{ paddingBottom: '15vh' }}>
+                <div
+                    className="max-w-5xl mx-auto relative z-10 h-screen flex items-center justify-center px-4 md:px-8"
+                    style={{ paddingBottom: heroPaddingBottom, paddingTop: heroPaddingTop }}
+                >
                     {isMobile ? (
                         /* Mobile layout - stacked */
-                        <div className="flex flex-col items-center justify-center gap-6">
-                            <ProfileImage isMobile={isMobile} />
+                        <div
+                            className="flex flex-col items-center justify-center gap-3"
+                            style={{ transform: `translateY(${mobileHeroShift})` }}
+                        >
+                            <ProfileImage isMobile={isMobile} sizeOverride={mobileProfileSize} />
                             <div className="flex flex-col items-center">
-                                <Trail open={open} animationConfig={{ mass: 5, tension: 80, friction: 60 }}>
-                                    <GradientText className="text-6xl font-black text-center" style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Johannes</GradientText>
-                                    <GradientText className="text-6xl font-black text-center" style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Sluis</GradientText>
-                                    <GradientText className="text-6xl font-black text-center" style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Portfolio</GradientText>
+                                <Trail
+                                    open={open}
+                                    animationConfig={{ mass: 5, tension: 80, friction: 60 }}
+                                    itemHeight={heroTrailHeight}
+                                    trailStyle={heroTrailStyle}
+                                >
+                                    <GradientText className={heroNameClass} style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Johannes</GradientText>
+                                    <GradientText className={heroNameClass} style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Sluis</GradientText>
+                                    <GradientText className={heroNameClass} style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Portfolio</GradientText>
                                 </Trail>
                             </div>
                         </div>
                     ) : (
                         /* Desktop layout - side by side, vertically centered */
                         <div className="flex flex-row items-center justify-center gap-12">
-                            <ProfileImage isMobile={isMobile} />
+                            <ProfileImage isMobile={isMobile} sizeOverride={250} />
                             <div className="flex flex-col justify-center" style={{ marginTop: '-45px' }}>
-                                <Trail open={open} animationConfig={{ mass: 5, tension: 80, friction: 60 }}>
-                                    <GradientText className="text-7xl md:text-8xl font-black" style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Johannes</GradientText>
-                                    <GradientText className="text-7xl md:text-8xl font-black" style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Sluis</GradientText>
-                                    <GradientText className="text-7xl md:text-8xl font-black" style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Portfolio</GradientText>
+                                <Trail
+                                    open={open}
+                                    animationConfig={{ mass: 5, tension: 80, friction: 60 }}
+                                    itemHeight={heroTrailHeight}
+                                    trailStyle={heroTrailStyle}
+                                >
+                                    <GradientText className={heroNameClass} style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Johannes</GradientText>
+                                    <GradientText className={heroNameClass} style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Sluis</GradientText>
+                                    <GradientText className={heroNameClass} style={{ lineHeight: '1.1' }} isDarkMode={isDarkMode}>Portfolio</GradientText>
                                 </Trail>
                             </div>
                         </div>
@@ -505,45 +549,111 @@ const ResponsiveHome = () => {
             }}>
                 <div className="max-w-4xl mx-auto">
                     <SectionDivider />
-                    <motion.div
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8 }}
-                        className="text-center"
-                    >
-                        <Trail open={open} animationConfig={{ mass: 5, tension: 80, friction: 60 }}>
-                            <span className={`${isMobile ? 'text-5xl' : 'text-7xl md:text-8xl'} font-black ${styles['highlight-text']}`} style={{ lineHeight: '1.1', letterSpacing: isMobile ? '0.01em' : '0.02em', whiteSpace: 'nowrap' }}>
-                                About Me 👨‍💻
-                            </span>
-                        </Trail>
-                    </motion.div>
+                    <div className="text-center flex flex-col items-center" style={{ gap: '28px' }}>
+                        <motion.h2
+                            initial={{ opacity: 0, y: 40 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.7 }}
+                            className={`${isMobile ? 'text-5xl' : 'text-7xl md:text-8xl'} font-black`}
+                            style={{ lineHeight: '1.05', letterSpacing: '0.01em' }}
+                        >
+                            About
+                        </motion.h2>
 
-                    <motion.div
-                        initial={{ opacity: 0, y: 50 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.8, delay: 0.2 }}
-                        className="mt-24 text-center"
-                    >
-                        <p className="mb-8 text-3xl md:text-4xl" style={{ lineHeight: '1.3' }}>
-                            Hi, I'm Johannes Sluis (or just Joe)! I'm a Senior at UW studying Computer Science,
-                            building as much as I can in my free time.
-                        </p>
-                        <p className="text-3xl md:text-4xl" style={{ lineHeight: '1.3' }}>
-                            I've interned at cool companies like Microsoft and Blue Origin, and worked for one of
-                            the world's top lean AI companies (Jenni AI), gaining invaluable experience. Now,
-                            I'm a founding engineer at{' '}
-                            <a
-                                href="https://pracareer.net/"
-                                className={`hover:text-blue-800 transition-colors duration-200 ${styles['highlight-text']}`}
-                                style={{ textDecoration: 'none' }}
-                            >
-                                Pracareer
-                            </a>,
-                            {' '}a platform dedicated to helping Japanese students land their dream jobs.
-                        </p>
-                    </motion.div>
+                        <motion.p
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.7, delay: 0.1 }}
+                            className="text-xl md:text-2xl"
+                            style={{ maxWidth: '900px', opacity: 0.92 }}
+                        >
+                            I build polished, high-impact products end-to-end - from idea to launch.
+                        </motion.p>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 24 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.7, delay: 0.2 }}
+                            className="flex flex-wrap justify-center"
+                            style={{ gap: '10px', maxWidth: '920px' }}
+                        >
+                            {[
+                                {
+                                    label: 'Microsoft software engineer',
+                                    logo: microsoftLogo,
+                                    alt: 'Microsoft logo',
+                                    isCurrent: true
+                                },
+                                {
+                                    label: 'Jenni AI intern',
+                                    logo: jenniLogo,
+                                    alt: 'Jenni AI logo',
+                                    logoSize: 28
+                                },
+                                { label: 'Blue Origin intern', logo: blueOriginLogo, alt: 'Blue Origin logo' }
+                            ].map((chip) => (
+                                <span
+                                    key={chip.label}
+                                    className="text-sm md:text-base font-semibold"
+                                    style={{
+                                        display: 'inline-flex',
+                                        alignItems: 'center',
+                                        gap: '8px',
+                                        padding: '10px 16px',
+                                        borderRadius: '999px',
+                                        border: chip.isCurrent ? '1px solid #60A5FA' : '1px solid var(--text-color)',
+                                        backgroundColor: chip.isCurrent ? 'rgba(96, 165, 250, 0.14)' : 'transparent',
+                                        color: 'var(--text-color)'
+                                    }}
+                                >
+                                    <img
+                                        src={chip.logo}
+                                        alt={chip.alt}
+                                        style={{
+                                            width: `${chip.logoSize || 18}px`,
+                                            height: `${chip.logoSize || 18}px`,
+                                            objectFit: 'contain',
+                                            borderRadius: '4px'
+                                        }}
+                                    />
+                                    {chip.label}
+                                    {chip.isCurrent && (
+                                        <span
+                                            style={{
+                                                marginLeft: '4px',
+                                                padding: '4px 8px',
+                                                borderRadius: '999px',
+                                                backgroundColor: '#3B82F6',
+                                                color: '#fff',
+                                                fontSize: '11px',
+                                                fontWeight: 700,
+                                                letterSpacing: '0.02em',
+                                                textTransform: 'uppercase'
+                                            }}
+                                        >
+                                            Current
+                                        </span>
+                                    )}
+                                </span>
+                            ))}
+                        </motion.div>
+
+                        <motion.p
+                            initial={{ opacity: 0, y: 36 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: 0.3 }}
+                            className="text-lg md:text-2xl"
+                            style={{ maxWidth: '980px', lineHeight: '1.7' }}
+                        >
+                            I'm Johannes Sluis (Joe), a UW Computer Science senior focused on thoughtful UI,
+                            fast iteration, and shipping work that feels great to use. I care about the details
+                            - the ones users notice and the ones they never have to.
+                        </motion.p>
+                    </div>
                 </div>
             </section>
 
