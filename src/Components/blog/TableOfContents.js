@@ -4,6 +4,18 @@ const TableOfContents = () => {
   const [headings, setHeadings] = useState([]);
   const [activeId, setActiveId] = useState('');
 
+  const handleClick = (event, id) => {
+    event.preventDefault();
+    const target = document.getElementById(id);
+    if (!target) return;
+
+    const headerOffset = 96;
+    const targetTop = target.getBoundingClientRect().top + window.scrollY - headerOffset;
+
+    window.scrollTo({ top: targetTop, behavior: 'smooth' });
+    window.history.replaceState(null, '', `#${id}`);
+  };
+
   useEffect(() => {
     const article = document.querySelector('.blog-post-content');
     if (!article) return;
@@ -55,6 +67,7 @@ const TableOfContents = () => {
             <a
               href={`#${heading.id}`}
               className={activeId === heading.id ? 'blog-toc-link active' : 'blog-toc-link'}
+              onClick={(event) => handleClick(event, heading.id)}
             >
               {heading.text}
             </a>
