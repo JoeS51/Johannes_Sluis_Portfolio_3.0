@@ -20,7 +20,7 @@ const TableOfContents = () => {
     const article = document.querySelector('.blog-post-content');
     if (!article) return;
 
-    const elements = article.querySelectorAll('h2, h3');
+    const elements = article.querySelectorAll('h1, h2, h3');
     const headingsList = [];
 
     elements.forEach((element, index) => {
@@ -63,7 +63,16 @@ const TableOfContents = () => {
       <p className="blog-toc-title">Contents</p>
       <ul className="blog-toc-list">
         {headings.map((heading) => (
-          <li key={heading.id} className={heading.level === 3 ? 'blog-toc-item blog-toc-subitem' : 'blog-toc-item'}>
+          <li
+            key={heading.id}
+            className={
+              heading.level === 3
+                ? 'blog-toc-item blog-toc-subitem'
+                : heading.level === 2
+                  ? 'blog-toc-item'
+                  : 'blog-toc-item blog-toc-top'
+            }
+          >
             <a
               href={`#${heading.id}`}
               className={activeId === heading.id ? 'blog-toc-link active' : 'blog-toc-link'}

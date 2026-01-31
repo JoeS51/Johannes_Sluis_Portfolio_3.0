@@ -379,7 +379,7 @@ export default function Home() {
                 ease: "easeInOut"
               }} >
               <Trail open={open} style={{ marginBottom: '400px' }}>
-                <center><span>{isMobile ? "Exp. 💹" : "Experience 💹"}</span></center>
+                <center><span>{isMobile ? "Exp." : "Experience"}</span></center>
               </Trail>
             </motion.span>
             <motion.div
@@ -423,7 +423,7 @@ export default function Home() {
                 ease: "easeInOut"
               }}>
               <Trail open={open} style={{ marginBottom: '400px' }}>
-                <center><span>Projects 💻</span></center>
+                <center><span>Projects</span></center>
               </Trail>
             </motion.span>
             <Projects></Projects>
@@ -451,7 +451,7 @@ export default function Home() {
                   duration: 0.8,
                   ease: "easeInOut"
                 }}>
-                <center><span>Contact 📨</span></center>
+                <center><span>Contact</span></center>
               </motion.span>
               <motion.div
                 initial={{ opacity: 0.5, y: 100 }}
