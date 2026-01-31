@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 const links = [
   { href: '/', label: 'Home' },
   { href: '/blog', label: 'Blogs' },
-  { href: '/random', label: 'Random' },
 ];
 
 const Navigation = () => {
