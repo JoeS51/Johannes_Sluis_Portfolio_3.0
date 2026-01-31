@@ -1,37 +1,14 @@
-const posts = [
-  {
-    slug: 'hello-world',
-    frontmatter: {
-      title: 'Hello World',
-      description: 'Kicking off the blog with thoughts on learning in public and what to expect.',
-      date: '2025-10-21',
-      tags: ['Personal', 'Meta'],
-      cover: null
-    },
-    content: '',
+const post = {
+  slug: 'rust-azure-service-bus-email-worker',
+  frontmatter: {
+    title: 'Emailing Service in Rust using Azure Service Bus',
+    description:
+      'How I built a Rust worker that reads Azure Service Bus messages and dispatches emails.',
+    date: '2025-11-15',
+    tags: ['Rust', 'Azure', 'Backend'],
+    cover: null
   },
-  {
-    slug: 'react-from-scratch',
-    frontmatter: {
-      title: 'Building React from Scratch',
-      description: 'I built a lightweight version of react.js from scratch for fun.',
-      date: '2025-11-01',
-      tags: ['Side Project', 'Internals', 'JavaScript'],
-      cover: null
-    },
-    content: '[TODO]',
-  },
-  {
-    slug: 'rust-azure-service-bus-email-worker',
-    frontmatter: {
-      title: 'Emailing Service in Rust using Azure Service Bus',
-      description:
-        'How I built a Rust worker that reads Azure Service Bus messages and dispatches emails.',
-      date: '2025-11-15',
-      tags: ['Rust', 'Azure', 'Backend'],
-      cover: null
-    },
-    content: `
+  content: `
 ## Why I needed this worker
 
 I wanted a single, reliable worker that listened to Azure Service Bus and sent out emails (welcome emails, weekly reports, and alerts). I could have simply used EmailJS or something similar, but this was a good excuse to use Rust since I had recently finished the Rust handbook.
@@ -180,7 +157,6 @@ async fn send_email(job: &EmailJob, smtp: &SmtpTransport) -> anyhow::Result<()> 
 
 I want to add automatic retries with scheduled messages for noisy email providers and wire in OpenTelemetry traces to follow a message from producer through to SMTP delivery.
 `
-  },
-];
+};
 
-export default posts;
+export default post;
