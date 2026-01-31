@@ -5,6 +5,7 @@ const post = {
     description:
       'A practical guide to building an SSH portfolio with Charm and hosting it on port 22 without losing admin access.',
     date: '2026-01-31',
+    readingTime: 15,
     tags: ['Go', 'Side Project', 'DevOps'],
     cover: null
   },
