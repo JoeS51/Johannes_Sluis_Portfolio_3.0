@@ -651,7 +651,7 @@ body.blog-body {
   color: #e2e8f0;
 }
 
-.dark-mode html.blog-body,
+html.dark-mode.blog-body,
 .dark-mode body.blog-body {
   background: linear-gradient(180deg, #0b1220 0%, #0f172a 100%) !important;
   background-color: #0f172a !important;
