@@ -14,6 +14,16 @@ const Blog = () => {
     document.title = 'Blog | Johannes Sluis';
   }, []);
 
+  useEffect(() => {
+    document.body.classList.add('blog-body');
+    document.documentElement.classList.add('blog-body');
+
+    return () => {
+      document.body.classList.remove('blog-body');
+      document.documentElement.classList.remove('blog-body');
+    };
+  }, []);
+
   const allPosts = getAllPosts();
   const allTags = getAllTags();
 

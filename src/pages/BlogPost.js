@@ -26,6 +26,16 @@ const BlogPost = () => {
     }
   }, [post]);
 
+  useEffect(() => {
+    document.body.classList.add('blog-body');
+    document.documentElement.classList.add('blog-body');
+
+    return () => {
+      document.body.classList.remove('blog-body');
+      document.documentElement.classList.remove('blog-body');
+    };
+  }, []);
+
   if (!slug || !post) {
     return <Navigate to="/blog" replace />;
   }
