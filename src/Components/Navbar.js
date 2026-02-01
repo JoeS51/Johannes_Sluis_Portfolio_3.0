@@ -20,6 +20,7 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 
 const pages = ['About', 'Experience', 'Projects', 'Contact'];
+const mobilePages = ['About', 'Experience', 'Projects'];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -155,7 +156,7 @@ function ResponsiveAppBar() {
                 },
               }}
             >
-              {pages.map((page) => (
+              {mobilePages.map((page) => (
                 <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
                   <Typography
                     sx={{
