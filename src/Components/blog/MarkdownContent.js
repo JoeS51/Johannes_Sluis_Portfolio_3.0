@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
@@ -52,7 +52,17 @@ const MarkdownContent = ({ content }) => {
         h2: ({ children }) => <h2 className="blog-heading-2">{children}</h2>,
         h3: ({ children }) => <h3 className="blog-heading-3">{children}</h3>,
         h4: ({ children }) => <h4 className="blog-heading-4">{children}</h4>,
-        p: ({ children }) => <p className="blog-paragraph">{children}</p>,
+        p: ({ children }) => {
+          const hasFigure = React.Children.toArray(children).some(
+            (child) => child?.type === 'figure'
+          );
+
+          if (hasFigure) {
+            return <div className="blog-paragraph">{children}</div>;
+          }
+
+          return <p className="blog-paragraph">{children}</p>;
+        },
         a: ({ href, children }) => (
           <a
             href={href}
