@@ -62,7 +62,9 @@ export const SlideTabs = () => {
         <Tab setPosition={setPosition} sectionId="experience" isMobile={isMobile} isDarkMode={isDarkMode}>{isMobile ? "Exp." : "Experience"}</Tab>
         <Tab setPosition={setPosition} sectionId="projects" isMobile={isMobile} isDarkMode={isDarkMode}>Projects</Tab>
         <Tab setPosition={setPosition} sectionId="blogs" isMobile={isMobile} isDarkMode={isDarkMode} isBlogTab>Blogs</Tab>
-        <Tab setPosition={setPosition} sectionId="contact" isMobile={isMobile} isDarkMode={isDarkMode}>Contact</Tab>
+        {!isMobile && (
+          <Tab setPosition={setPosition} sectionId="contact" isMobile={isMobile} isDarkMode={isDarkMode}>Contact</Tab>
+        )}
         <Cursor position={position} isDarkMode={isDarkMode} />
       </ul>
     </motion.nav>
