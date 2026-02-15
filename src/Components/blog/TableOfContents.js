@@ -1,8 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const TableOfContents = () => {
   const [headings, setHeadings] = useState([]);
   const [activeId, setActiveId] = useState('');
+  const activeIdRef = useRef('');
+  const rafRef = useRef(0);
 
   const handleClick = (event, id) => {
     event.preventDefault();
@@ -41,9 +43,19 @@ const TableOfContents = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveId(entry.target.id);
+          if (!entry.isIntersecting) return;
+
+          const nextId = entry.target.id;
+          if (activeIdRef.current === nextId) return;
+
+          if (rafRef.current) {
+            window.cancelAnimationFrame(rafRef.current);
           }
+
+          rafRef.current = window.requestAnimationFrame(() => {
+            activeIdRef.current = nextId;
+            setActiveId(nextId);
+          });
         });
       },
       { rootMargin: '-100px 0px -66% 0px' }
@@ -51,7 +63,12 @@ const TableOfContents = () => {
 
     elements.forEach((element) => observer.observe(element));
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      if (rafRef.current) {
+        window.cancelAnimationFrame(rafRef.current);
+      }
+    };
   }, []);
 
   if (headings.length === 0) {

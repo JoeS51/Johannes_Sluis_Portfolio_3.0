@@ -44,8 +44,8 @@ body.blog-body {
   top: 0;
   z-index: 20;
   background: var(--blog-nav-bg);
-  backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--blog-border);
+  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
   transition: background-color var(--transition-speed) ease,
     background var(--transition-speed) ease,
     border-color var(--transition-speed) ease,
