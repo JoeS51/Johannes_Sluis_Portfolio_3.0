@@ -11,8 +11,8 @@
 
 html.blog-body,
 body.blog-body {
-  --blog-bg-gradient: linear-gradient(180deg, #f7f9fc 0%, #ffffff 100%);
-  --blog-bg-solid: #f7f9fc;
+  --blog-bg-gradient: linear-gradient(180deg, #ffffff 0%, #ffffff 100%);
+  --blog-bg-solid: #ffffff;
   --blog-nav-bg: rgba(247, 249, 252, 0.92);
   --blog-border: rgba(15, 23, 42, 0.08);
   --blog-nav-link: rgba(15, 23, 42, 0.65);
