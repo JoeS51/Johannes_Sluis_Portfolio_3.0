@@ -61,6 +61,12 @@ const Blog = () => {
         <header className="blog-header">
           <h1 className="blog-title">Blog</h1>
           <p className="blog-subtitle">Things I've learnt or built</p>
+          <p className="blog-library-link">
+            I also keep a reading list at{' '}
+            <a href="https://library.joesluis.dev" target="_blank" rel="noreferrer">
+              library.joesluis.dev
+            </a>
+          </p>
         </header>
 
         <section className="blog-filters">
