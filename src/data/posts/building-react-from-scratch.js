@@ -51,12 +51,26 @@ Now for the fun part. How did I actually implement React in code?
 <br/><br/>
 To start off, it is important to know that JSX just compiles into JavaScript. So let's say you have a *index.jsx* file and within that file you have something like 
 \`\`\` javascript
-  const app = () => {
+  const App = () => {
     return (
-      <h1>test</h1>
+      <div id="hi">
+        <h1>test</h1>
+      </div>
     );
   };
 \`\`\`
+
+A tool like [Babel](https://babeljs.io/) takes this code and converts it into **createElement** function calls before the code runs in the browser.
+
+\`\`\` javascript
+  React.createElement(
+    "div",
+    {id: "hi"},
+    React.createElement("h1", null, "test")
+  );
+\`\`\`
+
+
 
 ### CreateElement
 
