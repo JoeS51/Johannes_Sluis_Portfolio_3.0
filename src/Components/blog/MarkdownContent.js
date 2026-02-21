@@ -2,10 +2,14 @@ import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import Prism from 'react-syntax-highlighter';
+import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 
-const CodeBlock = ({ children, ...props }) => {
+const CodeBlock = ({ children, className, ...props }) => {
   const [copied, setCopied] = useState(false);
   const code = String(children).replace(/\n$/, '');
+  const match = /language-(\w+)/.exec(className || '');
+  const language = match ? match[1] : 'javascript';
 
   const handleCopy = async () => {
     try {
@@ -35,9 +39,9 @@ const CodeBlock = ({ children, ...props }) => {
       <button type="button" className="blog-code-copy" onClick={handleCopy}>
         {copied ? 'Copied' : 'Copy'}
       </button>
-      <pre className="blog-code-block">
-        <code {...props}>{code}</code>
-      </pre>
+      <Prism language={language} style={atomOneDark} {...props}>
+        {code}
+      </Prism>
     </div>
   );
 };
@@ -79,7 +83,7 @@ const MarkdownContent = ({ content }) => {
         blockquote: ({ children }) => <blockquote className="blog-quote">{children}</blockquote>,
         code: ({ inline, className, children, ...props }) => {
           if (!inline) {
-            return <CodeBlock {...props}>{children}</CodeBlock>;
+            return <CodeBlock className={className} {...props}>{children}</CodeBlock>;
           }
 
           return (
