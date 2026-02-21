@@ -1,11 +1,11 @@
 const post = {
   slug: 'building-react-from-scratch',
   frontmatter: {
-    title: 'Building React From Scratch',
+    title: 'How I Rebuilt React From Scratch',
     description: 'Rebuilding React for fun',
     date: '2026-02-10',
     tags: ['React', 'JavaScript', 'Side project'],
-    readingTime: 35.2,
+    readingTime: 35,
     cover: null
   },
   content: `
@@ -47,7 +47,7 @@ Here's a visual representation of how diffing/reconciliation works:
 
 ## Rendering to the DOM
 
-Now for the fun part. How did I actually implement React in code?
+Now for the fun part. How did I actually implement a mini React?
 <br/><br/>
 To start off, it is important to know that JSX just compiles into JavaScript. So let's say you have a *index.jsx* file and within that file you have something like 
 \`\`\` javascript
@@ -60,7 +60,7 @@ To start off, it is important to know that JSX just compiles into JavaScript. So
   };
 \`\`\`
 
-A tool like [Babel](https://babeljs.io/) takes this code and converts it into **createElement** function calls before the code runs in the browser.
+A tool like [Babel](https://babeljs.io/) takes this code and converts it into **createElement** function calls before the code runs in the browser. So the above code would turn into this:
 
 \`\`\` javascript
   React.createElement(
@@ -70,26 +70,98 @@ A tool like [Babel](https://babeljs.io/) takes this code and converts it into **
   );
 \`\`\`
 
+As you can see, the generated JavaScript code maintains the same structure as the HTML code, but represented as arguments and nested function calls. 
+This *createElement* function takes these arguments: 
+- Element type (div, h1, etc.)
+- Props object
+- Any number of children.
+<br/>
+This plain JavaScript object serves as a virtual DOM node. When combined, these objects form the virtual DOM tree that React uses during reconciliation.
+<br/>
+Let's see what a simplified implementation of*createElement* might look like:
 
+\`\`\` javascript
+  const React = {
+    createElement: (type, props, ...children) => {
+      return {
+        type,
+        props: props || {},
+        children: children.flat(),
+      };
+    }
+  };
+\`\`\`
 
-### CreateElement
+so the earlier createElement code becomes:
 
+\`\`\`
+{
+  type: "div",
+  props: { id: "hi" },
+  children: [
+    {
+      type: "h1",
+      props: {},
+      children: ["test"]
+    }
+  ]
+}
+\`\`\`
 
-## Updating elements
+> JavaScript evaluates function arguments before calling the outer function, so the inner createElement("h1", ...) runs first. That’s why the outer call already receives a fully constructed child object.
 
-## Reconciliation strategy
+As you can see this createElement implementation is just making the earlier nested function call structure into a cleaner object. We do this to make reconciliation easier for ourselves. 
 
-## Component model
+Now that we can describe what the UI should look like, we need a way to turn this virtual DOM tree into actual DOM nodes in the browser.
 
-## Props and children
+The virtual DOM is just a tree of plain JavaScript objects. To display anything on the screen, we need to traverse this tree and create corresponding DOM nodes. Thus, rendering is just a tree traversal problem.
+
+Let’s start with a simple implementation:
+\`\`\`
+function render(vnode, container) {
+  // 1) Text node
+  if (typeof vnode === "string" || typeof vnode === "number") {
+    container.appendChild(document.createTextNode(String(vnode)));
+    return;
+  }
+
+  // 2) Function component
+  if (typeof vnode.type === "function") {
+    const childVNode = vnode.type({ ...(vnode.props || {}), children: vnode.children });
+    render(childVNode, container);
+    return;
+  }
+
+  // 3) Host element
+  const domNode = document.createElement(vnode.type);
+  vnode.children.forEach(child => render(child, domNode));
+  container.appendChild(domNode);
+}
+\`\`\`
+
+Since each virtual node can have children, and those children can have children themselves, we recursively call render() for each child. 
+Essentially, we’re performing DFS of the virtual DOM tree, creating corresponding DOM nodes as we go. Don't worry if some of this code doesn't make sense. We will come back to this when I explain function components.
+
+To mount the application, we simply call render with a root virtual node and a container element.
+
+\`\`\`
+const root = document.getElementById("root");
+
+render(<App />, root);
+\`\`\`
+> Remember, this JSX is compiled into React.createElement(App, null) before the code runs which is why we can pass it directly to render.
+
+And with that, we have rendered something to the screen!
+
+## Re-rendering and the Problem With Naive updates
+
+## Reconciliation Strategy
+
+## Component Model 
 
 ## State and setState
 
-## Hooks: useState
-
-## useEffect, useState, useMemo, etc
-
-## Testing your renderer
+## Hooks
 
 ## Next steps
 `
