@@ -155,6 +155,20 @@ And with that, we have rendered something to the screen!
 
 ## Re-rendering and the Problem With Naive updates
 
+Great, we rendered something to the screen, but we're missing some core functionalities of react like rerendering when state changes.
+
+In our current implementation, the only way to update the UI is to call render() again with a new virtual DOM tree.
+
+For example:
+\`\`\`
+let count = 0;
+
+function increment() {
+  count++;
+  render(<App count={count} />, root);
+}
+\`\`\`
+
 ## Reconciliation Strategy
 
 ## Component Model 
