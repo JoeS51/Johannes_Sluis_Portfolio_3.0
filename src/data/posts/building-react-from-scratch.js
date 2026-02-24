@@ -116,7 +116,7 @@ Now that we can describe what the UI should look like, we need a way to turn thi
 
 The virtual DOM is just a tree of plain JavaScript objects. To display anything on the screen, we need to traverse this tree and create corresponding DOM nodes. Thus, rendering is just a tree traversal problem.
 
-Let’s start with a simple implementation:
+Let’s start with this implementation:
 \`\`\`
 function render(vnode, container) {
   // 1) Text node
@@ -155,9 +155,9 @@ And with that, we have rendered something to the screen!
 
 ## Re-rendering and the Problem With Naive updates
 
-Great, we rendered something to the screen, but we're missing some core functionalities of react like rerendering when state changes.
+Great, we rendered something to the screen, but we're missing a core part of React: re-rendering when state changes.
 
-In our current implementation, the only way to update the UI is to call render() again with a new virtual DOM tree.
+Right now, the only way to update the UI is to call render() again with a brand new virtual DOM tree.
 
 For example:
 \`\`\`
@@ -169,7 +169,54 @@ function increment() {
 }
 \`\`\`
 
+This technically works, but it's naive. Every update re-renders the entire tree from the root down. For a large applciation, this gets expensive fast and you can start losing little DOM state things (input focus, scroll position, etc). So we need a smarter way to update only what actually changed.
+
 ## Reconciliation Strategy
+
+If we just call render() again, the naive version will blow away the entire DOM subtree and rebuild it from scratch. That works, but it is also expensive and loses stateful DOM things like input focus, scroll position, and even text selection. 
+
+So we need a smarter approach: keep the previous virtual DOM tree around, generate the next one, and compare them. Then apply the smallest possible set of DOM mutations. This is reconciliation.
+
+At a high level, my reconciler does three checks as it walks the tree:
+1) Node type changed ("div" -> "span", or component type changed) => replace the node.
+2) Same type, props changed => update attributes/event listeners.
+3) Children changed => reconcile children (with keys if provided).
+
+Here's a simplified idea of the diff:
+
+\`\`\`
+function reconcile(parentDom, oldVNode, newVNode) {
+  // 1) Remove
+  if (newVNode == null) {
+    parentDom.removeChild(oldVNode.dom);
+    return;
+  }
+
+  // 2) Create
+  if (oldVNode == null) {
+    const newDom = createDom(newVNode);
+    parentDom.appendChild(newDom);
+    return;
+  }
+
+  // 3) Replace if different type
+  if (oldVNode.type !== newVNode.type) {
+    const newDom = createDom(newVNode);
+    parentDom.replaceChild(newDom, oldVNode.dom);
+    return;
+  }
+
+  // 4) Update props + reconcile children
+  updateProps(oldVNode.dom, oldVNode.props, newVNode.props);
+  reconcileChildren(oldVNode.dom, oldVNode.children, newVNode.children);
+}
+\`\`\`
+
+Notice every vnode has a *dom* reference. I attach the real DOM node to the virtual node so reconciliation can quickly patch without searching the DOM. That one decision makes the algorithm way simpler.
+
+For children, the naive approach is "diff by index" (child 0 with child 0, child 1 with child 1, etc). This breaks when you insert at the start of a list because everything shifts. That's where keys come in. If children have stable keys, we can match old and new children by key instead of index and move/insert/remove the right ones.
+
+We'll get deeper into keys and component updates in the next section, but this is the core idea: keep the old tree, compare it to the new tree, and patch the DOM minimally.
 
 ## Component Model 
 
