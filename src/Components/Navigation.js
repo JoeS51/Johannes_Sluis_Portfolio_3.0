@@ -5,6 +5,7 @@ import { useDarkMode } from './DarkModeContext';
 const links = [
   { href: '/', label: 'Home' },
   { href: '/blog', label: 'Blogs' },
+  { href: '/ssh-portfolio', label: 'SSH' },
 ];
 
 const Navigation = () => {

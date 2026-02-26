@@ -61,7 +61,8 @@ export const SlideTabs = () => {
         <Tab setPosition={setPosition} sectionId="about" isMobile={isMobile} isDarkMode={isDarkMode}>About</Tab>
         <Tab setPosition={setPosition} sectionId="experience" isMobile={isMobile} isDarkMode={isDarkMode}>{isMobile ? "Exp." : "Experience"}</Tab>
         <Tab setPosition={setPosition} sectionId="projects" isMobile={isMobile} isDarkMode={isDarkMode}>Projects</Tab>
-        <Tab setPosition={setPosition} sectionId="blogs" isMobile={isMobile} isDarkMode={isDarkMode} isBlogTab>Blogs</Tab>
+        <Tab setPosition={setPosition} sectionId="blogs" isMobile={isMobile} isDarkMode={isDarkMode} redirectTo="/blog">Blogs</Tab>
+        <Tab setPosition={setPosition} sectionId="ssh-portfolio" isMobile={isMobile} isDarkMode={isDarkMode} redirectTo="/ssh-portfolio">SSH</Tab>
         {!isMobile && (
           <Tab setPosition={setPosition} sectionId="contact" isMobile={isMobile} isDarkMode={isDarkMode}>Contact</Tab>
         )}
@@ -71,13 +72,13 @@ export const SlideTabs = () => {
   );
 };
 
-const Tab = ({ children, setPosition, sectionId, isMobile, isDarkMode, isBlogTab }) => {
+const Tab = ({ children, setPosition, sectionId, isMobile, isDarkMode, redirectTo }) => {
   const ref = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
 
   const handleClick = () => {
-    if (isBlogTab) {
-      window.location.href = '/blog';
+    if (redirectTo) {
+      window.location.href = redirectTo;
       return;
     }
     const element = document.getElementById(sectionId);
