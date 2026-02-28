@@ -5,6 +5,7 @@ import App from './App';
 import Random from './Random';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
+import SshPortfolio from './pages/SshPortfolio';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/blog/:slug",
     element: <BlogPost />
+  },
+  {
+    path: "/ssh-portfolio",
+    element: <SshPortfolio />
   }
 ])
 
