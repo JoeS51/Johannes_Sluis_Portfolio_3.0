@@ -1,0 +1,104 @@
+.ssh-page {
+  min-height: 100vh;
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
+.ssh-main {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 5rem 1rem 4rem;
+}
+
+.ssh-panel {
+  border: 1px solid var(--divider-color);
+  border-radius: 14px;
+  background-color: var(--card-bg);
+  padding: 2rem;
+}
+
+.ssh-panel h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  color: var(--text-color);
+}
+
+.ssh-description {
+  margin: 0.8rem 0 1.25rem;
+  color: var(--text-color);
+  opacity: 0.8;
+  white-space: nowrap;
+}
+
+.ssh-command-card {
+  margin: 0 0 1rem;
+  border: 1px solid var(--divider-color);
+  border-radius: 10px;
+  background-color: var(--background-color);
+  padding: 0.9rem 1rem;
+}
+
+.ssh-command-card code {
+  font-family: Menlo, Consolas, monospace;
+  font-size: 1rem;
+  color: var(--text-color);
+}
+
+.ssh-copy-button {
+  padding: 0.65rem 1rem;
+  border-radius: 10px;
+  border: 1px solid var(--text-color);
+  background-color: var(--text-color);
+  color: var(--background-color);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.ssh-copy-button:hover {
+  opacity: 0.88;
+}
+
+.ssh-copy-button:focus-visible,
+.ssh-secondary-link a:focus-visible {
+  outline: 2px solid var(--text-color);
+  outline-offset: 3px;
+}
+
+.ssh-secondary-link {
+  margin: 1rem 0 0;
+  font-size: 0.9rem;
+}
+
+.ssh-secondary-link a {
+  color: var(--text-color);
+  opacity: 0.7;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.ssh-secondary-link a:hover {
+  opacity: 1;
+}
+
+@media (max-width: 640px) {
+  .ssh-main {
+    padding: 4.25rem 0.75rem 2.5rem;
+    min-height: calc(100dvh - 72px);
+  }
+
+  .ssh-panel {
+    padding: 1.25rem;
+    min-height: 68dvh;
+  }
+
+  .ssh-description {
+    white-space: normal;
+  }
+
+  .ssh-copy-button {
+    width: 100%;
+  }
+}
