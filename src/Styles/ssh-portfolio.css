@@ -1,258 +1,98 @@
 .ssh-page {
   min-height: 100vh;
-  color: #d9ffe3;
-  background:
-    radial-gradient(circle at 8% 10%, rgba(46, 204, 113, 0.15), transparent 45%),
-    radial-gradient(circle at 92% 20%, rgba(52, 152, 219, 0.12), transparent 42%),
-    #07110b;
-}
-
-html.ssh-body,
-body.ssh-body {
-  background: #07110b !important;
-  min-height: 100%;
-  overflow-x: hidden;
-}
-
-html.ssh-body {
-  --blog-nav-bg: rgba(7, 17, 11, 0.85);
-  --blog-border: rgba(119, 255, 170, 0.12);
-  --blog-nav-link: rgba(190, 255, 214, 0.72);
-  --blog-nav-link-active: #b8ffca;
-  --blog-nav-toggle-bg: rgba(11, 29, 19, 0.85);
-  --blog-nav-toggle-border: rgba(119, 255, 170, 0.16);
-  --blog-nav-toggle-color: rgba(190, 255, 214, 0.78);
-  --blog-nav-toggle-hover: rgba(184, 255, 202, 0.55);
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 .ssh-main {
-  max-width: 1200px;
+  max-width: 760px;
   margin: 0 auto;
-  padding: 3.5rem 1.25rem 4rem;
+  padding: 5rem 1rem 4rem;
 }
 
-.ssh-hero-panel {
-  display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
-  gap: 1.25rem;
-  align-items: stretch;
+.ssh-panel {
+  border: 1px solid var(--divider-color);
+  border-radius: 14px;
+  background-color: var(--card-bg);
+  padding: 2rem;
 }
 
-.ssh-terminal-shell,
-.ssh-content {
-  border: 1px solid rgba(119, 255, 170, 0.14);
-  border-radius: 20px;
-  background: rgba(6, 18, 11, 0.75);
-  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
-  backdrop-filter: blur(6px);
-}
-
-.ssh-terminal-shell {
-  overflow: hidden;
-}
-
-.ssh-terminal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0.9rem 1rem;
-  border-bottom: 1px solid rgba(119, 255, 170, 0.12);
-  background: rgba(7, 23, 14, 0.9);
-}
-
-.ssh-terminal-header p {
+.ssh-panel h1 {
   margin: 0;
-  color: rgba(217, 255, 227, 0.7);
-  font-size: 0.82rem;
-  letter-spacing: 0.03em;
-}
-
-.ssh-terminal-dots {
-  display: flex;
-  gap: 0.35rem;
-}
-
-.ssh-terminal-dots span {
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  display: block;
-}
-
-.ssh-terminal-dots span:nth-child(1) { background: #ff5f57; }
-.ssh-terminal-dots span:nth-child(2) { background: #febc2e; }
-.ssh-terminal-dots span:nth-child(3) { background: #28c840; }
-
-.ssh-terminal-body {
-  padding: 1.15rem 1rem 1.25rem;
-  font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
-}
-
-.ssh-terminal-intro {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.9rem;
-  color: #b8ffca;
-  font-size: 0.9rem;
-}
-
-.ssh-line {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 0.45rem;
-  line-height: 1.4;
-}
-
-.ssh-prompt {
-  color: #7dffae;
-}
-
-.ssh-command {
-  color: #effff3;
-}
-
-.ssh-output {
-  margin-top: 1rem;
-  padding: 0.9rem;
-  border: 1px solid rgba(119, 255, 170, 0.12);
-  border-radius: 12px;
-  background: rgba(5, 14, 9, 0.6);
-}
-
-.ssh-output p {
-  margin: 0;
-  color: rgba(216, 255, 226, 0.85);
-}
-
-.ssh-output p + p {
-  margin-top: 0.6rem;
-}
-
-.ssh-content {
-  padding: 1.5rem;
-  display: flex;
-  flex-direction: column;
-}
-
-.ssh-eyebrow {
-  margin: 0 0 0.55rem;
-  color: rgba(125, 255, 174, 0.85);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 0.75rem;
-}
-
-.ssh-content h1 {
-  margin: 0;
-  color: #f0fff4;
-  line-height: 1.05;
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  color: var(--text-color);
 }
 
 .ssh-description {
-  margin: 0.95rem 0 1rem;
-  color: rgba(217, 255, 227, 0.82);
-  font-size: 1rem;
-  line-height: 1.6;
+  margin: 0.8rem 0 1.25rem;
+  color: var(--text-color);
+  opacity: 0.8;
+  max-width: 38ch;
 }
 
 .ssh-command-card {
-  margin: 0.25rem 0 1.1rem;
-  padding: 0.95rem 1rem;
-  border-radius: 14px;
-  border: 1px solid rgba(119, 255, 170, 0.16);
-  background: rgba(3, 10, 7, 0.8);
+  margin: 0 0 1rem;
+  border: 1px solid var(--divider-color);
+  border-radius: 10px;
+  background-color: var(--background-color);
+  padding: 0.9rem 1rem;
 }
 
 .ssh-command-card code {
-  font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
-  font-size: clamp(1rem, 2.2vw, 1.1rem);
-  color: #c8ffd8;
+  font-family: Menlo, Consolas, monospace;
+  font-size: 1rem;
+  color: var(--text-color);
 }
 
-.ssh-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.ssh-action {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  border-radius: 999px;
+.ssh-copy-button {
   padding: 0.65rem 1rem;
-  text-decoration: none;
-  font: inherit;
+  border-radius: 10px;
+  border: 1px solid var(--text-color);
+  background-color: var(--text-color);
+  color: var(--background-color);
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
-.ssh-action:hover {
-  transform: translateY(-1px);
+.ssh-copy-button:hover {
+  opacity: 0.88;
 }
 
-.ssh-action-primary {
-  color: #031108;
-  background: #7dffae;
-  border: 1px solid #7dffae;
-  box-shadow: 0 10px 28px rgba(125, 255, 174, 0.22);
+.ssh-copy-button:focus-visible,
+.ssh-secondary-link a:focus-visible {
+  outline: 2px solid var(--text-color);
+  outline-offset: 3px;
 }
 
-.ssh-action-secondary {
-  color: #d7ffe2;
-  border: 1px solid rgba(119, 255, 170, 0.2);
-  background: rgba(8, 23, 15, 0.8);
-}
-
-.ssh-action-secondary:hover {
-  border-color: rgba(125, 255, 174, 0.38);
-}
-
-.ssh-feature-list {
+.ssh-secondary-link {
   margin: 1rem 0 0;
-  padding-left: 1.1rem;
-  color: rgba(217, 255, 227, 0.88);
-  line-height: 1.7;
+  font-size: 0.9rem;
 }
 
-.ssh-note {
-  margin: auto 0 0;
-  padding-top: 1rem;
-  color: rgba(191, 255, 214, 0.72);
-  font-size: 0.92rem;
+.ssh-secondary-link a {
+  color: var(--text-color);
+  opacity: 0.7;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
-.ssh-note code {
-  color: #d7ffe2;
-  font-family: "IBM Plex Mono", "SFMono-Regular", Menlo, Consolas, monospace;
-}
-
-@media (max-width: 900px) {
-  .ssh-hero-panel {
-    grid-template-columns: 1fr;
-  }
-
-  .ssh-main {
-    padding-top: 2rem;
-  }
+.ssh-secondary-link a:hover {
+  opacity: 1;
 }
 
 @media (max-width: 640px) {
   .ssh-main {
-    padding-inline: 0.85rem;
+    padding: 4.25rem 0.75rem 2.5rem;
   }
 
-  .ssh-content,
-  .ssh-terminal-body {
-    padding: 1rem;
+  .ssh-panel {
+    padding: 1.25rem;
   }
 
-  .ssh-terminal-header {
-    align-items: flex-start;
-    flex-direction: column;
+  .ssh-copy-button {
+    width: 100%;
   }
 }
