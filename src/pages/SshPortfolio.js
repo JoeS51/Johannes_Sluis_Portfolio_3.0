@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Navigation from '../Components/Navigation';
 import '../Styles/ssh-portfolio.css';
 
@@ -45,9 +46,9 @@ const SshPortfolio = () => {
           </button>
 
           <p className="ssh-secondary-link">
-            <a href="/blog/ssh-portfolio-guide">
+            <Link to="/blog/ssh-portfolio-guide">
               Read how I built it
-            </a>
+            </Link>
           </p>
         </section>
       </main>
