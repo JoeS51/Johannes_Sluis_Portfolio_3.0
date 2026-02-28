@@ -173,9 +173,7 @@ This technically works, but it's naive. Every update re-renders the entire tree 
 
 ## Reconciliation Strategy
 
-If we just call render() again, the naive version will blow away the entire DOM subtree and rebuild it from scratch. That works, but it is also expensive and loses stateful DOM things like input focus, scroll position, and even text selection. 
-
-So we need a smarter approach: keep the previous virtual DOM tree around, generate the next one, and compare them. Then apply the smallest possible set of DOM mutations. This is reconciliation.
+The smarter reconciliation strategy is to keep the previous virtual DOM tree around, generate the next one, and compare them. Then apply the smallest possible set of DOM mutations. This is how reconciliation actually works.
 
 At a high level, my reconciler does three checks as it walks the tree:
 1) Node type changed ("div" -> "span", or component type changed) => replace the node.
@@ -186,13 +184,13 @@ Here's a simplified idea of the diff:
 
 \`\`\`
 function reconcile(parentDom, oldVNode, newVNode) {
-  // 1) Remove
+  // 1) The vdom node was removed
   if (newVNode == null) {
     parentDom.removeChild(oldVNode.dom);
     return;
   }
 
-  // 2) Create
+  // 2) Create this new vdom node
   if (oldVNode == null) {
     const newDom = createDom(newVNode);
     parentDom.appendChild(newDom);
@@ -212,13 +210,34 @@ function reconcile(parentDom, oldVNode, newVNode) {
 }
 \`\`\`
 
-Notice every vnode has a *dom* reference. I attach the real DOM node to the virtual node so reconciliation can quickly patch without searching the DOM. That one decision makes the algorithm way simpler.
+Notice in the snippet above I’m doing things like *oldVNode.dom* and *parentDom.replaceChild(...)*. That only works because I attach the real DOM node onto each vnode as a *dom* field. So when we diff, we already have a direct handle to the element we need to update with no DOM querying required. This makes things way simpler.
 
-For children, the naive approach is "diff by index" (child 0 with child 0, child 1 with child 1, etc). This breaks when you insert at the start of a list because everything shifts. That's where keys come in. If children have stable keys, we can match old and new children by key instead of index and move/insert/remove the right ones.
+For children, the naive approach is "diff by index" (child 0 with child 0, child 1 with child 1, etc). This breaks when you insert at the start of a list because everything shifts. That's what key-based reconciliation is for. If children have stable keys, we can match old and new children by key instead of index and move/insert/remove the right ones. 
 
-We'll get deeper into keys and component updates in the next section, but this is the core idea: keep the old tree, compare it to the new tree, and patch the DOM minimally.
+(this is why React always bothers you about missing keys in lists)
+
+This is the core idea behind reconciliation! Keep the old tree, compare it to the new tree, and patch the DOM minimally (this is where the leetcode practice actually paid off).
 
 ## Component Model 
+
+In React, we often use components to modularize our UI, but how can we handle reconciliation with components in our version of React? In the end, a component is just a function and calling that function returns a vnode tree.
+
+When the renderer hits a vnode whose type is a function, it calls that function with props and uses whatever it returns as the real child to render.
+
+Here’s the tiny bit of logic that makes components work (same idea as earlier):
+
+\`\`\` javascript
+if (typeof vnode.type === "function") {
+  const childVNode = vnode.type({ ...(vnode.props || {}), children: vnode.children });
+  render(childVNode, container);
+  return;
+}
+\`\`\`
+
+Components still return regular virtual DOM nodes, so the reconciler doesn't need to account for it in a special way.
+
+One thing to note is that components need identity across renders. React uses the function reference (and key if you’re in a list) to decide if it’s the same component or a new one. That identity is what lets state and hooks attach to the right component later.
+I didn’t fully implement this in my version since I overlooked this at the start, but for a full implementation, you would want to account for this.
 
 ## State and setState
 
