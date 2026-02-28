@@ -27,7 +27,7 @@
   margin: 0.8rem 0 1.25rem;
   color: var(--text-color);
   opacity: 0.8;
-  max-width: 38ch;
+  white-space: nowrap;
 }
 
 .ssh-command-card {
@@ -86,10 +86,16 @@
 @media (max-width: 640px) {
   .ssh-main {
     padding: 4.25rem 0.75rem 2.5rem;
+    min-height: calc(100dvh - 72px);
   }
 
   .ssh-panel {
     padding: 1.25rem;
+    min-height: 68dvh;
+  }
+
+  .ssh-description {
+    white-space: normal;
   }
 
   .ssh-copy-button {
