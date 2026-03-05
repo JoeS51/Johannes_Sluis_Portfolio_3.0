@@ -570,10 +570,11 @@ body.blog-body {
   position: relative;
   width: 100%;
   max-width: 100%;
+  margin: 0.75rem 0 1.25rem;
 }
 
 .blog-code-block-wrapper pre {
-  margin: 0.75rem 0 1.25rem;
+  margin: 0;
   padding: 2.75rem 1.5rem 1.5rem;
   background: #282c34;
   border-radius: 12px;
@@ -630,13 +631,22 @@ body.blog-body {
   border: 1px solid rgba(248, 250, 252, 0.3);
   background: rgba(15, 23, 42, 0.9);
   color: #f8fafc;
-  font-size: 0.75rem;
+  font-size: 0.65rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  padding: 0.3rem 0.6rem;
+  padding: 0.2rem 0.45rem;
   border-radius: 999px;
   cursor: pointer;
   transition: border-color 0.2s ease, transform 0.2s ease;
+}
+
+.blog-code-block-wrapper.is-single-line .blog-code-copy {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.blog-code-block-wrapper.is-single-line pre {
+  padding: 1.25rem 1.5rem;
 }
 
 .blog-code-copy:hover {

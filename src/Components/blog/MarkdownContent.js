@@ -8,6 +8,7 @@ import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 const CodeBlock = ({ children, className, ...props }) => {
   const [copied, setCopied] = useState(false);
   const code = String(children).replace(/\n$/, '');
+  const isSingleLine = !code.includes('\n');
   const match = /language-(\w+)/.exec(className || '');
   const language = match ? match[1] : 'javascript';
 
@@ -35,7 +36,7 @@ const CodeBlock = ({ children, className, ...props }) => {
   };
 
   return (
-    <div className="blog-code-block-wrapper">
+    <div className={`blog-code-block-wrapper${isSingleLine ? ' is-single-line' : ''}`}>
       <button type="button" className="blog-code-copy" onClick={handleCopy}>
         {copied ? 'Copied' : 'Copy'}
       </button>
