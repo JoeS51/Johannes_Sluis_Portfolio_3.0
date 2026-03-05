@@ -12,30 +12,31 @@ const post = {
 ## Why?
 I started this project in the summer of 2025 after reading this [wonderful article](https://www.rob.directory/blog/react-from-scratch#reconciling-view-nodes-between-render) by Rob Pruzan. Since then, it's been a fun side project, and I've finally gotten it
 to a point where I wanted to share. I didn't necessarily have a goal in mind when starting this project, but surprisingly, it's opened up a lot of possibilities for me.
-Some open source projects I'm interested in, like HonoX and Rari (React rewritten in Rust) have very similar concepts to what I implemented for this project.
+Some open source projects I'm interested in, like HonoX and Rari, have similar concepts to what I implemented for this project.
 
 Here is the repo if you want to follow along with this article:
 [link](https://github.com/JoeS51/React-lite)
 
-As part of this project, I built a lightweight React with a virtual DOM, a custom renderer and reconciler, key-based reconciliation, and a lot of the hooks (useState, useEffect, useRef, useMemo, useCallback, useReducer, useLayoutEffect).
+As part of this project, I built a lightweight React clone with a virtual DOM, a custom renderer and reconciler, key-based reconciliation, and a lot of the hooks (useState, useEffect, useRef, useMemo, useCallback, useReducer, useLayoutEffect).
 
 ## Context
-Before frameworks like React existed, interactivity in websites required you to manually update the DOM in response to events. You had to listen for user interactions, query the DOM, and mutate it using tools like jQuery.
-The developer was responsible for keeping the UI in sync with the application state. React introduced a new way of creating web apps that abstracts this away. With React, you define some state and React handles updating the DOM based on state changes. (Important note: React wasn't the first framework to do this, but it popularized the approach) <br/><br/>
+Before frameworks like React existed, interactivity on websites required you to manually update the DOM in response to events. You had to listen for user interactions, query the DOM, and mutate it using tools like jQuery.
+The developer was responsible for keeping the UI in sync with the application state. React introduced a new way of creating web apps that abstract this away. With React, you define some state and React handles updating the DOM based on state changes. (Important note: React wasn't the first framework to do this, but it popularized the approach) <br/><br/>
 I wanted to explore how React does this for you using concepts like the virtual DOM, reconciliation, and hooks, which is what I'll be explaining :)
 
 ## Virtual DOM basics
-To understand the purpose of the virtual DOM, you need to understand the DOM itself.
-The DOM is what browsers use to know what goes on your webpage. [More info here](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model).
+To understand the virtual DOM, you first need to understand the DOM itself. The DOM is how the browser represents your page and knows what to update. [More info here](https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model).
 
 Here's a quick visual of the DOM:
 ![DOM tree diagram](/images/1_W91R-0YkyCNOVfQChFqZVg.gif)
-As you can see, it's just a tree. When you want to update something on the page, you could mutate this DOM directly like I mentioned earlier. Without React, finding the correct node and manually changing its properties.
-If you wanted to change the title, for example, you'd grab that element (or just set document.title) and update its text. For small websites, this can work fine. As your app grows though, this becomes hard to manage (although React has its own problems as applications grow).
+As you can see, it's just a tree. When you want to update something on the page, you could mutate this DOM directly like I mentioned earlier. Without React, that means finding the correct node and manually changing its properties.
+If you wanted to change the title, for example, you'd grab that element and update its text. For small websites, this can work fine. As your app grows though, this becomes hard to manage (although React has its own problems as applications grow).
 <br/><br/>
 React takes a different approach.
-React actually creates a lightweight representation of this DOM in memory, called the virtual DOM. Remember that React manages state for you, so when you change some state, React needs to be able to update the DOM on its own rather than the developer doing this.
-To understand what part of the DOM to change, React maintains this virtual DOM. To be more specific, this virtual DOM is just a tree of JavaScript objects that descibes what the UI *should* look like. 
+React actually creates a lightweight representation of this DOM in memory, called the **virtual DOM**. Remember that React manages state for you, so when you change some state, React needs to be able to update the DOM on its own rather than the developer doing this.
+To understand what part of the DOM to change, React maintains this virtual DOM. 
+
+Before this whole project, I’d heard of the virtual DOM, but it was still a mystical concept that I only vaguely understood. In the end, it’s just a tree of JavaScript objects that describes what the UI *should* look like. 
 <br/><br/>
 When state changes in your React app, React generates a new virtual DOM tree. It then compares this new virtual DOM tree with your previous virtual DOM tree to determine what exactly changed. This process is called **diffing**.
 Diffing allows React to compute the set of updates required to synchronize the real DOM with the new virtual DOM. The full process of updating the UI to match the new virtual DOM state is called **reconciliation**.
@@ -43,10 +44,9 @@ Diffing allows React to compute the set of updates required to synchronize the r
 Here's a visual representation of how diffing/reconciliation works:
 ![Diffing visual](/images/diffing.jpg)
 
-## Rendering to the DOM
+In this diagram, the left tree is the **previous** virtual DOM, the middle tree is the **new** virtual DOM after state changes, and the right tree is the **real** browser DOM. React diffs the left and middle trees, figures out which nodes changed (orange), and then applies *only those updates* to the real DOM on the right. The key point here is that we don’t rebuild the whole DOM. We only patch the parts that changed.
 
-Now for the fun part. How did I actually implement a mini React?
-<br/><br/>
+## Rendering to the DOM
 To start off, it is important to know that JSX just compiles into JavaScript. So let's say you have a *index.jsx* file and within that file you have something like 
 \`\`\` javascript
   const App = () => {
@@ -57,7 +57,6 @@ To start off, it is important to know that JSX just compiles into JavaScript. So
     );
   };
 \`\`\`
-This falls apart immediately once you have more than one piece of state. There’s only one global slot, so the second useState call would just overwrite the first. And if you have multiple components, they all fight over the same value.
 
 A tool like [Babel](https://babeljs.io/) takes this code and converts it into **createElement** function calls before the code runs in the browser. So the above code would turn into this:
 
@@ -75,9 +74,10 @@ This *createElement* function takes these arguments:
 - Props object
 - Any number of children.
 <br/>
-This plain JavaScript object serves as a virtual DOM node. When combined, these objects form the virtual DOM tree that React uses during reconciliation.
+That return value is just a plain JavaScript object. Think of each object as a single virtual DOM node, and the nested *children* arrays are what make it a tree. That tree is what React uses during reconciliation.
 <br/>
-Let's see what a simplified implementation of*createElement* might look like:
+
+So in my React-lite, *createElement* is the actual function that builds those virtual DOM node objects. Here’s a simplified version of it:
 
 \`\`\` javascript
   const React = {
@@ -91,7 +91,7 @@ Let's see what a simplified implementation of*createElement* might look like:
   };
 \`\`\`
 
-so the earlier createElement code becomes:
+Using this *createElement* implementation, our earlier JSX example becomes:
 
 \`\`\`
 {
@@ -111,7 +111,7 @@ so the earlier createElement code becomes:
 
 As you can see this createElement implementation is just making the earlier nested function call structure into a cleaner object. We do this to make reconciliation easier for ourselves. 
 
-Now that we can describe what the UI should look like, we need a way to turn this virtual DOM tree into actual DOM nodes in the browser.
+Now that we can describe what the UI should look like in plain JavaScript objects, we need a way to turn this virtual DOM tree into actual DOM nodes in the browser.
 
 The virtual DOM is just a tree of plain JavaScript objects. To display anything on the screen, we need to traverse this tree and create corresponding DOM nodes. Thus, rendering is just a tree traversal problem.
 
@@ -139,7 +139,7 @@ function render(vnode, container) {
 \`\`\`
 
 Since each virtual node can have children, and those children can have children themselves, we recursively call render() for each child. 
-Essentially, we’re performing DFS of the virtual DOM tree, creating corresponding DOM nodes as we go. Don't worry if some of this code doesn't make sense. We will come back to this when I explain function components.
+Essentially, we’re performing DFS of the virtual DOM tree, creating corresponding DOM nodes as we go.
 
 To mount the application, we simply call render with a root virtual node and a container element.
 
@@ -152,7 +152,7 @@ render(<App />, root);
 
 And with that, we have rendered something to the screen!
 
-## Re-rendering and the Problem With Naive updates
+## Re-rendering and the Problem With Naive Updates
 
 Great, we rendered something to the screen, but we're missing a core part of React: re-rendering when state changes.
 
@@ -168,11 +168,11 @@ function increment() {
 }
 \`\`\`
 
-This technically works, but it's naive. Every update re-renders the entire tree from the root down. For a large applciation, this gets expensive fast and you can start losing little DOM state things (input focus, scroll position, etc). So we need a smarter way to update only what actually changed.
+This technically works, but it's naive. Every update re-renders the entire tree from the root down. For a large application, this gets expensive fast and you can start losing little DOM state things (input focus, scroll position, etc). So we need a smarter way to update only what actually changed.
 
 ## Reconciliation Strategy
 
-The smarter reconciliation strategy is to keep the previous virtual DOM tree around, generate the next one, and compare them. Then apply the smallest possible set of DOM mutations. This is how reconciliation actually works.
+Reconciliation is just the process of syncing the real DOM with the new virtual DOM. The smarter strategy is to keep the previous virtual DOM tree around, generate the next one, compare them, and apply the smallest possible set of DOM mutations.
 
 At a high level, my reconciler does three checks as it walks the tree:
 1) Node type changed ("div" -> "span", or component type changed) => replace the node.
@@ -211,11 +211,9 @@ function reconcile(parentDom, oldVNode, newVNode) {
 
 Notice in the snippet above I’m doing things like *oldVNode.dom* and *parentDom.replaceChild(...)*. That only works because I attach the real DOM node onto each vnode as a *dom* field. So when we diff, we already have a direct handle to the element we need to update with no DOM querying required. This makes things way simpler.
 
-For children, the naive approach is "diff by index" (child 0 with child 0, child 1 with child 1, etc). This breaks when you insert at the start of a list because everything shifts. That's what key-based reconciliation is for. If children have stable keys, we can match old and new children by key instead of index and move/insert/remove the right ones. 
+For children, the naive approach is "diff by index" (child 0 with child 0, child 1 with child 1, etc). This breaks when you insert at the start of a list because everything shifts. That's what key-based reconciliation is for. If children have stable keys, we can match old and new children by key instead of index and move/insert/remove the right ones. (this is why React always bothers you about missing keys in lists)
 
-(this is why React always bothers you about missing keys in lists)
-
-This is the core idea behind reconciliation! Keep the old tree, compare it to the new tree, and patch the DOM minimally (this is where the leetcode practice actually paid off).
+This is the core idea behind reconciliation! Keep the old tree, compare it to the new tree, and patch the DOM minimally (the leetcode practice pays off here).
 
 ## Component Model 
 
@@ -240,7 +238,7 @@ I didn’t fully implement this in my version since I overlooked this at the sta
 
 ## State and setState
 
-Now for state. State is the core idea behind React and lets your UI change over time without you manually touching the DOM.
+Finally we can talk about state. State is the core idea behind React and lets your UI change over time without you manually touching the DOM.
 
 Here’s a common example in React of keeping track of some count state:
 \`\`\` javascript
@@ -267,12 +265,12 @@ function useState(initial) {
 
 This obviously falls apart for multiple reasons: we’re only supporting one piece of state, it’s tied to a single variable, and it doesn’t scale to multiple components. The better way to do this is to have a global array to store *many* pieces of state and retrieve them in a predictable order.
 
-We use an array and not a map because hooks are order-based. When you call useState multiple times in a component, the order of those calls is the identity. On each render, we walk those calls in the same order and grab the next slot. A map would need a key, and we don’t have one unless we want to deviate from React's spec.
+We use an array and not a map because hooks are order-based. When you call useState multiple times in a component, the order of those calls is the identity. On each render, we walk those calls in the same order and grab the next slot. A map would need a key, and we don’t have one unless we want to deviate from React's rules.
 So the array is the simplest thing that works, as long as the hook call order stays consistent.
 
-In my implementation, that *useState(0)* line grabs the value at the current slot in the *states* array and return a setter that updates that same slot and triggers a rerender. To make that work, I reset a global pointer (*idx = 0*) at the start of each render, and each useState call increments it. That’s why hook order has to stay consistent across renders.
+In my implementation, that *useState(0)* line grabs the value at the current slot in the *states* array and returns a setter that updates that same slot and triggers a rerender. To make that work, I reset a global pointer (*idx = 0*) at the start of each render, and each useState call increments it. That’s why hook order has to stay consistent across renders.
 
-Here's the stripped down version of what I did:
+Here's the stripped-down version of what I did:
 
 \`\`\` javascript
 const states = [];
@@ -300,7 +298,7 @@ This is a simplified version of how React does it. The real implementation track
 
 Finally, I'll cover how I implemented hooks. Hooks are just more stateful utilities built on top of the same idea as useState. React keeps some data around between renders, and advances an index so calls line up in the same order every time.
 
-You’ve probably heard that you can’t use hooks inside conditionals. If you ever wondered why, this is exactly the reason. It is because hooks are index-based, changing the call order means everything after that point reads the wrong slot. If you don't know what I'm talking about, React has a good warning page about this [here](https://react.dev/warnings/invalid-hook-call-warning).
+You’ve probably heard that you can’t use hooks inside conditionals. If you ever wondered why, this is exactly the reason. It is because hooks are index-based, so changing the call order means everything after that point reads the wrong slot. If you don't know what I'm talking about, React has a good warning page about this [here](https://react.dev/warnings/invalid-hook-call-warning).
 
 Let’s just focus on *useEffect* for now.
 
@@ -356,7 +354,7 @@ const executeEffect = () => {
 };
 \`\`\`
 
-In this snippet, *useEffect* decides whether the effect should run and pushes it into *pendingEffects*. Then *executeEffect* runs that list after render. So the timing is: render and reconcile first, then run effects. That matches React’s idea of running effects *after* the DOM updates, so you don’t block rendering.
+In this snippet, *useEffect* decides whether the effect should run and pushes it into *pendingEffects*. Then *executeEffect* runs that list after render. In my implementation, I call *executeEffect* at the end of rerender so effects run right after the DOM updates. That matches React’s idea of running effects *after* the DOM updates, so you don’t block rendering.
 
 I won't explain how the rest of the hooks are implemented, but they all follow a similar pattern:
 - **useRef**: store an object once and keep returning the same object.
