@@ -12,7 +12,7 @@ const post = {
 ## Why?
 I started this project in the summer of 2025 after reading this [wonderful article](https://www.rob.directory/blog/react-from-scratch#reconciling-view-nodes-between-render) by Rob Pruzan. Since then, it's been a fun side project, and I've finally gotten it
 to a point where I wanted to share. I didn't necessarily have a goal in mind when starting this project, but surprisingly, it's opened up a lot of possibilities for me.
-Some open source projects I'm interested in, like (LINK THESE AND MAKE SURE IT"S ACCURATE) HonoX, Solid.js, and Rari (React rewritten in Rust), all have very similar concepts to what I implemented for this project.
+Some open source projects I'm interested in, like HonoX and Rari (React rewritten in Rust) have very similar concepts to what I implemented for this project.
 
 Here is the repo if you want to follow along with this article:
 [link](https://github.com/JoeS51/React-lite)
@@ -20,9 +20,9 @@ Here is the repo if you want to follow along with this article:
 As part of this project, I built a lightweight React with a virtual DOM, a custom renderer and reconciler, key-based reconciliation, and a lot of the hooks (useState, useEffect, useRef, useMemo, useCallback, useReducer, useLayoutEffect).
 
 ## Context
-Before frameworks like React existed, interactivity in websites required you to manually update the DOM in response to events. Developers would listen for user interactions, query the DOM, and mutate the DOM using tools like jQuery.
-The developer was responsible for keeping the UI in sync with the application state. React introduced a new way of creating web apps that abstracted this away. With React, you define some state and React handles updating the DOM based on state changes. (Important note: React wasn't the first framework to do this, but it popularized the approach) <br/><br/>
-I wanted to explore how React does this for you using concepts like the virtual DOM, reconciliation, hooks, which is what I'll be explaining :)
+Before frameworks like React existed, interactivity in websites required you to manually update the DOM in response to events. You had to listen for user interactions, query the DOM, and mutate it using tools like jQuery.
+The developer was responsible for keeping the UI in sync with the application state. React introduced a new way of creating web apps that abstracts this away. With React, you define some state and React handles updating the DOM based on state changes. (Important note: React wasn't the first framework to do this, but it popularized the approach) <br/><br/>
+I wanted to explore how React does this for you using concepts like the virtual DOM, reconciliation, and hooks, which is what I'll be explaining :)
 
 ## Virtual DOM basics
 To understand the purpose of the virtual DOM, you need to understand the DOM itself.
@@ -57,6 +57,7 @@ To start off, it is important to know that JSX just compiles into JavaScript. So
     );
   };
 \`\`\`
+This falls apart immediately once you have more than one piece of state. There’s only one global slot, so the second useState call would just overwrite the first. And if you have multiple components, they all fight over the same value.
 
 A tool like [Babel](https://babeljs.io/) takes this code and converts it into **createElement** function calls before the code runs in the browser. So the above code would turn into this:
 
@@ -239,9 +240,141 @@ I didn’t fully implement this in my version since I overlooked this at the sta
 
 ## State and setState
 
+Now for state. State is the core idea behind React and lets your UI change over time without you manually touching the DOM.
+
+Here’s a common example in React of keeping track of some count state:
+\`\`\` javascript
+const [count, setCount] = useState(0);
+\`\`\`
+
+Looking at this line, we can tell that in order to implement this ourselves, we need a useState function that takes one parameter (the initial value) and returns an array with the value and a function to change that value.
+
+A super naive approach would be to just have a global "count" variable and keep it in sync with this.
+
+For example, the naive version might look like this:
+\`\`\` javascript
+// BAD EXAMPLE
+let count = 0;
+
+function useState(initial) {
+  return [count, (next) => {
+    // Support both setCount(5) and setCount(prev => prev + 1)
+    count = typeof next === "function" ? next(count) : next;
+    rerender();
+  }];
+}
+\`\`\`
+
+This obviously falls apart for multiple reasons: we’re only supporting one piece of state, it’s tied to a single variable, and it doesn’t scale to multiple components. The better way to do this is to have a global array to store *many* pieces of state and retrieve them in a predictable order.
+
+We use an array and not a map because hooks are order-based. When you call useState multiple times in a component, the order of those calls is the identity. On each render, we walk those calls in the same order and grab the next slot. A map would need a key, and we don’t have one unless we want to deviate from React's spec.
+So the array is the simplest thing that works, as long as the hook call order stays consistent.
+
+In my implementation, that *useState(0)* line grabs the value at the current slot in the *states* array and return a setter that updates that same slot and triggers a rerender. To make that work, I reset a global pointer (*idx = 0*) at the start of each render, and each useState call increments it. That’s why hook order has to stay consistent across renders.
+
+Here's the stripped down version of what I did:
+
+\`\`\` javascript
+const states = [];
+let idx = 0;
+
+const useState = (initial) => {
+  const frozen = idx;
+  if (frozen >= states.length) states.push(initial);
+
+  const setState = (next) => {
+    states[frozen] = typeof next === "function" ? next(states[frozen]) : next;
+    rerender();
+  };
+
+  idx++;
+  return [states[frozen], setState];
+};
+\`\`\`
+
+When you call setState, my React implementation just updates the value and calls rerender(), which runs reconciliation against the previous tree, so you see the updated value!
+
+This is a simplified version of how React does it. The real implementation tracks state per component instance instead of a single global array, but the mental model still holds and it works here as long as hook order doesn’t change.
+
 ## Hooks
 
+Finally, I'll cover how I implemented hooks. Hooks are just more stateful utilities built on top of the same idea as useState. React keeps some data around between renders, and advances an index so calls line up in the same order every time.
+
+You’ve probably heard that you can’t use hooks inside conditionals. If you ever wondered why, this is exactly the reason. It is because hooks are index-based, changing the call order means everything after that point reads the wrong slot. If you don't know what I'm talking about, React has a good warning page about this [here](https://react.dev/warnings/invalid-hook-call-warning).
+
+Let’s just focus on *useEffect* for now.
+
+\`\`\` javascript
+useEffect(() => {
+  console.log("count:", count);
+}, [count]);
+\`\`\`
+
+You can see useEffect takes two parameters: a function that runs your side effect, and an array. That array is the dependency list (deps). If any value inside it changes, React runs the effect again.
+
+At a high level, *useEffect* is just: decide **if** the effect should run, queue it, then flush the queue after render. The dependency array is the cheap “did anything change?” check.
+
+Here’s an example of how to implement useEffect:
+\`\`\` javascript
+const pendingEffects = [];
+const effectDeps = [];
+let effectIdx = 0;
+
+const useEffect = (fn, deps) => {
+  // 1) Find the previous deps for this hook slot
+  const currIdx = effectIdx;
+  const prevDeps = effectDeps[currIdx];
+  let shouldRun = false;
+
+  // 2) Decide if the effect should run again
+  if (!prevDeps || !deps) {
+    shouldRun = true;
+  } else if (prevDeps.length !== deps.length) {
+    shouldRun = true;
+  } else {
+    for (let i = 0; i < deps.length; i++) {
+      if (prevDeps[i] !== deps[i]) {
+        shouldRun = true;
+        break;
+      }
+    }
+  }
+
+  // 3) If it should run, queue it for later
+  if (shouldRun) pendingEffects.push(fn);
+
+  // 4) Save deps for the next render and advance the slot
+  effectDeps[currIdx] = deps;
+  effectIdx++;
+};
+
+const executeEffect = () => {
+  // Run everything that was queued this render
+  const effectsToRun = pendingEffects.slice();
+  pendingEffects.length = 0;
+  effectsToRun.forEach((fn) => fn());
+};
+\`\`\`
+
+In this snippet, *useEffect* decides whether the effect should run and pushes it into *pendingEffects*. Then *executeEffect* runs that list after render. So the timing is: render and reconcile first, then run effects. That matches React’s idea of running effects *after* the DOM updates, so you don’t block rendering.
+
+I won't explain how the rest of the hooks are implemented, but they all follow a similar pattern:
+- **useRef**: store an object once and keep returning the same object.
+- **useMemo**: store a value + deps, recompute only if deps change.
+- **useCallback**: same as useMemo but for functions.
+- **useReducer**: same as useState but the updater is a reducer.
+
 ## Next steps
+If you got all the way here, thank you so much for reading!
+
+Send me a message if you liked it or hated it or have questions: joesluis51@gmail.com
+
+Some improvements that could be made to my implementation are:
+- **Component instances + per-component hooks**: move state out of global arrays so identity is stable across reorders.
+- **Scheduling / Fiber-like work loop**: break rendering into units of work so large updates can be interrupted and resumed.
+- **Batched updates**: group multiple setState calls into a single render pass.
+- **Smarter reconciliation**: keep improving the diffing strategy for complex trees and edge cases.
+- **SSR**: generate HTML on the server and hydrate on the client.
 `
 };
 
