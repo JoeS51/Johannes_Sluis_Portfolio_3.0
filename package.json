@@ -24,8 +24,7 @@
     "react-dom": "^18.3.1",
     "react-loader-spinner": "^6.1.6",
     "react-markdown": "^10.1.0",
-    "react-router-dom": "^6.26.1",
-    "react-scripts": "5.0.1",
+    "react-router-dom": "^6.30.2",
     "react-scroll": "^1.9.3",
     "react-spring": "^9.7.4",
     "react-syntax-highlighter": "^16.1.0",
@@ -39,13 +38,13 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "dev": "react-scripts start",
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "dev": "vite",
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d dist"
   },
   "eslintConfig": {
     "extends": [
@@ -66,8 +65,12 @@
     ]
   },
   "devDependencies": {
+    "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.20",
+    "jsdom": "^27.0.1",
     "postcss": "^8.4.45",
-    "tailwindcss": "^3.4.13"
+    "tailwindcss": "^3.4.13",
+    "vite": "^7.1.7",
+    "vitest": "^3.2.4"
   }
 }
