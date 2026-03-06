@@ -569,7 +569,6 @@ const ResponsiveHome = () => {
               className="text-xl md:text-2xl"
               style={{ maxWidth: '900px', opacity: 0.92 }}
             >
-              I build polished, high-impact products end-to-end - from idea to launch.
             </motion.p>
 
             <motion.div
@@ -649,28 +648,11 @@ const ResponsiveHome = () => {
               className="text-lg md:text-2xl"
               style={{ maxWidth: '980px', lineHeight: '1.7' }}
             >
-              I'm Joe Sluis, a programmer.
             </motion.p>
           </div>
         </div>
       </section>
 
-      {/* Experience Section */}
-      <section id="experience" className="py-20 px-4 md:px-8 bg-transparent" style={{
-        backgroundColor: isDarkMode ? '#121212' : 'var(--background-color)'
-      }}>
-        <div className="max-w-6xl mx-auto">
-          <SectionDivider />
-          <motion.div className="text-center mb-16">
-            <Trail open={open} animationConfig={{ mass: 5, tension: 80, friction: 60 }}>
-              <span className={`${isMobile ? 'text-5xl' : 'text-7xl md:text-8xl'} font-black ${styles['highlight-text']}`} style={{ lineHeight: '1.1', letterSpacing: isMobile ? '0.01em' : '0.02em' }}>
-                Experience
-              </span>
-            </Trail>
-          </motion.div>
-          {isMobile ? <MobileExperience /> : <Experience />}
-        </div>
-      </section>
 
       {/* Projects Section */}
       <section id="projects" className="py-20 px-4 md:px-8 bg-transparent" style={{
