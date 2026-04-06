@@ -9,7 +9,6 @@ import blueOriginLogo from '../../Pictures/blue.png';
 import profileIllustration from '../../Pictures/pfp.png';
 import profilePhoto from '../../Pictures/profilepic.jpeg';
 import { WavyBackground } from '../Wave';
-import styles from '../../styles.module.css';
 
 export const useIsMobile = () => {
   const [isMobile, setIsMobile] = useState(
@@ -164,7 +163,7 @@ export const HomeHero = () => {
                 >
                   <span className={heroNameClass} style={{ lineHeight: '1.1', color: '#1a1a1a' }}>Johannes</span>
                   <span className={heroNameClass} style={{ lineHeight: '1.1', color: '#1a1a1a' }}>Sluis</span>
-                  <span className={`${heroNameClass} ${styles['highlight-text']}`} style={{ lineHeight: '1.1' }}>Portfolio</span>
+                  <span className={heroNameClass} style={{ lineHeight: '1.1' }}>Portfolio</span>
                 </Trail>
               </div>
             </div>
