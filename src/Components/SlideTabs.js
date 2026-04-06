@@ -75,7 +75,6 @@ const Tab = ({ children, setPosition, path, isActive, isMobile, isDarkMode }) =>
   const ref = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
   const navigate = useNavigate();
-  const activeColor = isDarkMode ? '#bfdbfe' : '#60a5fa';
 
   const handleClick = () => {
     navigate(path);
@@ -103,8 +102,8 @@ const Tab = ({ children, setPosition, path, isActive, isMobile, isDarkMode }) =>
         padding: isMobile ? '0.5rem 0.75rem' : '0.75rem 1.25rem',
         fontSize: isMobile ? '0.75rem' : '1rem',
         textTransform: 'uppercase',
-        color: isHovered ? 'white' : (isActive ? activeColor : (isDarkMode ? 'var(--text-color)' : 'black')),
-        fontWeight: isActive ? 600 : 400,
+        color: isHovered ? 'white' : (isDarkMode ? 'var(--text-color)' : 'black'),
+        fontWeight: 400,
         transition: 'color 0.3s ease'
       }}
     >
