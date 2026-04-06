@@ -6,6 +6,9 @@ import Random from './Random';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
 import SshPortfolio from './pages/SshPortfolio';
+import AboutPage from './pages/portfolio/AboutPage';
+import ProjectsPage from './pages/portfolio/ProjectsPage';
+import ContactPage from './pages/portfolio/ContactPage';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -19,6 +22,18 @@ const router = createBrowserRouter([
   {
     path: "/random",
     element: <Random />
+  },
+  {
+    path: "/about",
+    element: <AboutPage />
+  },
+  {
+    path: "/projects",
+    element: <ProjectsPage />
+  },
+  {
+    path: "/contact",
+    element: <ContactPage />
   },
   {
     path: "/blog",
