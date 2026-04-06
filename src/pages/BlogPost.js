@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Link, Navigate, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
-import Navigation from '../Components/Navigation.js';
+import { SlideTabs } from '../Components/SlideTabs';
 import MarkdownContent from '../Components/blog/MarkdownContent';
 import TableOfContents from '../Components/blog/TableOfContents';
 import { getAdjacentPosts, getPostBySlug } from '../lib/posts';
@@ -44,7 +44,7 @@ const BlogPost = () => {
 
   return (
     <div className="blog-page">
-      <Navigation />
+      <SlideTabs />
       <main className="blog-post-main">
         <div className="blog-back">
           <Link to="/blog" className="blog-back-link">

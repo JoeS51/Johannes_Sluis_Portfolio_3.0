@@ -1,5 +1,10 @@
 {
   "rewrites": [
+    { "source": "/about", "destination": "/index.html" },
+    { "source": "/projects", "destination": "/index.html" },
+    { "source": "/contact", "destination": "/index.html" },
+    { "source": "/blog", "destination": "/index.html" },
+    { "source": "/blog/:path*", "destination": "/index.html" },
     { "source": "/((?!static|images|favicon.ico|manifest.json|robots.txt|logo192.png|logo512.png).*)", "destination": "/index.html" }
   ]
 }

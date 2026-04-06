@@ -1,15 +1,8 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Divider from '@mui/material/Divider';
-import { Stack, TextField } from '@mui/material';
+import { Stack } from '@mui/material';
 import Trail from '../Trail';
-import emailjs from 'emailjs-com';
-import { FidgetSpinner } from 'react-loader-spinner';
-import SendIcon from '@mui/icons-material/Send';
-import SubjectIcon from '@mui/icons-material/Subject';
-import MessageIcon from '@mui/icons-material/Message';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import ErrorIcon from '@mui/icons-material/Error';
 import microsoftLogo from '../../Pictures/microsoft.svg';
 import jenniLogo from '../../Pictures/jenni-logo.png';
 import blueOriginLogo from '../../Pictures/blue.png';
@@ -254,124 +247,63 @@ export const AboutContent = () => {
 };
 
 export const ContactFormContent = () => {
-  const [subject, setSubject] = useState('');
-  const [message, setMessage] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [formStatus, setFormStatus] = useState('idle');
-
-  const sendEmail = (event) => {
-    event.preventDefault();
-    setLoading(true);
-    setFormStatus('idle');
-
-    emailjs
-      .send(
-        'service_5jo8tjd',
-        'template_cpwd3s8',
-        { subject, message },
-        'N-gkjHJLoKESLpaki'
-      )
-      .then(() => {
-        setSubject('');
-        setMessage('');
-        setLoading(false);
-        setFormStatus('success');
-        setTimeout(() => setFormStatus('idle'), 3000);
-      })
-      .catch((error) => {
-        console.error(error);
-        setLoading(false);
-        setFormStatus('error');
-        setTimeout(() => setFormStatus('idle'), 3000);
-      });
-  };
-
   return (
     <div className="max-w-4xl mx-auto px-4 md:px-8">
       <PageHeading
         title="Contact"
-        subtitle="If you want to talk about work, projects, or collaboration, send a note here."
+        subtitle="Best ways to reach me."
       />
-      <div className="max-w-xl mx-auto">
-        <Stack spacing={3}>
-          <TextField
-            label="Subject"
-            value={subject}
-            onChange={(event) => setSubject(event.target.value)}
-            fullWidth
-            InputProps={{ startAdornment: <SubjectIcon sx={{ mr: 1, color: 'text.secondary' }} /> }}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                borderRadius: '12px',
-                backgroundColor: 'var(--card-bg)',
-              },
-              '& .MuiInputLabel-root': { color: 'var(--text-color)' },
-              '& .MuiOutlinedInput-input': { color: 'var(--text-color)' },
+      <div className="max-w-2xl mx-auto">
+        <Stack spacing={2.5}>
+          <a
+            href="mailto:joesluis51@gmail.com"
+            style={{
+              display: 'block',
+              padding: '18px 22px',
+              borderRadius: '14px',
+              border: '1px solid var(--divider-color)',
+              backgroundColor: 'var(--card-bg)',
+              color: 'var(--text-color)',
+              textDecoration: 'none',
             }}
-          />
-          <TextField
-            label="Message"
-            value={message}
-            onChange={(event) => setMessage(event.target.value)}
-            multiline
-            rows={6}
-            fullWidth
-            InputProps={{ startAdornment: <MessageIcon sx={{ mr: 1, color: 'text.secondary', alignSelf: 'flex-start', mt: 1 }} /> }}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                borderRadius: '12px',
-                backgroundColor: 'var(--card-bg)',
-              },
-              '& .MuiInputLabel-root': { color: 'var(--text-color)' },
-              '& .MuiOutlinedInput-input': { color: 'var(--text-color)' },
+          >
+            Email
+            <div style={{ opacity: 0.75, marginTop: '6px' }}>joesluis51@gmail.com</div>
+          </a>
+          <a
+            href="https://github.com/JoeS51"
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              display: 'block',
+              padding: '18px 22px',
+              borderRadius: '14px',
+              border: '1px solid var(--divider-color)',
+              backgroundColor: 'var(--card-bg)',
+              color: 'var(--text-color)',
+              textDecoration: 'none',
             }}
-          />
-          <div className="flex justify-center">
-            <Button
-              variant="contained"
-              onClick={sendEmail}
-              disabled={loading || !subject || !message}
-              endIcon={
-                loading ? (
-                  <FidgetSpinner
-                    visible
-                    height="20"
-                    width="20"
-                    ariaLabel="fidget-spinner-loading"
-                  />
-                ) : formStatus === 'success' ? (
-                  <CheckCircleIcon />
-                ) : formStatus === 'error' ? (
-                  <ErrorIcon />
-                ) : (
-                  <SendIcon />
-                )
-              }
-              sx={{
-                borderRadius: '12px',
-                py: 1.5,
-                px: 4,
-                fontSize: '1rem',
-                fontWeight: 'bold',
-                boxShadow: '0 4px 14px 0 rgba(0,118,255,0.39)',
-                background: 'linear-gradient(45deg, var(--primary-color) 30%, var(--secondary-color) 90%)',
-              }}
-            >
-              {loading ? 'Sending...' : formStatus === 'success' ? 'Message Sent!' : formStatus === 'error' ? 'Try Again' : 'Send Message'}
-            </Button>
-          </div>
-          {formStatus === 'success' ? (
-            <div className="text-center text-green-600 font-medium">
-              <CheckCircleIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
-              Your message has been sent successfully.
-            </div>
-          ) : null}
-          {formStatus === 'error' ? (
-            <div className="text-center text-red-600 font-medium">
-              <ErrorIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
-              There was an error sending your message. Please try again.
-            </div>
-          ) : null}
+          >
+            GitHub
+            <div style={{ opacity: 0.75, marginTop: '6px' }}>github.com/JoeS51</div>
+          </a>
+          <a
+            href="https://www.linkedin.com/in/joesluis/"
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              display: 'block',
+              padding: '18px 22px',
+              borderRadius: '14px',
+              border: '1px solid var(--divider-color)',
+              backgroundColor: 'var(--card-bg)',
+              color: 'var(--text-color)',
+              textDecoration: 'none',
+            }}
+          >
+            LinkedIn
+            <div style={{ opacity: 0.75, marginTop: '6px' }}>linkedin.com/in/joesluis</div>
+          </a>
         </Stack>
       </div>
     </div>
