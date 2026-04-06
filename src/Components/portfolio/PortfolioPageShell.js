@@ -1,4 +1,3 @@
-import Contact from '../Contact';
 import { SlideTabs } from '../SlideTabs';
 
 const PortfolioPageShell = ({ children, offsetContent = true }) => {
@@ -11,9 +10,6 @@ const PortfolioPageShell = ({ children, offsetContent = true }) => {
       }}
     >
       <SlideTabs />
-      <div className="hidden md:block">
-        <Contact />
-      </div>
       <main style={{ paddingTop: offsetContent ? '88px' : '0', paddingBottom: offsetContent ? '48px' : '0' }}>
         {children}
       </main>
