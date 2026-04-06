@@ -5,9 +5,16 @@
 }
 
 .ssh-main {
-  max-width: 760px;
+  max-width: 1180px;
   margin: 0 auto;
   padding: 5rem 1rem 4rem;
+}
+
+.ssh-hero {
+  display: grid;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
 }
 
 .ssh-panel {
@@ -15,19 +22,34 @@
   border-radius: 14px;
   background-color: var(--card-bg);
   padding: 2rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.06);
+}
+
+.ssh-panel--intro {
+  position: sticky;
+  top: 5.5rem;
 }
 
 .ssh-panel h1 {
-  margin: 0;
+  margin: 0.15rem 0 0;
   font-size: clamp(2rem, 4vw, 2.75rem);
   color: var(--text-color);
+}
+
+.ssh-eyebrow {
+  margin: 0;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0.65;
 }
 
 .ssh-description {
   margin: 0.8rem 0 1.25rem;
   color: var(--text-color);
   opacity: 0.8;
-  white-space: nowrap;
+  line-height: 1.6;
 }
 
 .ssh-command-card {
@@ -36,6 +58,12 @@
   border-radius: 10px;
   background-color: var(--background-color);
   padding: 0.9rem 1rem;
+}
+
+.ssh-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.95rem;
 }
 
 .ssh-command-card code {
@@ -68,7 +96,7 @@
 }
 
 .ssh-secondary-link {
-  margin: 1rem 0 0;
+  margin: 0;
   font-size: 0.9rem;
 }
 
@@ -83,15 +111,136 @@
   opacity: 1;
 }
 
+.ssh-terminal-section {
+  border: 1px solid var(--divider-color);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at top left, rgba(92, 132, 255, 0.08), transparent 34%),
+    linear-gradient(180deg, rgba(19, 25, 34, 0.06), rgba(19, 25, 34, 0));
+  background-color: var(--card-bg);
+  padding: 1.25rem;
+  min-width: 0;
+}
+
+.ssh-section-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.ssh-section-header h2 {
+  margin: 0.2rem 0 0;
+  font-size: clamp(1.25rem, 2vw, 1.65rem);
+}
+
+.ssh-terminal-link,
+.ssh-terminal-inline-link {
+  color: var(--text-color);
+  text-decoration: underline;
+  text-underline-offset: 0.2rem;
+}
+
+.ssh-terminal-link {
+  font-size: 0.95rem;
+  white-space: nowrap;
+  opacity: 0.8;
+}
+
+.ssh-terminal-link:hover,
+.ssh-terminal-inline-link:hover {
+  opacity: 1;
+}
+
+.ssh-terminal-shell {
+  position: relative;
+  min-height: 36rem;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04), transparent 14%),
+    #0b1120;
+}
+
+.ssh-terminal-frame {
+  width: 100%;
+  min-height: 36rem;
+  border: 0;
+  display: block;
+  background: #0b1120;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.ssh-terminal-frame.is-ready {
+  opacity: 1;
+}
+
+.ssh-terminal-frame--placeholder {
+  opacity: 1;
+}
+
+.ssh-terminal-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.9rem;
+  padding: 2rem;
+  text-align: center;
+  color: #e5edf7;
+  background: rgba(6, 11, 19, 0.72);
+  backdrop-filter: blur(6px);
+}
+
+.ssh-terminal-status-title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.ssh-terminal-status-body {
+  margin: 0;
+  max-width: 38rem;
+  line-height: 1.6;
+  color: rgba(229, 237, 247, 0.82);
+}
+
+.ssh-terminal-spinner {
+  width: 2.1rem;
+  height: 2.1rem;
+  border: 3px solid rgba(229, 237, 247, 0.24);
+  border-top-color: #e5edf7;
+  border-radius: 999px;
+  animation: ssh-terminal-spin 0.9s linear infinite;
+}
+
+@keyframes ssh-terminal-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 @media (max-width: 640px) {
   .ssh-main {
     padding: 4.25rem 0.75rem 2.5rem;
-    min-height: calc(100dvh - 72px);
   }
 
-  .ssh-panel {
+  .ssh-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .ssh-panel,
+  .ssh-terminal-section {
     padding: 1.25rem;
-    min-height: 68dvh;
+  }
+
+  .ssh-panel--intro {
+    position: static;
   }
 
   .ssh-description {
@@ -100,5 +249,29 @@
 
   .ssh-copy-button {
     width: 100%;
+  }
+
+  .ssh-section-header {
+    flex-direction: column;
+  }
+
+  .ssh-terminal-link {
+    white-space: normal;
+  }
+
+  .ssh-terminal-shell,
+  .ssh-terminal-frame {
+    min-height: 28rem;
+  }
+}
+
+@media (max-width: 960px) {
+  .ssh-hero {
+    grid-template-columns: 1fr;
+  }
+
+  .ssh-panel--intro {
+    position: static;
+    top: auto;
   }
 }

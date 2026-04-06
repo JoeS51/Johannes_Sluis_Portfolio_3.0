@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-scroll";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useDarkMode } from './DarkModeContext';
 
 export const SlideTabs = () => {
@@ -13,6 +13,7 @@ export const SlideTabs = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const { isDarkMode } = useDarkMode();
+  const location = useLocation();
 
   useEffect(() => {
     const checkMobile = () => {
@@ -57,14 +58,12 @@ export const SlideTabs = () => {
           transition: 'border-color 0.3s ease'
         }}
       >
-        <Tab setPosition={setPosition} sectionId="home" isMobile={isMobile} isDarkMode={isDarkMode}>Home</Tab>
-        <Tab setPosition={setPosition} sectionId="about" isMobile={isMobile} isDarkMode={isDarkMode}>About</Tab>
-        <Tab setPosition={setPosition} sectionId="experience" isMobile={isMobile} isDarkMode={isDarkMode}>{isMobile ? "Exp." : "Experience"}</Tab>
-        <Tab setPosition={setPosition} sectionId="projects" isMobile={isMobile} isDarkMode={isDarkMode}>Projects</Tab>
-        <Tab setPosition={setPosition} sectionId="blogs" isMobile={isMobile} isDarkMode={isDarkMode} redirectTo="/blog">Blogs</Tab>
-        <Tab setPosition={setPosition} sectionId="ssh-portfolio" isMobile={isMobile} isDarkMode={isDarkMode} redirectTo="/ssh-portfolio">SSH</Tab>
+        <Tab setPosition={setPosition} path="/" isActive={location.pathname === '/'} isMobile={isMobile} isDarkMode={isDarkMode}>Home</Tab>
+        <Tab setPosition={setPosition} path="/about" isActive={location.pathname === '/about'} isMobile={isMobile} isDarkMode={isDarkMode}>About</Tab>
+        <Tab setPosition={setPosition} path="/projects" isActive={location.pathname === '/projects'} isMobile={isMobile} isDarkMode={isDarkMode}>Projects</Tab>
+        <Tab setPosition={setPosition} path="/blog" isActive={location.pathname.startsWith('/blog')} isMobile={isMobile} isDarkMode={isDarkMode}>Blogs</Tab>
         {!isMobile && (
-          <Tab setPosition={setPosition} sectionId="contact" isMobile={isMobile} isDarkMode={isDarkMode}>Contact</Tab>
+          <Tab setPosition={setPosition} path="/contact" isActive={location.pathname === '/contact'} isMobile={isMobile} isDarkMode={isDarkMode}>Contact</Tab>
         )}
         <Cursor position={position} isDarkMode={isDarkMode} />
       </ul>
@@ -72,33 +71,14 @@ export const SlideTabs = () => {
   );
 };
 
-const Tab = ({ children, setPosition, sectionId, isMobile, isDarkMode, redirectTo }) => {
+const Tab = ({ children, setPosition, path, isActive, isMobile, isDarkMode }) => {
   const ref = useRef(null);
   const [isHovered, setIsHovered] = useState(false);
+  const navigate = useNavigate();
+  const activeColor = isDarkMode ? '#bfdbfe' : '#60a5fa';
 
   const handleClick = () => {
-    if (redirectTo) {
-      window.location.href = redirectTo;
-      return;
-    }
-    const element = document.getElementById(sectionId);
-    if (element) {
-      if (sectionId === 'home') {
-        window.scrollTo({
-          top: 0,
-          behavior: 'smooth'
-        });
-      } else {
-        const offset = -100;
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-      }
-    }
+    navigate(path);
   };
 
   return (
@@ -123,7 +103,8 @@ const Tab = ({ children, setPosition, sectionId, isMobile, isDarkMode, redirectT
         padding: isMobile ? '0.5rem 0.75rem' : '0.75rem 1.25rem',
         fontSize: isMobile ? '0.75rem' : '1rem',
         textTransform: 'uppercase',
-        color: isHovered ? 'white' : (isDarkMode ? 'var(--text-color)' : 'black'),
+        color: isHovered ? 'white' : (isActive ? activeColor : (isDarkMode ? 'var(--text-color)' : 'black')),
+        fontWeight: isActive ? 600 : 400,
         transition: 'color 0.3s ease'
       }}
     >
