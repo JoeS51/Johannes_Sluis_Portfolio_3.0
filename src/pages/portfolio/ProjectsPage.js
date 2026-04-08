@@ -5,11 +5,8 @@ import { PageHeading } from '../../Components/portfolio/PortfolioSections';
 const ProjectsPage = () => {
   return (
     <PortfolioPageShell>
-      <div className="max-w-6xl mx-auto px-4 md:px-8">
-        <PageHeading
-          title="Projects"
-          subtitle="Selected work across AI products, databases, robotics, and developer-facing tools."
-        />
+      <div className="max-w-6xl mx-auto px-4 md:px-8" style={{ paddingTop: '8px' }}>
+        <PageHeading title="Projects" />
         <Projects />
       </div>
     </PortfolioPageShell>
