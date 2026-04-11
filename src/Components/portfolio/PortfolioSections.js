@@ -185,7 +185,6 @@ export const AboutContent = () => {
     <div className="max-w-4xl mx-auto px-4 md:px-8">
       <PageHeading
         title="About"
-        subtitle="A quick view of what I work on and the environments where I’ve done that work."
       />
       <div className="flex flex-wrap justify-center gap-3 mb-10">
         {chips.map((chip) => (
@@ -235,10 +234,10 @@ export const AboutContent = () => {
       </div>
       <div className="max-w-3xl mx-auto text-lg md:text-xl" style={{ lineHeight: '1.8', opacity: 0.9 }}>
         <p>
-          I’m a Seattle-based engineer focused on building polished software that is practical for real users and teams.
+          I’m a Seattle-based engineer currently focused on database internals, especially Postgres, and distributed systems.
         </p>
         <p className="mt-6">
-          My background spans large-scale product engineering, startup execution, and research-driven interface work. That mix shows up in how I ship: clear UX, strong implementation details, and an interest in systems people actually want to use.
+          I also help lead the Microsoft Systems Reading Group, where we read through Postgres internals and systems research papers.
         </p>
       </div>
     </div>
