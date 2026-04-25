@@ -1,34 +1,18 @@
-import React, { Suspense, lazy } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
+import App from './App';
+import Random from './Random';
+import Blog from './pages/Blog';
+import BlogPost from './pages/BlogPost';
+import SshPortfolio from './pages/SshPortfolio';
+import AboutPage from './pages/portfolio/AboutPage';
+import ProjectsPage from './pages/portfolio/ProjectsPage';
+import ContactPage from './pages/portfolio/ContactPage';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { DarkModeProvider } from './Components/DarkModeContext';
-
-const App = lazy(() => import('./App'));
-const Random = lazy(() => import('./Random'));
-const Blog = lazy(() => import('./pages/Blog'));
-const BlogPost = lazy(() => import('./pages/BlogPost'));
-const SshPortfolio = lazy(() => import('./pages/SshPortfolio'));
-const AboutPage = lazy(() => import('./pages/portfolio/AboutPage'));
-const ProjectsPage = lazy(() => import('./pages/portfolio/ProjectsPage'));
-const ContactPage = lazy(() => import('./pages/portfolio/ContactPage'));
-
-const RouteFallback = () => (
-  <div
-    style={{
-      minHeight: '100vh',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      backgroundColor: 'var(--background-color, #fff)',
-      color: 'var(--text-color, #111)',
-    }}
-  >
-    Loading...
-  </div>
-);
 
 const router = createBrowserRouter([
   {
@@ -69,9 +53,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <DarkModeProvider>
-      <Suspense fallback={<RouteFallback />}>
-        <RouterProvider router={router} />
-      </Suspense>
+      <RouterProvider router={router} />
     </DarkModeProvider>
   </React.StrictMode>
 );
