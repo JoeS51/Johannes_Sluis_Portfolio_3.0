@@ -10,20 +10,22 @@ import profileIllustration from '../../Pictures/pfp.png';
 import profilePhoto from '../../Pictures/profilepic.jpeg';
 import { WavyBackground } from '../Wave';
 
-export const useIsMobile = () => {
-  const [isMobile, setIsMobile] = useState(
-    typeof window !== 'undefined' ? window.innerWidth <= 768 : false
+export const useViewportWidth = () => {
+  const [viewportWidth, setViewportWidth] = useState(
+    typeof window !== 'undefined' ? window.innerWidth : 1024
   );
 
   useEffect(() => {
-    const onResize = () => setIsMobile(window.innerWidth <= 768);
+    const onResize = () => setViewportWidth(window.innerWidth);
     onResize();
     window.addEventListener('resize', onResize);
     return () => window.removeEventListener('resize', onResize);
   }, []);
 
-  return isMobile;
+  return viewportWidth;
 };
+
+export const useIsMobile = () => useViewportWidth() <= 768;
 
 export const SectionDivider = () => (
   <Divider
@@ -94,17 +96,8 @@ const ProfileImage = ({ isMobile, sizeOverride }) => {
 };
 
 export const HomeHero = () => {
-  const isMobile = useIsMobile();
-  const [viewportWidth, setViewportWidth] = useState(
-    typeof window !== 'undefined' ? window.innerWidth : 1024
-  );
-
-  useEffect(() => {
-    const checkViewport = () => setViewportWidth(window.innerWidth);
-    checkViewport();
-    window.addEventListener('resize', checkViewport);
-    return () => window.removeEventListener('resize', checkViewport);
-  }, []);
+  const viewportWidth = useViewportWidth();
+  const isMobile = viewportWidth <= 768;
 
   const isLargeMobile = isMobile && viewportWidth >= 430;
   const mobileProfileSize = (() => {

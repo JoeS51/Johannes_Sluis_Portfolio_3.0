@@ -25,6 +25,8 @@ export const WavyBackground = ({
   const dimensionsRef = useRef({ w: 0, h: 0 });
   const ntRef = useRef(0);
   const { isDarkMode } = useDarkMode();
+  const shouldAnimateRef = useRef(true);
+  const lastFrameTimeRef = useRef(0);
 
   // Wave entrance animation timing
   const animationStartTime = useRef(null);
@@ -42,22 +44,33 @@ export const WavyBackground = ({
     }
   };
 
-  const init = () => {
+  const syncCanvasSize = () => {
     const canvas = canvasRef.current;
-    ctxRef.current = canvas.getContext("2d");
     const ctx = ctxRef.current;
+    if (!canvas || !ctx) return;
+
     dimensionsRef.current.w = ctx.canvas.width = window.innerWidth;
     dimensionsRef.current.h = ctx.canvas.height = window.innerHeight;
     ctx.filter = `blur(${blur}px)`;
+  };
+
+  const drawStaticFrame = () => {
+    const ctx = ctxRef.current;
+    const { w, h } = dimensionsRef.current;
+    if (!ctx || !w) return;
+
+    ctx.fillStyle = isDarkMode ? '#121212' : (backgroundFill || "white");
+    ctx.globalAlpha = waveOpacity || 0.5;
+    ctx.fillRect(0, 0, w, h);
+    drawWave(5, 1);
+  };
+
+  const init = () => {
+    const canvas = canvasRef.current;
+    ctxRef.current = canvas.getContext("2d");
     ntRef.current = 0;
-    window.onresize = function () {
-      if (ctxRef.current) {
-        dimensionsRef.current.w = ctxRef.current.canvas.width = window.innerWidth;
-        dimensionsRef.current.h = ctxRef.current.canvas.height = window.innerHeight;
-        ctxRef.current.filter = `blur(${blur}px)`;
-      }
-    };
-    // Start animation loop with requestAnimationFrame to get proper timestamp
+    syncCanvasSize();
+
     animationIdRef.current = requestAnimationFrame(render);
   };
 
@@ -131,6 +144,18 @@ export const WavyBackground = ({
     const { w, h } = dimensionsRef.current;
     if (!ctx) return; // Safety check
 
+    if (!shouldAnimateRef.current) {
+      animationIdRef.current = null;
+      return;
+    }
+
+    if (timestamp - lastFrameTimeRef.current < 33) {
+      animationIdRef.current = requestAnimationFrame(render);
+      return;
+    }
+
+    lastFrameTimeRef.current = timestamp;
+
     // Handle entrance animation timing
     if (animationStartTime.current === null) {
       animationStartTime.current = timestamp + entranceDelay;
@@ -150,10 +175,51 @@ export const WavyBackground = ({
     // Reset animation on mount/theme change
     animationStartTime.current = null;
     progressRef.current = 0;
+    shouldAnimateRef.current = true;
+    lastFrameTimeRef.current = 0;
     init();
-    return () => {
+
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+    const updateAnimationState = () => {
+      const shouldAnimate = !document.hidden && !mediaQuery.matches;
+      shouldAnimateRef.current = shouldAnimate;
+
+      if (shouldAnimate) {
+        if (!animationIdRef.current) {
+          animationIdRef.current = requestAnimationFrame(render);
+        }
+        return;
+      }
+
       if (animationIdRef.current) {
         cancelAnimationFrame(animationIdRef.current);
+        animationIdRef.current = null;
+      }
+
+      drawStaticFrame();
+    };
+
+    const handleResize = () => {
+      syncCanvasSize();
+      if (!shouldAnimateRef.current) {
+        drawStaticFrame();
+      }
+    };
+
+    updateAnimationState();
+    document.addEventListener('visibilitychange', updateAnimationState);
+    window.addEventListener('resize', handleResize);
+    mediaQuery.addEventListener('change', updateAnimationState);
+
+    return () => {
+      document.removeEventListener('visibilitychange', updateAnimationState);
+      window.removeEventListener('resize', handleResize);
+      mediaQuery.removeEventListener('change', updateAnimationState);
+      shouldAnimateRef.current = false;
+      if (animationIdRef.current) {
+        cancelAnimationFrame(animationIdRef.current);
+        animationIdRef.current = null;
       }
     };
   }, [isDarkMode]); // Re-initialize when dark mode changes
