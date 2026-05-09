@@ -64,6 +64,7 @@ const createBlankBlock = () => ({
 
 const getModeLabel = (mode, pendingOperator) => {
   if (pendingOperator) return '-- OPERATOR PENDING: PRESS D AGAIN, COWARD --';
+  if (mode === 'command') return ':';
   if (mode === 'insert') return '-- INSERT: TEMPORARY THOUGHTS ONLY --';
   return '-- NORMAL: THE MOUSE IS A RUMOR --';
 };
@@ -79,6 +80,8 @@ const VimEditableArticle = ({ blocks: initialBlocks }) => {
   const [cursorColumn, setCursorColumn] = useState(0);
   const [mode, setMode] = useState('normal');
   const [pendingOperator, setPendingOperator] = useState('');
+  const [commandInput, setCommandInput] = useState('');
+  const [commandFeedback, setCommandFeedback] = useState('');
   const [statusMessage, setStatusMessage] = useState('edits live here until the page refresh goblin eats them');
   const articleRef = useRef(null);
   const blockRefs = useRef([]);
@@ -86,6 +89,7 @@ const VimEditableArticle = ({ blocks: initialBlocks }) => {
   const desiredColumnRef = useRef(0);
   const insertOffsetRef = useRef(0);
   const historyRef = useRef([]);
+  const commandFeedbackTimeoutRef = useRef(0);
 
   const saveUndoSnapshot = () => {
     historyRef.current = [
@@ -131,6 +135,64 @@ const VimEditableArticle = ({ blocks: initialBlocks }) => {
     desiredColumnRef.current = Math.min(Math.max(caretOffset - 1, 0), Math.max(text.length - 1, 0));
     setStatusMessage('escaped insert mode without saving anything real');
     setMode('normal');
+  };
+
+  const showCommandFeedback = (message) => {
+    setCommandFeedback(message);
+
+    if (commandFeedbackTimeoutRef.current) {
+      window.clearTimeout(commandFeedbackTimeoutRef.current);
+    }
+
+    commandFeedbackTimeoutRef.current = window.setTimeout(() => {
+      setCommandFeedback('');
+    }, 2200);
+  };
+
+  const enterCommandMode = () => {
+    setPendingOperator('');
+    setCommandInput('');
+    setStatusMessage('command-line mode: type w, q, wq, or reset');
+    setMode('command');
+  };
+
+  const submitCommand = () => {
+    const command = commandInput.trim().toLowerCase();
+
+    setCommandInput('');
+    setMode('normal');
+
+    if (!command) {
+      setStatusMessage('command cancelled');
+      return;
+    }
+
+    if (command === 'w' || command === 'write') {
+      setStatusMessage('pretended to write the temporary buffer');
+      showCommandFeedback('"vim-test-buffer" saved (not really)');
+      return;
+    }
+
+    if (command === 'q' || command === 'quit') {
+      setStatusMessage('pretended to quit, but the article is still here');
+      showCommandFeedback('quit requested');
+      return;
+    }
+
+    if (command === 'wq' || command === 'x') {
+      setStatusMessage('pretended to save and quit; very responsible');
+      showCommandFeedback('saved and quit (emotionally)');
+      return;
+    }
+
+    if (command === 'reset') {
+      resetArticle();
+      showCommandFeedback('buffer reset');
+      return;
+    }
+
+    setStatusMessage(`not an editor command: ${command}`);
+    showCommandFeedback(`E492: Not an editor command: ${command}`);
   };
 
   const setActiveLine = (nextIndex, nextColumn = desiredColumnRef.current) => {
@@ -306,6 +368,33 @@ const VimEditableArticle = ({ blocks: initialBlocks }) => {
   const handleKeyDown = (event) => {
     if (event.metaKey || event.ctrlKey || event.altKey) return;
 
+    if (mode === 'command') {
+      event.preventDefault();
+
+      if (event.key === 'Escape') {
+        setCommandInput('');
+        setMode('normal');
+        setStatusMessage('command-line mode cancelled');
+        return;
+      }
+
+      if (event.key === 'Enter') {
+        submitCommand();
+        return;
+      }
+
+      if (event.key === 'Backspace') {
+        setCommandInput((currentInput) => currentInput.slice(0, -1));
+        return;
+      }
+
+      if (event.key.length === 1) {
+        setCommandInput((currentInput) => `${currentInput}${event.key}`);
+      }
+
+      return;
+    }
+
     if (mode === 'insert') {
       if (event.key === 'Escape') {
         event.preventDefault();
@@ -314,7 +403,7 @@ const VimEditableArticle = ({ blocks: initialBlocks }) => {
       return;
     }
 
-    const handledKeys = ['h', 'j', 'k', 'l', 'w', 'b', '0', '$', '^', 'g', 'G', 'i', 'a', 'o', 'O', 'x', 'd', 'u', 'r'];
+    const handledKeys = ['h', 'j', 'k', 'l', 'w', 'b', '0', '$', '^', 'g', 'G', 'i', 'a', 'o', 'O', 'x', 'd', 'u', 'r', ':'];
     if (!handledKeys.includes(event.key)) return;
 
     event.preventDefault();
@@ -389,10 +478,21 @@ const VimEditableArticle = ({ blocks: initialBlocks }) => {
       case 'r':
         resetArticle();
         break;
+      case ':':
+        enterCommandMode();
+        break;
       default:
         break;
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (commandFeedbackTimeoutRef.current) {
+        window.clearTimeout(commandFeedbackTimeoutRef.current);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const activeElement = blockRefs.current[activeIndex];
@@ -523,7 +623,7 @@ const VimEditableArticle = ({ blocks: initialBlocks }) => {
     >
       <div className="vim-editor-help">
         <strong>Vim test buffer</strong>
-        <span>Normal: h/l move cursor, w/b move by word, 0/^/$ line jumps, j/k move lines, dd delete line, u undo, r reset. Insert: Esc returns to normal.</span>
+        <span>Normal: h/l move cursor, w/b move by word, 0/^/$ line jumps, j/k move lines, dd delete line, u undo, r reset, : command mode. Insert: Esc returns to normal.</span>
       </div>
 
       {blocks.map(renderEditableBlock)}
@@ -531,8 +631,10 @@ const VimEditableArticle = ({ blocks: initialBlocks }) => {
       <div className="vim-status-line" aria-live="polite">
         <span>{getModeLabel(mode, pendingOperator)}</span>
         <span>{activeIndex + 1}/{blocks.length}:{cursorColumn + 1}</span>
-        <span>{statusMessage}</span>
+        <span>{mode === 'command' ? `:${commandInput}` : statusMessage}</span>
       </div>
+
+      {commandFeedback && <div className="vim-command-popup">{commandFeedback}</div>}
 
       <div className="vim-mode-overlay" aria-live="polite">
         <span>Mode</span>

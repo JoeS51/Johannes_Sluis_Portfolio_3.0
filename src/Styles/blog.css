@@ -717,6 +717,12 @@ body.blog-body {
   --vim-mode-text: #000000;
 }
 
+.vim-editor-shell.vim-mode-command {
+  --vim-mode-accent: #5fd7ff;
+  --vim-mode-accent-soft: rgba(95, 215, 255, 0.12);
+  --vim-mode-text: #000000;
+}
+
 .vim-editor-help {
   display: grid;
   gap: 0.35rem;
@@ -841,6 +847,23 @@ body.blog-body {
   font-size: 0.9rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.vim-command-popup {
+  position: fixed;
+  left: 50%;
+  bottom: 5rem;
+  z-index: 31;
+  transform: translateX(-50%);
+  max-width: min(90vw, 34rem);
+  padding: 0.45rem 0.75rem;
+  border: 2px solid var(--vim-terminal-fg);
+  background: var(--vim-terminal-bg);
+  color: var(--vim-terminal-fg);
+  box-shadow: 5px 5px 0 rgba(15, 23, 42, 0.35);
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.85rem;
+  line-height: 1.4;
 }
 
 .blog-table-wrapper {
@@ -1086,6 +1109,12 @@ html.dark-mode.blog-body,
 .dark-mode .vim-editor-shell.vim-mode-operator {
   --vim-mode-accent: #ffd75f;
   --vim-mode-accent-soft: rgba(255, 215, 95, 0.17);
+  --vim-mode-text: #000000;
+}
+
+.dark-mode .vim-editor-shell.vim-mode-command {
+  --vim-mode-accent: #5fd7ff;
+  --vim-mode-accent-soft: rgba(95, 215, 255, 0.14);
   --vim-mode-text: #000000;
 }
 
