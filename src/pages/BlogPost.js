@@ -3,6 +3,7 @@ import { Link, Navigate, useParams } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import MarkdownContent from '../Components/blog/MarkdownContent';
 import TableOfContents from '../Components/blog/TableOfContents';
+import VimEditableArticle from '../Components/blog/VimEditableArticle';
 import { getAdjacentPosts, getPostBySlug } from '../lib/posts';
 import '../Styles/blog.css';
 
@@ -72,7 +73,11 @@ const BlogPost = () => {
 
         <div className="blog-post-layout">
           <div className="blog-post-content">
-            <MarkdownContent content={post.content} />
+            {post.interactive?.type === 'vim-editor' ? (
+              <VimEditableArticle blocks={post.interactive.blocks} />
+            ) : (
+              <MarkdownContent content={post.content} />
+            )}
           </div>
           <TableOfContents />
         </div>

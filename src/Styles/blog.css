@@ -695,6 +695,177 @@ body.blog-body {
   font-family: 'Source Code Pro', monospace;
 }
 
+.vim-editor-shell {
+  position: relative;
+  outline: none;
+  --vim-mode-accent: #d7d7d7;
+  --vim-mode-accent-soft: rgba(15, 23, 42, 0.045);
+  --vim-mode-text: #111111;
+  --vim-terminal-bg: #111111;
+  --vim-terminal-fg: #d7d7d7;
+}
+
+.vim-editor-shell.vim-mode-insert {
+  --vim-mode-accent: #00af5f;
+  --vim-mode-accent-soft: rgba(0, 175, 95, 0.09);
+  --vim-mode-text: #000000;
+}
+
+.vim-editor-shell.vim-mode-operator {
+  --vim-mode-accent: #ffd75f;
+  --vim-mode-accent-soft: rgba(255, 215, 95, 0.16);
+  --vim-mode-text: #000000;
+}
+
+.vim-editor-shell.vim-mode-command {
+  --vim-mode-accent: #5fd7ff;
+  --vim-mode-accent-soft: rgba(95, 215, 255, 0.12);
+  --vim-mode-text: #000000;
+}
+
+.vim-editor-help {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 2rem;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 14px;
+  background: rgba(15, 23, 42, 0.03);
+  color: rgba(15, 23, 42, 0.68);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.vim-editor-help strong {
+  color: #0f172a;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+}
+
+.vim-editable-block {
+  position: relative;
+  border-radius: 0;
+  transition: box-shadow 0.12s steps(1), background-color 0.12s steps(1);
+}
+
+.vim-editable-block.is-active {
+  box-shadow: -3px 0 0 var(--vim-mode-accent);
+  background: var(--vim-mode-accent-soft);
+}
+
+.vim-editable-block.is-editing {
+  outline: none;
+  box-shadow: -3px 0 0 var(--vim-mode-accent);
+  background: var(--vim-mode-accent-soft);
+}
+
+.vim-editable-block.is-active::before {
+  content: attr(data-vim-line);
+  position: absolute;
+  right: calc(100% + 0.75rem);
+  top: 0.45rem;
+  color: rgba(15, 23, 42, 0.35);
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.75rem;
+}
+
+.vim-character-cursor {
+  background: var(--vim-terminal-bg);
+  color: var(--vim-terminal-fg);
+  animation: vim-cursor-blink 1.1s steps(1) infinite;
+}
+
+@keyframes vim-cursor-blink {
+  50% {
+    background: rgba(15, 23, 42, 0.16);
+    color: inherit;
+  }
+}
+
+.vim-status-line {
+  position: sticky;
+  bottom: 0;
+  z-index: 3;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1ch;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2.5rem;
+  padding: 0.15rem 0.55rem;
+  border-radius: 0;
+  background: var(--vim-terminal-bg);
+  color: var(--vim-terminal-fg);
+  box-shadow: none;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.vim-status-line span:first-child {
+  background: var(--vim-mode-accent);
+  color: var(--vim-mode-text);
+  padding: 0 0.45rem;
+}
+
+.vim-mode-overlay {
+  position: fixed;
+  left: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 30;
+  display: flex;
+  align-items: stretch;
+  min-width: 13rem;
+  border: 2px solid var(--vim-terminal-fg);
+  border-radius: 0;
+  background: var(--vim-terminal-bg);
+  color: var(--vim-terminal-fg);
+  box-shadow: 6px 6px 0 rgba(15, 23, 42, 0.35);
+  font-family: 'Source Code Pro', monospace;
+  line-height: 1;
+}
+
+.vim-mode-overlay span {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.55rem 0.65rem;
+  background: var(--vim-terminal-fg);
+  color: var(--vim-terminal-bg);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.vim-mode-overlay strong {
+  display: inline-flex;
+  align-items: center;
+  flex: 1;
+  padding: 0.55rem 0.75rem;
+  background: var(--vim-mode-accent);
+  color: var(--vim-mode-text);
+  font-size: 0.9rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.vim-command-popup {
+  position: fixed;
+  left: 50%;
+  bottom: 5rem;
+  z-index: 31;
+  transform: translateX(-50%);
+  max-width: min(90vw, 34rem);
+  padding: 0.45rem 0.75rem;
+  border: 2px solid var(--vim-terminal-fg);
+  background: var(--vim-terminal-bg);
+  color: var(--vim-terminal-fg);
+  box-shadow: 5px 5px 0 rgba(15, 23, 42, 0.35);
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
 .blog-table-wrapper {
   margin: 2rem 0;
   overflow-x: auto;
@@ -911,6 +1082,61 @@ html.dark-mode.blog-body,
   color: #e2e8f0;
 }
 
+.dark-mode .vim-editor-help {
+  border-color: rgba(148, 163, 184, 0.25);
+  background: rgba(148, 163, 184, 0.1);
+  color: rgba(226, 232, 240, 0.72);
+}
+
+.dark-mode .vim-editor-help strong {
+  color: #e2e8f0;
+}
+
+.dark-mode .vim-editor-shell {
+  --vim-mode-accent: #d7d7d7;
+  --vim-mode-accent-soft: rgba(226, 232, 240, 0.08);
+  --vim-mode-text: #111111;
+  --vim-terminal-bg: #050505;
+  --vim-terminal-fg: #d7d7d7;
+}
+
+.dark-mode .vim-editor-shell.vim-mode-insert {
+  --vim-mode-accent: #00af5f;
+  --vim-mode-accent-soft: rgba(0, 175, 95, 0.13);
+  --vim-mode-text: #000000;
+}
+
+.dark-mode .vim-editor-shell.vim-mode-operator {
+  --vim-mode-accent: #ffd75f;
+  --vim-mode-accent-soft: rgba(255, 215, 95, 0.17);
+  --vim-mode-text: #000000;
+}
+
+.dark-mode .vim-editor-shell.vim-mode-command {
+  --vim-mode-accent: #5fd7ff;
+  --vim-mode-accent-soft: rgba(95, 215, 255, 0.14);
+  --vim-mode-text: #000000;
+}
+
+.dark-mode .vim-editable-block.is-active {
+  box-shadow: -3px 0 0 var(--vim-mode-accent);
+  background: var(--vim-mode-accent-soft);
+}
+
+.dark-mode .vim-editable-block.is-editing {
+  box-shadow: -3px 0 0 var(--vim-mode-accent);
+  background: var(--vim-mode-accent-soft);
+}
+
+.dark-mode .vim-editable-block.is-active::before {
+  color: rgba(226, 232, 240, 0.4);
+}
+
+.dark-mode .vim-character-cursor {
+  background: var(--vim-terminal-fg);
+  color: var(--vim-terminal-bg);
+}
+
 .dark-mode .blog-table-wrapper {
   border-color: rgba(148, 163, 184, 0.25);
 }
@@ -998,6 +1224,21 @@ html.dark-mode.blog-body,
   .blog-code-block {
     padding: 2.25rem 1rem 1rem;
     font-size: 0.85rem;
+  }
+
+  .vim-editable-block.is-active::before {
+    display: none;
+  }
+
+  .vim-status-line {
+    position: static;
+  }
+
+  .vim-mode-overlay {
+    left: 0.75rem;
+    bottom: 0.75rem;
+    min-width: 8.5rem;
+    padding: 0.65rem 0.75rem;
   }
 
   .blog-toc {
