@@ -2,28 +2,15 @@ const vimBlocks = [
   {
     type: 'h2',
     id: 'start-in-normal-mode',
-    text: 'Start in normal mode',
+    text: 'Starting out',
   },
   {
     type: 'p',
-    text: 'Vim feels strange at first because you do not begin by typing. You begin in normal mode, which is the mode for moving, deleting, jumping, searching, and deciding what to do next. This article is also a tiny fake Vim buffer, so you can practice the keys while reading about them.',
+    text: 'Vim feels strange at first because you don\'t begin by typing. You begin in something called normal mode, which is the mode for moving, deleting, jumping, searching, etc. This article is also a tiny fake Vim buffer, so you can practice the keys while reading about them.',
   },
   {
     type: 'p',
-    text: 'Try this first: press h to move left, l to move right, j to move down, and k to move up. Those four keys are the classic Vim movement keys. The cursor is the highlighted character, and the status bar at the bottom shows your current line and column.',
-  },
-  {
-    type: 'h2',
-    id: 'why-hjkl-exists',
-    text: 'Why hjkl exists',
-  },
-  {
-    type: 'p',
-    text: 'The h j k l keys come from the ADM-3A terminal keyboard used by Bill Joy when vi was created. Its arrow labels lived on those letter keys, so the habit became part of vi, then Vim, and now every Vim user gets to pretend the arrow keys are lava.',
-  },
-  {
-    type: 'quote',
-    text: 'Practice: move to this quote, then use h and l to walk across the sentence one character at a time. Use j and k to leave and come back.',
+    text: 'If you haven\'t clicked anything so far, you should see your cursor blinking on the \'S\' in "Starting out". Let\'s get you down here. Press j to move down into this paragraph, then try h and l to move left and right across the sentence. Press k if you overshoot and want to move back up. Those four keys are the classic Vim movement keys, and once moving by character feels less weird, the next step is learning how to jump around without spamming one key.',
   },
   {
     type: 'h2',
@@ -32,7 +19,7 @@ const vimBlocks = [
   },
   {
     type: 'p',
-    text: 'Moving one character at a time is useful, but Vim is built around bigger jumps. Press 0 to jump to the beginning of the current line. Press $ to jump to the end. Press ^ to jump to the first non-blank character, which matters in code because indentation is usually not where the interesting text begins.',
+    text: 'Ideally, we aren\'t moving one character at a time. Vim is built around bigger jumps. Press 0 to jump to the beginning of the current line. Press $ to jump to the end. Press ^ to jump to the first non-blank character, which matters in code because indentation is usually not where the interesting text begins.',
   },
   {
     type: 'code',
@@ -40,7 +27,7 @@ const vimBlocks = [
   },
   {
     type: 'p',
-    text: 'Practice: land on the code block above, press 0, then ^, then $. The cursor should jump from the true start, to the first visible character, to the final character in the line-like block.',
+    text: 'Try practicing by landing on the code block above, press 0, then ^, then $. The cursor should jump from the true start, to the first visible character, to the final character in the line-like block.',
   },
   {
     type: 'h2',
@@ -49,11 +36,11 @@ const vimBlocks = [
   },
   {
     type: 'p',
-    text: 'Vim also thinks in words. Press w to jump forward to the start of the next word. Press b to jump backward to the start of the previous word. This is faster than holding l forever like a tiny keyboard woodpecker.',
+    text: 'Vim also thinks in words. Pressing w jumps you forward to the start of the next word. Press b to jump backward to the start of the previous word. This is faster than holding l or h.',
   },
   {
     type: 'p',
-    text: 'Practice words here: alpha beta_gamma 123numbers punctuation! final-word. Try w and b across this sentence until the rhythm starts to make sense.',
+    text: 'Try practicing on these words here: alpha beta_gamma 123numbers punctuation! final-word. Try w and b across this sentence until the rhythm starts to make sense.',
   },
   {
     type: 'h2',
@@ -93,19 +80,6 @@ const vimBlocks = [
   {
     type: 'quote',
     text: 'The core Vim trick is composability: small motions and small actions combine into larger editing moves. Once that clicks, editing starts to feel like a language.',
-  },
-  {
-    type: 'h2',
-    id: 'history-and-fun-facts',
-    text: 'History and fun facts',
-  },
-  {
-    type: 'p',
-    text: 'vi was created by Bill Joy in the 1970s. Vim, short for Vi IMproved, was first released by Bram Moolenaar in 1991. Neovim later forked from Vim with a focus on extensibility, async plugins, and cleaner embedding.',
-  },
-  {
-    type: 'p',
-    text: 'Fun fact: Vim has registers, macros, marks, splits, tabs, buffers, folding, spell checking, terminal windows, and enough configuration gravity to turn a quiet weekend into dotfiles archaeology.',
   },
   {
     type: 'h2',

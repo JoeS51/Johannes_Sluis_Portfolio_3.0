@@ -12,6 +12,54 @@ const clampInsertOffset = (block, offset) => {
   return Math.min(Math.max(offset, 0), getTextLength(block));
 };
 
+const getLinePosition = (text, offset) => {
+  const lines = text.split('\n');
+  const clampedOffset = Math.min(Math.max(offset, 0), Math.max(text.length - 1, 0));
+  let lineStart = 0;
+
+  for (let lineIndex = 0; lineIndex < lines.length; lineIndex += 1) {
+    const lineText = lines[lineIndex];
+    const lineEnd = lineStart + lineText.length;
+
+    if (clampedOffset <= lineEnd || lineIndex === lines.length - 1) {
+      return {
+        lineIndex,
+        lineStart,
+        lineText,
+        column: Math.min(clampedOffset - lineStart, Math.max(lineText.length - 1, 0)),
+      };
+    }
+
+    lineStart = lineEnd + 1;
+  }
+
+  return {
+    lineIndex: 0,
+    lineStart: 0,
+    lineText: text,
+    column: 0,
+  };
+};
+
+const getOffsetForLineColumn = (text, lineIndex, column) => {
+  const lines = text.split('\n');
+  const targetLineIndex = Math.min(Math.max(lineIndex, 0), lines.length - 1);
+  const lineStart = lines.slice(0, targetLineIndex).reduce((offset, line) => offset + line.length + 1, 0);
+  const lineText = lines[targetLineIndex];
+  const targetColumn = Math.min(Math.max(column, 0), Math.max(lineText.length - 1, 0));
+
+  return lineStart + targetColumn;
+};
+
+const getVisualColumn = (block, offset) => getLinePosition(block.text, offset).column;
+
+const clampVisibleColumn = (block, offset) => {
+  const clampedOffset = clampColumn(block, offset);
+  const linePosition = getLinePosition(block.text, clampedOffset);
+
+  return getOffsetForLineColumn(block.text, linePosition.lineIndex, linePosition.column);
+};
+
 const isWordCharacter = (character) => /[A-Za-z0-9_]/.test(character);
 
 const placeCaretAtOffset = (element, offset) => {
@@ -50,6 +98,33 @@ const getCaretOffset = (element) => {
 
   const range = selection.getRangeAt(0);
   if (!element.contains(range.startContainer)) return 0;
+
+  const preCaretRange = range.cloneRange();
+  preCaretRange.selectNodeContents(element);
+  preCaretRange.setEnd(range.startContainer, range.startOffset);
+  return preCaretRange.toString().length;
+};
+
+const getCaretOffsetFromPoint = (element, clientX, clientY) => {
+  let range = null;
+
+  if (document.caretPositionFromPoint) {
+    const position = document.caretPositionFromPoint(clientX, clientY);
+
+    if (position && element.contains(position.offsetNode)) {
+      range = document.createRange();
+      range.setStart(position.offsetNode, position.offset);
+      range.collapse(true);
+    }
+  } else if (document.caretRangeFromPoint) {
+    const pointRange = document.caretRangeFromPoint(clientX, clientY);
+
+    if (pointRange && element.contains(pointRange.startContainer)) {
+      range = pointRange;
+    }
+  }
+
+  if (!range) return null;
 
   const preCaretRange = range.cloneRange();
   preCaretRange.selectNodeContents(element);
@@ -131,8 +206,9 @@ const VimEditableArticle = ({ blocks: initialBlocks }) => {
         blockIndex === activeIndex ? { ...block, text } : block
       )
     );
-    setCursorColumn(Math.min(Math.max(caretOffset - 1, 0), Math.max(text.length - 1, 0)));
-    desiredColumnRef.current = Math.min(Math.max(caretOffset - 1, 0), Math.max(text.length - 1, 0));
+    const nextColumn = clampVisibleColumn({ text }, caretOffset - 1);
+    setCursorColumn(nextColumn);
+    desiredColumnRef.current = getVisualColumn({ text }, nextColumn);
     setStatusMessage('escaped insert mode without saving anything real');
     setMode('normal');
   };
@@ -197,48 +273,75 @@ const VimEditableArticle = ({ blocks: initialBlocks }) => {
 
   const setActiveLine = (nextIndex, nextColumn = desiredColumnRef.current) => {
     const clampedIndex = Math.min(Math.max(nextIndex, 0), blocks.length - 1);
-    const clampedColumn = clampColumn(blocks[clampedIndex], nextColumn);
+    const clampedColumn = clampVisibleColumn(blocks[clampedIndex], nextColumn);
     setActiveIndex(clampedIndex);
     setCursorColumn(clampedColumn);
   };
 
   const moveVertical = (step) => {
+    const block = blocks[activeIndex];
+    const lines = block.text.split('\n');
+
+    if (lines.length > 1) {
+      const linePosition = getLinePosition(block.text, cursorColumn);
+      const nextLineIndex = linePosition.lineIndex + step;
+
+      if (nextLineIndex >= 0 && nextLineIndex < lines.length) {
+        setCursorColumn(getOffsetForLineColumn(block.text, nextLineIndex, desiredColumnRef.current));
+        return;
+      }
+    }
+
     setActiveIndex((currentIndex) => {
       const nextIndex = Math.min(Math.max(currentIndex + step, 0), blocks.length - 1);
-      setCursorColumn(clampColumn(blocks[nextIndex], desiredColumnRef.current));
+      setCursorColumn(clampVisibleColumn(blocks[nextIndex], desiredColumnRef.current));
       return nextIndex;
     });
   };
 
   const moveHorizontal = (step) => {
-    const nextColumn = clampColumn(blocks[activeIndex], cursorColumn + step);
-    desiredColumnRef.current = nextColumn;
+    const block = blocks[activeIndex];
+    const linePosition = getLinePosition(block.text, cursorColumn);
+    const nextColumn = clampColumn(
+      block,
+      linePosition.lineStart + linePosition.column + step
+    );
+
+    if (nextColumn < linePosition.lineStart || nextColumn >= linePosition.lineStart + linePosition.lineText.length) {
+      return;
+    }
+
+    desiredColumnRef.current = getVisualColumn(block, nextColumn);
     setCursorColumn(nextColumn);
   };
 
   const moveToLineStart = () => {
+    const linePosition = getLinePosition(blocks[activeIndex].text, cursorColumn);
     desiredColumnRef.current = 0;
-    setCursorColumn(0);
+    setCursorColumn(linePosition.lineStart);
   };
 
   const moveToFirstNonBlank = () => {
-    const firstNonBlank = blocks[activeIndex].text.search(/\S/);
-    const nextColumn = firstNonBlank === -1 ? 0 : firstNonBlank;
-    desiredColumnRef.current = nextColumn;
+    const linePosition = getLinePosition(blocks[activeIndex].text, cursorColumn);
+    const firstNonBlank = linePosition.lineText.search(/\S/);
+    const nextVisualColumn = firstNonBlank === -1 ? 0 : firstNonBlank;
+    const nextColumn = linePosition.lineStart + nextVisualColumn;
+    desiredColumnRef.current = nextVisualColumn;
     setCursorColumn(nextColumn);
   };
 
   const moveToLineEnd = () => {
-    const nextColumn = clampColumn(blocks[activeIndex], getTextLength(blocks[activeIndex]) - 1);
-    desiredColumnRef.current = nextColumn;
+    const linePosition = getLinePosition(blocks[activeIndex].text, cursorColumn);
+    const nextColumn = linePosition.lineStart + Math.max(linePosition.lineText.length - 1, 0);
+    desiredColumnRef.current = getVisualColumn(blocks[activeIndex], nextColumn);
     setCursorColumn(nextColumn);
   };
 
   const moveToPosition = (nextIndex, nextColumn) => {
-    const clampedColumn = clampColumn(blocks[nextIndex], nextColumn);
+    const clampedColumn = clampVisibleColumn(blocks[nextIndex], nextColumn);
     setActiveIndex(nextIndex);
     setCursorColumn(clampedColumn);
-    desiredColumnRef.current = clampedColumn;
+    desiredColumnRef.current = getVisualColumn(blocks[nextIndex], clampedColumn);
   };
 
   const moveWordForward = () => {
@@ -312,7 +415,7 @@ const VimEditableArticle = ({ blocks: initialBlocks }) => {
       )
     );
     setCursorColumn(nextColumn);
-    desiredColumnRef.current = nextColumn;
+    desiredColumnRef.current = getVisualColumn({ text: nextText }, nextColumn);
     setStatusMessage('deleted one character; it probably deserved it');
   };
 
@@ -348,7 +451,7 @@ const VimEditableArticle = ({ blocks: initialBlocks }) => {
     setBlocks(cloneBlocks(snapshot.blocks));
     setActiveIndex(snapshot.activeIndex);
     setCursorColumn(snapshot.cursorColumn);
-    desiredColumnRef.current = snapshot.cursorColumn;
+    desiredColumnRef.current = getVisualColumn(snapshot.blocks[snapshot.activeIndex], snapshot.cursorColumn);
     setMode('normal');
     setPendingOperator('');
     setStatusMessage('u undid the last questionable decision');
@@ -542,13 +645,14 @@ const VimEditableArticle = ({ blocks: initialBlocks }) => {
       suppressContentEditableWarning: true,
       tabIndex: -1,
       onBlur: () => commitBlock(index),
-      onClick: () => {
+      onClick: (event) => {
         setActiveIndex(index);
-        setCursorColumn((currentColumn) => {
-          const nextColumn = clampColumn(blocks[index], currentColumn);
-          desiredColumnRef.current = nextColumn;
-          return nextColumn;
-        });
+        const clickedOffset = getCaretOffsetFromPoint(event.currentTarget, event.clientX, event.clientY);
+        const nextColumn = clampVisibleColumn(blocks[index], clickedOffset ?? cursorColumn);
+
+        setCursorColumn(nextColumn);
+        desiredColumnRef.current = getVisualColumn(blocks[index], nextColumn);
+
         if (mode === 'normal') {
           articleRef.current?.focus({ preventScroll: true });
         }
@@ -621,11 +725,6 @@ const VimEditableArticle = ({ blocks: initialBlocks }) => {
       onKeyDown={handleKeyDown}
       aria-label="Editable Vim article. Use i to edit, escape for normal mode, and j or k to move."
     >
-      <div className="vim-editor-help">
-        <strong>Vim test buffer</strong>
-        <span>Normal: h/l move cursor, w/b move by word, 0/^/$ line jumps, j/k move lines, dd delete line, u undo, r reset, : command mode. Insert: Esc returns to normal.</span>
-      </div>
-
       {blocks.map(renderEditableBlock)}
 
       <div className="vim-status-line" aria-live="polite">
