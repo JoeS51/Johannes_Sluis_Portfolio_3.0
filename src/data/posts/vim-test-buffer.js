@@ -10,7 +10,7 @@ const vimBlocks = [
   },
   {
     type: 'p',
-    text: 'If you haven\'t clicked anything so far, you should see your cursor blinking on the \'S\' in "Starting out". Let\'s get you down here. Press j to move down into this paragraph, then try h and l to move left and right across the sentence. Press k if you overshoot and want to move back up. Those four keys are the classic Vim movement keys, and once moving by character feels less weird, the next step is learning how to jump around without spamming one key.',
+    text: 'If you haven\'t clicked anything so far, you should see your cursor blinking on the \'S\' in "Starting out". Let\'s get you down here. Press j to move down into this paragraph (hit it twice), then try h and l to move left and right across the sentence. Press k if you overshoot and want to move back up. Those four keys are the classic Vim movement keys, and once moving by character feels less weird, the next step is learning how to jump around without spamming one key.',
   },
   {
     type: 'h2',
