@@ -3,7 +3,7 @@ const post = {
   frontmatter: {
     title: 'Building an SSH Portfolio',
     description:
-      'A guide to building an SSH portfolio hosting it',
+      'A guide to building an SSH portfolio and hosting it',
     date: '2026-01-31',
     readingTime: 15,
     tags: ['Go', 'Side Project'],

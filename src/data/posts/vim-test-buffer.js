@@ -123,7 +123,7 @@ const post = {
   slug: 'vim-test-buffer',
   frontmatter: {
     title: 'Learn Vim by Editing This Article',
-    description: 'An interactive Vim-style blog post that teaches movement, modes, deletion, insertion, and a few editor facts.',
+    description: 'Learn how to use Vim by using Vim in the article itself!',
     date: '2026-05-08',
     tags: ['Vim', 'Experiment', 'Editor'],
     readingTime: 5,
