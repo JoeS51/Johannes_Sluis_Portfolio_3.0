@@ -4,6 +4,7 @@ import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
 import Prism from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import MvccTransactionAnimation from './MvccTransactionAnimation';
 
 const CodeBlock = ({ children, className, ...props }) => {
   const [copied, setCopied] = useState(false);
@@ -47,12 +48,7 @@ const CodeBlock = ({ children, className, ...props }) => {
   );
 };
 
-const MarkdownContent = ({ content }) => {
-  return (
-    <ReactMarkdown
-      remarkPlugins={[remarkGfm]}
-      rehypePlugins={[rehypeRaw]}
-      components={{
+const markdownComponents = {
         h1: ({ children }) => <h1 className="blog-heading-1">{children}</h1>,
         h2: ({ children }) => <h2 className="blog-heading-2">{children}</h2>,
         h3: ({ children }) => <h3 className="blog-heading-3">{children}</h3>,
@@ -104,7 +100,37 @@ const MarkdownContent = ({ content }) => {
             {alt && <figcaption>{alt}</figcaption>}
           </figure>
         ),
-      }}
+      };
+
+const MarkdownContent = ({ content }) => {
+  const parts = content.split('[[MVCC_TRANSACTION_ANIMATION]]');
+
+  if (parts.length > 1) {
+    return (
+      <>
+        {parts.map((part, index) => (
+          <React.Fragment key={`${index}-${part.slice(0, 12)}`}>
+            {part && (
+              <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
+                rehypePlugins={[rehypeRaw]}
+                components={markdownComponents}
+              >
+                {part}
+              </ReactMarkdown>
+            )}
+            {index < parts.length - 1 && <MvccTransactionAnimation />}
+          </React.Fragment>
+        ))}
+      </>
+    );
+  }
+
+  return (
+    <ReactMarkdown
+      remarkPlugins={[remarkGfm]}
+      rehypePlugins={[rehypeRaw]}
+      components={markdownComponents}
     >
       {content}
     </ReactMarkdown>

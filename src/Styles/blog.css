@@ -1296,3 +1296,142 @@ html.dark-mode.blog-body,
     border-top: 1px solid rgba(148, 163, 184, 0.25);
   }
 }
+
+.mvcc-demo {
+  margin: 2rem 0 2.5rem;
+  border: 1px solid rgba(15, 23, 42, 0.18);
+  padding: 1rem;
+  background: #f8fafc;
+  box-shadow: 8px 8px 0 rgba(15, 23, 42, 0.08);
+}
+
+.mvcc-tx-panel-header,
+.mvcc-db-header,
+.mvcc-demo-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.mvcc-tx-panel h4,
+.mvcc-db-panel h4 { margin: 0; }
+
+.mvcc-tx-eyebrow {
+  margin: 0 !important;
+  font-size: 0.68rem !important;
+  line-height: 1.2 !important;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.mvcc-tx-status,
+.mvcc-db-badge {
+  flex-shrink: 0;
+  padding: 0.25rem 0.45rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  border: 1px solid currentColor;
+}
+
+.mvcc-tx-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  margin: 0 0 1rem;
+}
+
+.mvcc-tx-panel {
+  border: 1px solid #334155;
+  padding: 0;
+  background: #020617;
+  color: #e2e8f0;
+  box-shadow: 5px 5px 0 rgba(15, 23, 42, 0.18);
+}
+
+.mvcc-tx-panel-header {
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid #334155;
+  background: #111827;
+  font-family: 'Source Code Pro', monospace;
+}
+
+.mvcc-tx-panel .mvcc-tx-eyebrow { color: #94a3b8 !important; }
+.mvcc-tx-panel h4 { color: #f8fafc; font-size: 0.9rem; font-family: 'Source Code Pro', monospace; }
+.mvcc-tx-status { color: #86efac; background: rgba(34, 197, 94, 0.08); }
+
+.mvcc-sql-window {
+  margin: 0;
+  padding: 0.9rem 0.75rem 1rem;
+  background: #020617;
+  color: #e2e8f0;
+  overflow-x: auto;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.86rem;
+  line-height: 1.65;
+}
+
+.mvcc-sql-window code { display: block; white-space: pre-wrap; }
+.mvcc-sql-window code + code { margin-top: 0.45rem; }
+.mvcc-sql-window code.is-active { outline: 1px solid rgba(134, 239, 172, 0.12); }
+.mvcc-sql-prompt { color: #86efac; }
+.mvcc-terminal-muted { color: #64748b; }
+
+.mvcc-db-panel {
+  border: 1px solid rgba(15, 23, 42, 0.18);
+  padding: 1rem;
+  background: #ffffff;
+}
+.mvcc-db-panel h4 { color: #0f172a; }
+.mvcc-db-panel .mvcc-tx-eyebrow { color: rgba(22, 101, 52, 0.72) !important; }
+.mvcc-db-badge { color: #166534; background: rgba(34, 197, 94, 0.08); }
+.mvcc-step-note {
+  margin: 0.85rem 0 0 !important;
+  color: rgba(15, 23, 42, 0.68) !important;
+  font-size: 0.95rem !important;
+  line-height: 1.55 !important;
+}
+.mvcc-table-wrap { overflow-x: auto; margin-top: 1rem; border: 1px solid rgba(15, 23, 42, 0.12); }
+.mvcc-world-cup-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+.mvcc-world-cup-table th,
+.mvcc-world-cup-table td { padding: 0.75rem; text-align: left; border-bottom: 1px solid rgba(15, 23, 42, 0.08); }
+.mvcc-world-cup-table th { color: rgba(15, 23, 42, 0.55); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; background: #f1f5f9; }
+.mvcc-world-cup-table td { color: rgba(15, 23, 42, 0.82); font-weight: 600; }
+.mvcc-world-cup-table tr.is-visible-version td { background: rgba(34, 197, 94, 0.08); }
+.mvcc-world-cup-table tr.is-hidden-version td { background: rgba(239, 68, 68, 0.06); color: rgba(15, 23, 42, 0.55); }
+.mvcc-team-ball { margin-right: 0.45rem; }
+
+.mvcc-demo-controls { margin-top: 1rem; }
+.mvcc-demo-controls button {
+  border: 1px solid rgba(15, 23, 42, 0.22);
+  padding: 0.5rem 0.85rem;
+  background: #ffffff;
+  color: #0f172a;
+  font-weight: 700;
+  cursor: pointer;
+}
+.mvcc-demo-controls button:disabled { cursor: not-allowed; opacity: 0.45; }
+.mvcc-demo-controls span { color: rgba(15, 23, 42, 0.55); font-size: 0.85rem; font-weight: 700; }
+
+.dark-mode .mvcc-demo {
+  border-color: rgba(148, 163, 184, 0.24);
+  background: #0f172a;
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.35);
+}
+.dark-mode .mvcc-db-panel { border-color: rgba(148, 163, 184, 0.2); background: rgba(15, 23, 42, 0.72); }
+.dark-mode .mvcc-db-panel h4 { color: #f8fafc; }
+.dark-mode .mvcc-world-cup-table th { color: rgba(226, 232, 240, 0.58); background: rgba(15, 23, 42, 0.9); }
+.dark-mode .mvcc-world-cup-table td { color: rgba(248, 250, 252, 0.86); }
+.dark-mode .mvcc-step-note { color: rgba(226, 232, 240, 0.68) !important; }
+.dark-mode .mvcc-world-cup-table tr.is-visible-version td { background: rgba(34, 197, 94, 0.11); }
+.dark-mode .mvcc-world-cup-table tr.is-hidden-version td { background: rgba(239, 68, 68, 0.09); color: rgba(226, 232, 240, 0.58); }
+.dark-mode .mvcc-world-cup-table th,
+.dark-mode .mvcc-world-cup-table td { border-bottom-color: rgba(148, 163, 184, 0.14); }
+.dark-mode .mvcc-table-wrap { border-color: rgba(148, 163, 184, 0.18); }
+.dark-mode .mvcc-demo-controls button { background: rgba(15, 23, 42, 0.9); color: #f8fafc; border-color: rgba(148, 163, 184, 0.24); }
+
+@media (max-width: 760px) {
+  .mvcc-tx-grid { grid-template-columns: 1fr; }
+  .mvcc-db-header { align-items: flex-start; flex-direction: column; }
+}
