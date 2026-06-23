@@ -178,7 +178,7 @@ const MvccTransactionAnimation = () => {
                     {...rowMotion}
                   >
                     <td>{row.version}</td>
-                    <td><span className="mvcc-team-ball">⚽</span>{row.team}</td>
+                    <td>{row.team}</td>
                     <td>{row.goals}</td>
                     <td>{row.state}</td>
                     <td>{row.visibleToTx2 ? 'yes' : 'no'}</td>
