@@ -11,14 +11,11 @@ const post = {
   },
   content: `
 ### What is MVCC
-MVCC, or multi-version concurrency control, put simply is when a database maintains multiple versions of its rows.
-This sounds counterintuitive because you would think that an update to some row is in-place update,
-but with MVCC any update actually creates a new row with the updated value. The reason that some/most databases (Postgres, MySQL, Turso, etc.)
-use some form of MVCC is to not block readers on writers and vice versa. 
-It is easier to understand why this 
+In Postgres, whenever you UPDATE a row, you are actually creating a new row in the database rather than modifying the original row in-place. This came as a surprise to me initially
+because it feels unintuitive and like wasted work. Why would you want to clog up your database with extra rows rather than updating rows in-place?
+As it turns out, this isn't a bug in Postgres but an intentional feature called MVCC, or multi-version concurrency control, where a database maintains multiple versions of its rows.
 
-[[MVCC_TRANSACTION_ANIMATION]]
-
+It also turns out that many major OLTP databases like MySQL, Turso, etc. all use some form of MVCC. To understand **why**, let's look at this example:
 `,
 };
 
