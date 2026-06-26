@@ -16,6 +16,8 @@ because it feels unintuitive and like wasted work. Why would you want to clog up
 As it turns out, this isn't a bug in Postgres but an intentional feature called MVCC, or multi-version concurrency control, where a database maintains multiple versions of its rows.
 
 It also turns out that many major OLTP databases like MySQL, Turso, etc. all use some form of MVCC. To understand **why**, let's look at this example:
+
+[[MVCC_TRANSACTION_ANIMATION]]
 `,
 };
 
