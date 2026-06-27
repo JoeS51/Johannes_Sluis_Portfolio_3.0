@@ -7,53 +7,76 @@ const scoreOneOne = ` team_name   | goals_for | goals_against\n-------------+---
 
 const scoreTwoOne = ` team_name   | goals_for | goals_against\n-------------+-----------+---------------\n Argentina   |         2 |             1\n Netherlands |         1 |             2\n(2 rows)`;
 
+const shell = (text) => ({ kind: 'shell', text });
+const sql = (text) => ({ kind: 'sql', text });
+const output = (text) => ({ kind: 'output', text });
+const comment = (text) => ({ kind: 'comment', text });
+const blocked = (text) => ({ kind: 'blocked', text });
+
 const steps = [
   {
     label: 'Step 1',
     activePane: 'A',
-    left: ['$ psql -d worldcup', `worldcup=# ${scoreQuery}\n${scoreOneOne}`],
-    right: ['$ psql -d worldcup', 'worldcup=# -- Session B is ready'],
+    takeaway: 'No MVCC yet: imagine the database has only one version of each score row.',
+    left: [shell('$ psql -d worldcup'), sql(`worldcup=# ${scoreQuery}`), output(scoreOneOne)],
+    right: [shell('$ psql -d worldcup'), comment('worldcup=# -- Transaction B is ready')],
   },
   {
     label: 'Step 2',
     activePane: 'A',
-    left: ['$ psql -d worldcup', 'worldcup=# BEGIN;', 'BEGIN'],
-    right: ['$ psql -d worldcup', 'worldcup=# -- still idle'],
+    takeaway: 'Transaction A starts a write transaction and will need exclusive access to the score rows.',
+    left: [shell('$ psql -d worldcup'), sql('worldcup=# BEGIN;'), output('BEGIN')],
+    right: [shell('$ psql -d worldcup'), comment('worldcup=# -- still idle')],
   },
   {
     label: 'Step 3',
     activePane: 'A',
+    takeaway: 'Transaction A changes the only row versions. Until commit, those rows are not safe for readers.',
     left: [
-      '$ psql -d worldcup',
-      'worldcup=# BEGIN;',
-      "worldcup=*# UPDATE world_cup_score\nSET goals_for = goals_for + 1\nWHERE match_id = 26\n  AND team_name = 'Argentina';\nUPDATE 1",
-      "worldcup=*# UPDATE world_cup_score\nSET goals_against = goals_against + 1\nWHERE match_id = 26\n  AND team_name = 'Netherlands';\nUPDATE 1",
+      shell('$ psql -d worldcup'),
+      sql('worldcup=# BEGIN;'),
+      sql("worldcup=*# UPDATE world_cup_score\nSET goals_for = goals_for + 1\nWHERE match_id = 26\n  AND team_name = 'Argentina';"),
+      output('UPDATE 1'),
+      sql("worldcup=*# UPDATE world_cup_score\nSET goals_against = goals_against + 1\nWHERE match_id = 26\n  AND team_name = 'Netherlands';"),
+      output('UPDATE 1'),
     ],
-    right: ['$ psql -d worldcup', 'worldcup=# -- the writer has not committed'],
+    right: [shell('$ psql -d worldcup'), comment('worldcup=# -- Transaction A has not committed')],
   },
   {
     label: 'Step 4',
     activePane: 'B',
+    takeaway: 'Reader blocked by writer: Transaction B cannot read the only row versions while A is uncommitted.',
     left: [
-      '$ psql -d worldcup',
-      'worldcup=# BEGIN;',
-      "worldcup=*# UPDATE world_cup_score\nSET goals_for = goals_for + 1\nWHERE match_id = 26\n  AND team_name = 'Argentina';\nUPDATE 1",
-      "worldcup=*# UPDATE world_cup_score\nSET goals_against = goals_against + 1\nWHERE match_id = 26\n  AND team_name = 'Netherlands';\nUPDATE 1",
-      'worldcup=*# -- transaction still open',
+      shell('$ psql -d worldcup'),
+      sql('worldcup=# BEGIN;'),
+      sql("worldcup=*# UPDATE world_cup_score\nSET goals_for = goals_for + 1\nWHERE match_id = 26\n  AND team_name = 'Argentina';"),
+      output('UPDATE 1'),
+      sql("worldcup=*# UPDATE world_cup_score\nSET goals_against = goals_against + 1\nWHERE match_id = 26\n  AND team_name = 'Netherlands';"),
+      output('UPDATE 1'),
+      comment('worldcup=*# -- transaction still open'),
     ],
-    right: ['$ psql -d worldcup', `worldcup=# ${scoreQuery}\n${scoreOneOne}`],
+    right: [
+      shell('$ psql -d worldcup'),
+      sql(`worldcup=# ${scoreQuery}`),
+      blocked('waiting... Transaction A holds the score rows'),
+      comment('-- with only one row version, B must wait for A to commit or roll back'),
+    ],
   },
   {
     label: 'Step 5',
     activePane: 'B',
+    takeaway: 'After A commits, B is unblocked and can finally read the new committed score.',
     left: [
-      '$ psql -d worldcup',
-      'worldcup=# BEGIN;',
-      "worldcup=*# UPDATE world_cup_score\nSET goals_for = goals_for + 1\nWHERE match_id = 26\n  AND team_name = 'Argentina';\nUPDATE 1",
-      "worldcup=*# UPDATE world_cup_score\nSET goals_against = goals_against + 1\nWHERE match_id = 26\n  AND team_name = 'Netherlands';\nUPDATE 1",
-      'worldcup=*# COMMIT;\nCOMMIT',
+      shell('$ psql -d worldcup'),
+      sql('worldcup=# BEGIN;'),
+      sql("worldcup=*# UPDATE world_cup_score\nSET goals_for = goals_for + 1\nWHERE match_id = 26\n  AND team_name = 'Argentina';"),
+      output('UPDATE 1'),
+      sql("worldcup=*# UPDATE world_cup_score\nSET goals_against = goals_against + 1\nWHERE match_id = 26\n  AND team_name = 'Netherlands';"),
+      output('UPDATE 1'),
+      sql('worldcup=*# COMMIT;'),
+      output('COMMIT'),
     ],
-    right: ['$ psql -d worldcup', `worldcup=# ${scoreQuery}\n${scoreTwoOne}`],
+    right: [shell('$ psql -d worldcup'), sql(`worldcup=# ${scoreQuery}`), output(scoreTwoOne)],
   },
 ];
 
@@ -65,12 +88,13 @@ const ZellijPane = ({ title, active, blocks }) => (
     <pre className="mvcc-sql-window">
       {blocks.map((block, index) => (
         <motion.code
-          key={`${title}-${index}-${block}`}
+          key={`${title}-${index}-${block.text}`}
+          className={`mvcc-terminal-${block.kind}`}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.14, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
         >
-          {block}
+          {block.text}
         </motion.code>
       ))}
     </pre>
@@ -101,9 +125,19 @@ const MvccTransactionAnimation = () => {
         </div>
 
         <div className="mvcc-zellij-panes">
-          <ZellijPane title="Session A" active={activeStep.activePane === 'A'} blocks={activeStep.left} />
-          <ZellijPane title="Session B" active={activeStep.activePane === 'B'} blocks={activeStep.right} />
+          <ZellijPane title="Transaction A" active={activeStep.activePane === 'A'} blocks={activeStep.left} />
+          <ZellijPane title="Transaction B" active={activeStep.activePane === 'B'} blocks={activeStep.right} />
         </div>
+
+        <motion.div
+          key={activeStep.takeaway}
+          className="mvcc-zellij-status"
+          initial={{ opacity: 0, y: 6 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {activeStep.takeaway}
+        </motion.div>
 
         <div className="mvcc-zellij-footer" aria-hidden="true">
           <span>Ctrl +</span>
