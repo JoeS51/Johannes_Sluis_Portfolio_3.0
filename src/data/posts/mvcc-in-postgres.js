@@ -30,6 +30,21 @@ Most databases prevent dirty reads in one of two ways:
 The first option sounds easier to implement, but it slows things down. We can see why with this example below where a database DOESN'T use MVCC:
 
 [[MVCC_TRANSACTION_ANIMATION]]
+
+
+### MVCC in Postgres (xmin/xmax)
+(INCLUDE actual postgres header file)
+
+### Snapshots
+
+### VACUUM
+
+
+
+### References
+- [The internals of PostgreSQL by Hironobu Suzuki](https://www.interdb.jp/pg/pgsql05/index.html)
+- [PostgreSQL 14 internals by Egor Rogov](https://postgrespro.com/community/books/internals)
+
 `,
 };
 

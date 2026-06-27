@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef, useState } from 'react';
+import { motion, useInView } from 'framer-motion';
 
 const scoreQuery = 'SELECT team_name, goals_for, goals_against\nFROM world_cup_score\nWHERE match_id = 26;';
 
@@ -7,19 +7,20 @@ const scoreOneOne = ` team_name   | goals_for | goals_against\n-------------+---
 
 const scoreTwoOne = ` team_name   | goals_for | goals_against\n-------------+-----------+---------------\n Argentina   |         2 |             1\n Netherlands |         1 |             2\n(2 rows)`;
 
-const shell = (text) => ({ kind: 'shell', text });
-const sql = (text) => ({ kind: 'sql', text });
-const output = (text) => ({ kind: 'output', text });
-const comment = (text) => ({ kind: 'comment', text });
-const blocked = (text) => ({ kind: 'blocked', text });
+const shell = (text, options = {}) => ({ kind: 'shell', text, ...options });
+const sql = (text, options = {}) => ({ kind: 'sql', text, ...options });
+const output = (text, options = {}) => ({ kind: 'output', text, ...options });
+const comment = (text, options = {}) => ({ kind: 'comment', text, ...options });
+const blocked = (text, options = {}) => ({ kind: 'blocked', text, ...options });
 
 const steps = [
   {
     label: 'Step 1',
+    layout: 'single',
     activePane: 'A',
     takeaway: 'No MVCC yet: imagine the database has only one version of each score row.',
+    title: 'Starting score',
     left: [shell('$ psql -d worldcup'), sql(`worldcup=# ${scoreQuery}`), output(scoreOneOne)],
-    right: [shell('$ psql -d worldcup'), comment('worldcup=# -- Transaction B is ready')],
   },
   {
     label: 'Step 2',
@@ -45,7 +46,7 @@ const steps = [
   {
     label: 'Step 4',
     activePane: 'B',
-    takeaway: 'Reader blocked by writer: Transaction B cannot read the only row versions while A is uncommitted.',
+    takeaway: 'Reader blocked by writer: Transaction B begins, tries to read, and waits on A.',
     left: [
       shell('$ psql -d worldcup'),
       sql('worldcup=# BEGIN;'),
@@ -57,7 +58,9 @@ const steps = [
     ],
     right: [
       shell('$ psql -d worldcup'),
-      sql(`worldcup=# ${scoreQuery}`),
+      sql('worldcup=# BEGIN;'),
+      output('BEGIN'),
+      sql(`worldcup=*# ${scoreQuery}`),
       blocked('waiting... Transaction A holds the score rows'),
       comment('-- with only one row version, B must wait for A to commit or roll back'),
     ],
@@ -76,11 +79,44 @@ const steps = [
       sql('worldcup=*# COMMIT;'),
       output('COMMIT'),
     ],
-    right: [shell('$ psql -d worldcup'), sql(`worldcup=# ${scoreQuery}`), output(scoreTwoOne)],
+    right: [
+      shell('$ psql -d worldcup'),
+      sql('worldcup=# BEGIN;'),
+      output('BEGIN'),
+      sql(`worldcup=*# ${scoreQuery}`),
+      blocked('waiting... Transaction A holds the score rows'),
+      output(scoreTwoOne, { delay: 1.35 }),
+    ],
   },
 ];
 
-const ZellijPane = ({ title, active, blocks }) => (
+const TerminalLine = ({ block }) => {
+  if (block.kind === 'shell') {
+    return (
+      <>
+        <span className="mvcc-shell-prompt">$</span>
+        <span className="mvcc-shell-command">{block.text.slice(1)}</span>
+      </>
+    );
+  }
+
+  if (block.kind === 'sql') {
+    const match = block.text.match(/^(worldcup=(?:\*|)#\s)([\s\S]*)$/);
+
+    if (match) {
+      return (
+        <>
+          <span className="mvcc-psql-prompt">{match[1]}</span>
+          <span className="mvcc-sql-command">{match[2]}</span>
+        </>
+      );
+    }
+  }
+
+  return block.text;
+};
+
+const ZellijPane = ({ title, active, blocks, shouldAnimate, delayStart = 0 }) => (
   <section className={`mvcc-zellij-pane${active ? ' is-active' : ''}`}>
     <div className="mvcc-zellij-pane-title">
       <span>{title}</span>
@@ -91,10 +127,10 @@ const ZellijPane = ({ title, active, blocks }) => (
           key={`${title}-${index}-${block.text}`}
           className={`mvcc-terminal-${block.kind}`}
           initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.14, duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+          animate={shouldAnimate ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
+          transition={{ delay: delayStart + (block.delay ?? index * 0.14), duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
         >
-          {block.text}
+          <TerminalLine block={block} />
         </motion.code>
       ))}
     </pre>
@@ -102,11 +138,13 @@ const ZellijPane = ({ title, active, blocks }) => (
 );
 
 const MvccTransactionAnimation = () => {
+  const demoRef = useRef(null);
+  const hasEnteredView = useInView(demoRef, { once: true, amount: 0.3 });
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const activeStep = steps[activeStepIndex];
 
   return (
-    <figure className="mvcc-demo mvcc-demo-initial" aria-label="MVCC transaction steps in Zellij and psql">
+    <figure ref={demoRef} className="mvcc-demo mvcc-demo-initial" aria-label="MVCC transaction steps in Zellij and psql">
       <div className="mvcc-psql-terminal">
         <div className="mvcc-zellij-tabbar">
           <span className="mvcc-zellij-title">Zellij (mvcc-world-cup)</span>
@@ -124,16 +162,32 @@ const MvccTransactionAnimation = () => {
           <span className="mvcc-zellij-mode">Alt &lt;[]&gt; BASE</span>
         </div>
 
-        <div className="mvcc-zellij-panes">
-          <ZellijPane title="Transaction A" active={activeStep.activePane === 'A'} blocks={activeStep.left} />
-          <ZellijPane title="Transaction B" active={activeStep.activePane === 'B'} blocks={activeStep.right} />
+        <div className={`mvcc-zellij-panes${activeStep.layout === 'single' ? ' is-single-pane' : ''}`}>
+          {activeStep.layout === 'single' ? (
+            <ZellijPane title={activeStep.title} active blocks={activeStep.left} shouldAnimate={hasEnteredView} />
+          ) : (
+            <>
+              <ZellijPane
+                title="Transaction A"
+                active={activeStep.activePane === 'A'}
+                blocks={activeStep.left}
+                shouldAnimate={hasEnteredView}
+              />
+              <ZellijPane
+                title="Transaction B"
+                active={activeStep.activePane === 'B'}
+                blocks={activeStep.right}
+                shouldAnimate={hasEnteredView}
+              />
+            </>
+          )}
         </div>
 
         <motion.div
           key={activeStep.takeaway}
           className="mvcc-zellij-status"
           initial={{ opacity: 0, y: 6 }}
-          animate={{ opacity: 1, y: 0 }}
+          animate={hasEnteredView ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
           transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
         >
           {activeStep.takeaway}
