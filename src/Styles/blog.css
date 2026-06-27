@@ -1455,6 +1455,10 @@ html.dark-mode.blog-body,
   background: #080d14;
 }
 
+.mvcc-zellij-panes.is-single-pane {
+  grid-template-columns: 1fr;
+}
+
 .mvcc-zellij-pane {
   min-width: 0;
   border: 1px solid #94a3b8;
@@ -1570,16 +1574,31 @@ html.dark-mode.blog-body,
 }
 .mvcc-sql-window code + code { margin-top: 0.45rem; }
 .mvcc-sql-window code.is-active { outline: 1px solid rgba(134, 239, 172, 0.12); }
-.mvcc-terminal-shell { color: #38bdf8 !important; }
-.mvcc-terminal-sql { color: #f8fafc !important; }
-.mvcc-terminal-output { color: #94a3b8 !important; }
+.mvcc-terminal-shell { color: #67e8f9 !important; }
+.mvcc-terminal-sql { color: #c4b5fd !important; }
+.mvcc-terminal-output { color: #9ca3af !important; }
 .mvcc-terminal-comment { color: #fbbf24 !important; }
 .mvcc-terminal-blocked {
   color: #fb7185 !important;
   background: rgba(251, 113, 133, 0.08) !important;
   border-left: 3px solid #fb7185;
-  padding-left: 0.6rem !important;
+  padding: 0.08rem 0 0.08rem 1.35rem !important;
+  margin-left: 0.15rem;
 }
+.mvcc-shell-prompt,
+.mvcc-psql-prompt {
+  color: #86efac !important;
+  font-weight: 900;
+}
+
+.mvcc-shell-command {
+  color: #22d3ee !important;
+}
+
+.mvcc-sql-command {
+  color: #c4b5fd !important;
+}
+
 .mvcc-terminal-command { color: #94a3b8 !important; }
 .mvcc-sql-prompt { color: #86efac; }
 .mvcc-psql-output { color: #cbd5e1; }
