@@ -1526,6 +1526,17 @@ html.dark-mode.blog-body,
   font-weight: 900;
 }
 
+.mvcc-zellij-status {
+  border-top: 1px solid #1f2937;
+  padding: 0.55rem 0.75rem;
+  background: rgba(163, 255, 18, 0.08);
+  color: #d9f99d;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
 .mvcc-tx-panel-header {
   padding: 0.55rem 0.75rem;
   border-bottom: 1px solid #334155;
@@ -1559,6 +1570,16 @@ html.dark-mode.blog-body,
 }
 .mvcc-sql-window code + code { margin-top: 0.45rem; }
 .mvcc-sql-window code.is-active { outline: 1px solid rgba(134, 239, 172, 0.12); }
+.mvcc-terminal-shell { color: #38bdf8 !important; }
+.mvcc-terminal-sql { color: #f8fafc !important; }
+.mvcc-terminal-output { color: #94a3b8 !important; }
+.mvcc-terminal-comment { color: #fbbf24 !important; }
+.mvcc-terminal-blocked {
+  color: #fb7185 !important;
+  background: rgba(251, 113, 133, 0.08) !important;
+  border-left: 3px solid #fb7185;
+  padding-left: 0.6rem !important;
+}
 .mvcc-terminal-command { color: #94a3b8 !important; }
 .mvcc-sql-prompt { color: #86efac; }
 .mvcc-psql-output { color: #cbd5e1; }
