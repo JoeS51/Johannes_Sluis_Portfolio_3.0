@@ -12,6 +12,7 @@ const CodeBlock = ({ children, className, ...props }) => {
   const isSingleLine = !code.includes('\n');
   const match = /language-(\w+)/.exec(className || '');
   const language = match ? match[1] : 'javascript';
+  const showCopyButton = language !== 'sql';
 
   const handleCopy = async () => {
     try {
@@ -37,10 +38,12 @@ const CodeBlock = ({ children, className, ...props }) => {
   };
 
   return (
-    <div className={`blog-code-block-wrapper${isSingleLine ? ' is-single-line' : ''}`}>
-      <button type="button" className="blog-code-copy" onClick={handleCopy}>
-        {copied ? 'Copied' : 'Copy'}
-      </button>
+    <div className={`blog-code-block-wrapper language-${language}${isSingleLine ? ' is-single-line' : ''}`}>
+      {showCopyButton && (
+        <button type="button" className="blog-code-copy" onClick={handleCopy}>
+          {copied ? 'Copied' : 'Copy'}
+        </button>
+      )}
       <Prism language={language} style={atomOneDark} {...props}>
         {code}
       </Prism>

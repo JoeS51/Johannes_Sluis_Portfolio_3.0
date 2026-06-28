@@ -26,7 +26,7 @@ Reading another transaction's uncommitted change is called a **dirty read**. The
 Most databases prevent concurrency anomalies, like dirty reads, by using one of these three concurrency control mechanisms:
 1. MVCC
 2. Strict two-phase locking (S2PL) - Writers take exclusive locks on rows they modify, and readers may need shared locks before reading those rows 
-3. Optimistic concurrency control (OCC) - WHAT IS THIS
+3. Optimistic concurrency control (OCC) 
 
 There are tradeoffs for each of these options, but the main argument for MVCC is that it is faster compared to S2PL. We can see why with this example below where a database DOESN'T use MVCC:
 
@@ -47,7 +47,25 @@ Each tuple contains:
 Looking at the image above, you can see the xmin of both tuples is 99. That means a transaction with txid 99 inserted both of those tuples. The xmax for both of these tuples is 0 which means these tuples have not been deleted by any transaction yet.
 For the purposes of simplicity, let's ignore t_cid and t_ctid since they aren't central to MVCC.
 
-You might already be seeing how these fields help with MVCC, but we will continue with an example. Let's say Alice sends Bob $100:
+You might already be seeing how these fields help with MVCC, but we will continue with an example. Let's say Alice sends Bob $50:
+
+~~~sql
+BEGIN; -- txid 100
+
+UPDATE accounts
+SET balance = balance - 50
+WHERE name = 'Alice';
+
+UPDATE accounts
+SET balance = balance + 50
+WHERE name = 'Bob';
+
+COMMIT;
+~~~
+
+![Postgres heap page after account transfer update](/images/postgres-mvcc-account-update.svg)
+
+
 
 If you are curious, you can check out the actual implementation in Postgres: [htup_details.h](https://github.com/postgres/postgres/blob/ee943004466418595363d567f18c053bae407792/src/include/access/htup_details.h)
 
