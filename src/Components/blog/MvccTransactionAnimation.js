@@ -137,15 +137,54 @@ const ZellijPane = ({ title, active, blocks, shouldAnimate, delayStart = 0 }) =>
   </section>
 );
 
+const SimpleMvccView = () => (
+  <section className="mvcc-simple-view-text" aria-label="Simplified no-MVCC blocking explanation">
+    <p>
+      Start with a tied World Cup match. In the database, the score rows look like this:
+    </p>
+
+    <pre aria-label="Starting World Cup score table">{scoreOneOne}</pre>
+
+    <p>
+      Now imagine the database does not use MVCC, so there is only one version of each row. Transaction A updates
+      Argentina's <code>goals_for</code> and the Netherlands' <code>goals_against</code>, but has not committed yet.
+    </p>
+
+    <p>
+      If Transaction B reads those rows immediately, it could see changes that later roll back. To avoid that dirty
+      read, Transaction B has to wait until Transaction A commits or rolls back.
+    </p>
+  </section>
+);
+
 const MvccTransactionAnimation = () => {
   const demoRef = useRef(null);
   const hasEnteredView = useInView(demoRef, { once: true, amount: 0.3 });
   const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const [viewMode, setViewMode] = useState('animated');
   const activeStep = steps[activeStepIndex];
 
   return (
     <figure ref={demoRef} className="mvcc-demo mvcc-demo-initial" aria-label="MVCC transaction steps in Zellij and psql">
-      <div className="mvcc-psql-terminal">
+      <div className="mvcc-view-toggle" aria-label="MVCC visual display mode">
+        <button
+          type="button"
+          className={viewMode === 'animated' ? 'is-active' : ''}
+          onClick={() => setViewMode('animated')}
+        >
+          Animated
+        </button>
+        <button
+          type="button"
+          className={viewMode === 'simple' ? 'is-active' : ''}
+          onClick={() => setViewMode('simple')}
+        >
+          Simple
+        </button>
+      </div>
+
+      <div className={`mvcc-animated-view${viewMode === 'simple' ? ' is-hidden-by-choice' : ''}`}>
+        <div className="mvcc-psql-terminal">
         <div className="mvcc-zellij-tabbar">
           <span className="mvcc-zellij-title">Zellij (mvcc-world-cup)</span>
           {steps.map((step, index) => (
@@ -197,6 +236,11 @@ const MvccTransactionAnimation = () => {
           <span>Ctrl +</span>
           <span>&lt;<b>g</b>&gt; LOCK</span>
         </div>
+        </div>
+      </div>
+
+      <div className={`mvcc-simple-view${viewMode === 'animated' ? ' is-hidden-by-choice' : ''}`}>
+        <SimpleMvccView />
       </div>
     </figure>
   );
