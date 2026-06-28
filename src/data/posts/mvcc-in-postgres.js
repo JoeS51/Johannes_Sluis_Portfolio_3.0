@@ -23,9 +23,10 @@ If one transaction has modified a row but hasn't committed yet, should other tra
 
 Reading another transaction's uncommitted change is called a **dirty read**. The issue with dirty reads is that a transaction might read data from a transaction that eventually rolls back, meaning that data never officially existed.
 
-Most databases prevent dirty reads in one of two ways:
-1. Writers take exclusive locks on rows they modify, and readers may need shared locks before reading those rows
-2. MVCC
+Most databases prevent dirty reads in one of three ways:
+1. MVCC
+2. Strict two-phase locking - Writers take exclusive locks on rows they modify, and readers may need shared locks before reading those rows 
+3. Optimistic concurrency control - WHAT IS THIS
 
 The first option sounds easier to implement, but it slows things down. We can see why with this example below where a database DOESN'T use MVCC:
 
@@ -33,13 +34,16 @@ The first option sounds easier to implement, but it slows things down. We can se
 
 
 ### MVCC in Postgres (xmin/xmax)
+Each transaction in postgres comes with an XID (or transaction ID), 
 (INCLUDE actual postgres header file)
 
 ### Snapshots
 
 ### VACUUM
+Postgres needs to eventually garbage collect all the extra tuples that were deleted. This garbage collection process is called **VACUUMing** in Postgres. 
+The VACUUM process is very involved and complex, so I'll only be going over it at a high level. If you're interested in learning more, check out the references at the bottom. 
 
-
+### HOT Updates (?)
 
 ### References
 - [The internals of PostgreSQL by Hironobu Suzuki](https://www.interdb.jp/pg/pgsql05/index.html)

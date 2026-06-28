@@ -559,7 +559,7 @@ body.blog-body {
   border-radius: 12px;
   overflow-x: auto;
   max-width: 100%;
-  font-family: 'Source Code Pro', monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
   font-size: 0.9rem;
   width: 100%;
   box-sizing: border-box;
@@ -1345,9 +1345,11 @@ html.dark-mode.blog-body,
   padding: 0.45rem 0.85rem;
   background: #ffffff;
   color: #0f172a;
-  font-family: 'Source Code Pro', monospace;
-  font-size: 0.82rem;
-  font-weight: 800;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
   cursor: pointer;
 }
 
