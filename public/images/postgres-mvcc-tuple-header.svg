@@ -1,0 +1,65 @@
+<svg width="1536" height="320" viewBox="0 0 1536 320" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Postgres heap page and tuple metadata</title>
+  <desc id="desc">A heap page with two tuples pointing to a table of tuple header fields t_xmin, t_xmax, t_cid, t_ctid, and user data.</desc>
+  <rect width="1536" height="320" fill="white"/>
+
+  <g font-family="Arial, Helvetica, sans-serif" font-size="24" fill="#777777">
+    <rect x="95" y="58" width="555" height="213" fill="#ffffff" stroke="#bbbbbb" stroke-width="1.5"/>
+    <rect x="95" y="58" width="555" height="38" fill="#82aad2"/>
+    <text x="375" y="83" text-anchor="middle" fill="#f3f5f7" font-size="23">Page Header</text>
+
+    <rect x="95" y="96" width="63" height="40" fill="#d7d7d7" stroke="#aaa"/>
+    <rect x="158" y="96" width="63" height="40" fill="#d7d7d7" stroke="#aaa"/>
+    <text x="126" y="123" text-anchor="middle" fill="#ffffff">1</text>
+    <text x="189" y="123" text-anchor="middle" fill="#ffffff">2</text>
+
+    <rect x="158" y="232" width="213" height="38" fill="#f1f1f1" stroke="#b6b6b6"/>
+    <rect x="371" y="232" width="279" height="38" fill="#f1f1f1" stroke="#b6b6b6"/>
+    <text x="265" y="257" text-anchor="middle">Bob tuple</text>
+    <text x="510" y="257" text-anchor="middle">Alice tuple</text>
+
+    <path d="M695 121H743V93L790 160L743 227V199H695V121Z" fill="#fffdd7" stroke="#b8b8a4" stroke-width="1.4"/>
+
+    <text x="835" y="143">Alice</text>
+    <text x="835" y="197">Bob</text>
+
+    <g font-size="22" font-weight="600" fill="#777777">
+      <text x="946" y="64" text-anchor="middle">t_xmin</text>
+      <text x="1056" y="64" text-anchor="middle">t_xmax</text>
+      <text x="1141" y="64" text-anchor="middle">t_cid</text>
+      <text x="1223" y="64" text-anchor="middle">t_ctid</text>
+      <text x="1323" y="64" text-anchor="middle">name</text>
+      <text x="1420" y="64" text-anchor="middle">balance</text>
+    </g>
+
+    <g stroke="#bdbdbd" stroke-width="1.2">
+      <rect x="891" y="98" width="110" height="60" fill="#ffffff"/>
+      <rect x="1001" y="98" width="110" height="60" fill="#ffffff"/>
+      <rect x="1111" y="98" width="60" height="60" fill="#ffffff"/>
+      <rect x="1171" y="98" width="104" height="60" fill="#ffffff"/>
+      <rect x="1275" y="98" width="96" height="60" fill="#d2d2d2"/>
+      <rect x="1371" y="98" width="96" height="60" fill="#d2d2d2"/>
+
+      <rect x="891" y="158" width="110" height="60" fill="#ffffff"/>
+      <rect x="1001" y="158" width="110" height="60" fill="#ffffff"/>
+      <rect x="1111" y="158" width="60" height="60" fill="#ffffff"/>
+      <rect x="1171" y="158" width="104" height="60" fill="#ffffff"/>
+      <rect x="1275" y="158" width="96" height="60" fill="#d2d2d2"/>
+      <rect x="1371" y="158" width="96" height="60" fill="#d2d2d2"/>
+    </g>
+
+    <text x="946" y="136" text-anchor="middle">99</text>
+    <text x="1056" y="136" text-anchor="middle">0</text>
+    <text x="1141" y="136" text-anchor="middle">0</text>
+    <text x="1223" y="136" text-anchor="middle">(0,1)</text>
+    <text x="1323" y="136" text-anchor="middle">Alice</text>
+    <text x="1420" y="136" text-anchor="middle">100</text>
+
+    <text x="946" y="196" text-anchor="middle">99</text>
+    <text x="1056" y="196" text-anchor="middle">0</text>
+    <text x="1141" y="196" text-anchor="middle">1</text>
+    <text x="1223" y="196" text-anchor="middle">(0,2)</text>
+    <text x="1323" y="196" text-anchor="middle">Bob</text>
+    <text x="1420" y="196" text-anchor="middle">100</text>
+  </g>
+</svg>
