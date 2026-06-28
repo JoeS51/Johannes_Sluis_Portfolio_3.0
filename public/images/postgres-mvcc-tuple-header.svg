@@ -3,6 +3,12 @@
   <desc id="desc">A heap page with two tuples pointing to a table of tuple header fields t_xmin, t_xmax, t_cid, t_ctid, and user data.</desc>
   <rect width="1536" height="320" fill="white"/>
 
+  <defs>
+    <marker id="pointer-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0 0L8 4L0 8Z" fill="#b7b7b7"/>
+    </marker>
+  </defs>
+
   <g font-family="Arial, Helvetica, sans-serif" font-size="24" fill="#777777">
     <rect x="95" y="58" width="555" height="213" fill="#ffffff" stroke="#bbbbbb" stroke-width="1.5"/>
     <rect x="95" y="58" width="555" height="38" fill="#82aad2"/>
@@ -12,6 +18,11 @@
     <rect x="158" y="96" width="63" height="40" fill="#d7d7d7" stroke="#aaa"/>
     <text x="126" y="123" text-anchor="middle" fill="#ffffff">1</text>
     <text x="189" y="123" text-anchor="middle" fill="#ffffff">2</text>
+
+    <g stroke="#b7b7b7" stroke-width="1.2" fill="none" marker-end="url(#pointer-arrow)" opacity="0.7">
+      <path d="M126 136 C126 180 510 190 510 226"/>
+      <path d="M189 136 C189 182 265 196 265 226"/>
+    </g>
 
     <rect x="158" y="232" width="213" height="38" fill="#f1f1f1" stroke="#b6b6b6"/>
     <rect x="371" y="232" width="279" height="38" fill="#f1f1f1" stroke="#b6b6b6"/>

@@ -587,6 +587,10 @@ body.blog-body {
   white-space: pre;
 }
 
+.blog-code-block-wrapper.language-sql pre {
+  border-radius: 4px;
+}
+
 .blog-code-block::-webkit-scrollbar,
 .blog-code-block-wrapper pre::-webkit-scrollbar {
   height: 8px;
@@ -1641,6 +1645,13 @@ html.dark-mode.blog-body,
   color: #fb7185 !important;
   background: rgba(251, 113, 133, 0.08) !important;
   border-left: 3px solid #fb7185;
+  padding: 0.08rem 0 0.08rem 1.5rem !important;
+  margin-left: 0.15rem;
+}
+.mvcc-sql-window code.mvcc-terminal-success {
+  color: #86efac !important;
+  background: rgba(134, 239, 172, 0.08) !important;
+  border-left: 3px solid #86efac;
   padding: 0.08rem 0 0.08rem 1.5rem !important;
   margin-left: 0.15rem;
 }

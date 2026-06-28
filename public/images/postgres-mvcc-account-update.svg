@@ -1,0 +1,115 @@
+<svg width="1536" height="430" viewBox="0 0 1536 430" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Postgres heap page after account transfer update</title>
+  <desc id="desc">A heap page after transaction 100 updates Alice and Bob. The old tuples have xmax 100 and point to new tuple versions. The new tuples have xmin 100 and xmax 0.</desc>
+  <rect width="1536" height="430" fill="white"/>
+
+  <defs>
+    <marker id="pointer-arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0 0L8 4L0 8Z" fill="#b7b7b7"/>
+    </marker>
+  </defs>
+
+  <g font-family="Arial, Helvetica, sans-serif" font-size="22" fill="#707070">
+    <rect x="70" y="70" width="600" height="285" fill="#ffffff" stroke="#bbbbbb" stroke-width="1.5"/>
+    <rect x="70" y="70" width="600" height="38" fill="#82aad2"/>
+    <text x="370" y="95" text-anchor="middle" fill="#f3f5f7" font-size="23">Page Header</text>
+
+    <g fill="#d7d7d7" stroke="#aaaaaa">
+      <rect x="70" y="108" width="55" height="40"/>
+      <rect x="125" y="108" width="55" height="40"/>
+      <rect x="180" y="108" width="55" height="40"/>
+      <rect x="235" y="108" width="55" height="40"/>
+    </g>
+    <text x="98" y="135" text-anchor="middle" fill="#ffffff">1</text>
+    <text x="153" y="135" text-anchor="middle" fill="#ffffff">2</text>
+    <text x="208" y="135" text-anchor="middle" fill="#ffffff">3</text>
+    <text x="263" y="135" text-anchor="middle" fill="#ffffff">4</text>
+
+    <g stroke="#b7b7b7" stroke-width="1.2" fill="none" marker-end="url(#pointer-arrow)" opacity="0.7">
+      <path d="M98 148 C98 210 595 230 595 309"/>
+      <path d="M153 148 C153 215 445 235 445 309"/>
+      <path d="M208 148 C208 220 295 238 295 309"/>
+      <path d="M263 148 C263 225 145 240 145 309"/>
+    </g>
+
+    <g fill="#f1f1f1" stroke="#b6b6b6">
+      <rect x="70" y="315" width="150" height="40"/>
+      <rect x="220" y="315" width="150" height="40"/>
+      <rect x="370" y="315" width="150" height="40"/>
+      <rect x="520" y="315" width="150" height="40"/>
+    </g>
+    <text x="145" y="341" text-anchor="middle">Bob v2</text>
+    <text x="295" y="341" text-anchor="middle">Alice v2</text>
+    <text x="445" y="341" text-anchor="middle">Bob v1</text>
+    <text x="595" y="341" text-anchor="middle">Alice v1</text>
+
+    <path d="M705 172H750V142L798 215L750 288V258H705V172Z" fill="#fffdd7" stroke="#b8b8a4" stroke-width="1.4"/>
+
+    <g font-size="22" font-weight="600" fill="#707070">
+      <text x="912" y="64" text-anchor="middle">t_xmin</text>
+      <text x="1007" y="64" text-anchor="middle">t_xmax</text>
+      <text x="1085" y="64" text-anchor="middle">t_cid</text>
+      <text x="1163" y="64" text-anchor="middle">t_ctid</text>
+      <text x="1260" y="64" text-anchor="middle">name</text>
+      <text x="1360" y="64" text-anchor="middle">balance</text>
+    </g>
+
+    <g stroke="#bdbdbd" stroke-width="1.2">
+      <rect x="865" y="90" width="95" height="55" fill="#ffffff"/>
+      <rect x="960" y="90" width="95" height="55" fill="#ffffff"/>
+      <rect x="1055" y="90" width="60" height="55" fill="#ffffff"/>
+      <rect x="1115" y="90" width="95" height="55" fill="#ffffff"/>
+      <rect x="1210" y="90" width="100" height="55" fill="#d2d2d2"/>
+      <rect x="1310" y="90" width="100" height="55" fill="#d2d2d2"/>
+
+      <rect x="865" y="145" width="95" height="55" fill="#ffffff"/>
+      <rect x="960" y="145" width="95" height="55" fill="#ffffff"/>
+      <rect x="1055" y="145" width="60" height="55" fill="#ffffff"/>
+      <rect x="1115" y="145" width="95" height="55" fill="#ffffff"/>
+      <rect x="1210" y="145" width="100" height="55" fill="#d2d2d2"/>
+      <rect x="1310" y="145" width="100" height="55" fill="#d2d2d2"/>
+
+      <rect x="865" y="200" width="95" height="55" fill="#f0fdf4"/>
+      <rect x="960" y="200" width="95" height="55" fill="#f0fdf4"/>
+      <rect x="1055" y="200" width="60" height="55" fill="#f0fdf4"/>
+      <rect x="1115" y="200" width="95" height="55" fill="#f0fdf4"/>
+      <rect x="1210" y="200" width="100" height="55" fill="#cfe8d5"/>
+      <rect x="1310" y="200" width="100" height="55" fill="#cfe8d5"/>
+
+      <rect x="865" y="255" width="95" height="55" fill="#f0fdf4"/>
+      <rect x="960" y="255" width="95" height="55" fill="#f0fdf4"/>
+      <rect x="1055" y="255" width="60" height="55" fill="#f0fdf4"/>
+      <rect x="1115" y="255" width="95" height="55" fill="#f0fdf4"/>
+      <rect x="1210" y="255" width="100" height="55" fill="#cfe8d5"/>
+      <rect x="1310" y="255" width="100" height="55" fill="#cfe8d5"/>
+    </g>
+
+    <text x="912" y="124" text-anchor="middle">99</text>
+    <text x="1007" y="124" text-anchor="middle">100</text>
+    <text x="1085" y="124" text-anchor="middle">0</text>
+    <text x="1163" y="124" text-anchor="middle">(0,3)</text>
+    <text x="1260" y="124" text-anchor="middle">Alice</text>
+    <text x="1360" y="124" text-anchor="middle">100</text>
+
+    <text x="912" y="179" text-anchor="middle">99</text>
+    <text x="1007" y="179" text-anchor="middle">100</text>
+    <text x="1085" y="179" text-anchor="middle">1</text>
+    <text x="1163" y="179" text-anchor="middle">(0,4)</text>
+    <text x="1260" y="179" text-anchor="middle">Bob</text>
+    <text x="1360" y="179" text-anchor="middle">100</text>
+
+    <text x="912" y="234" text-anchor="middle">100</text>
+    <text x="1007" y="234" text-anchor="middle">0</text>
+    <text x="1085" y="234" text-anchor="middle">0</text>
+    <text x="1163" y="234" text-anchor="middle">(0,3)</text>
+    <text x="1260" y="234" text-anchor="middle">Alice</text>
+    <text x="1360" y="234" text-anchor="middle">50</text>
+
+    <text x="912" y="289" text-anchor="middle">100</text>
+    <text x="1007" y="289" text-anchor="middle">0</text>
+    <text x="1085" y="289" text-anchor="middle">1</text>
+    <text x="1163" y="289" text-anchor="middle">(0,4)</text>
+    <text x="1260" y="289" text-anchor="middle">Bob</text>
+    <text x="1360" y="289" text-anchor="middle">150</text>
+  </g>
+</svg>

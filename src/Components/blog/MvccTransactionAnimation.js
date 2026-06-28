@@ -12,27 +12,28 @@ const sql = (text, options = {}) => ({ kind: 'sql', text, ...options });
 const output = (text, options = {}) => ({ kind: 'output', text, ...options });
 const comment = (text, options = {}) => ({ kind: 'comment', text, ...options });
 const blocked = (text, options = {}) => ({ kind: 'blocked', text, ...options });
+const success = (text, options = {}) => ({ kind: 'success', text, ...options });
 
 const steps = [
   {
     label: 'Step 1',
     layout: 'single',
     activePane: 'A',
-    takeaway: 'No MVCC yet: imagine the database has only one version of each account row.',
+    takeaway: 'The table initially has two rows for Alice and Bob\'s balance',
     title: 'Starting balances',
     left: [shell('$ psql -d bank'), sql(`bank=# ${accountsQuery}`), output(accountsBefore)],
   },
   {
     label: 'Step 2',
     activePane: 'A',
-    takeaway: 'Transaction A starts a transfer and will need exclusive access to the account rows it changes.',
+    takeaway: 'Both transactions begin. Transaction A will write to the table and Transaction B will read from it.',
     left: [shell('$ psql -d bank'), sql('bank=# BEGIN;'), output('BEGIN')],
-    right: [shell('$ psql -d bank'), comment('bank=# -- still idle')],
+    right: [shell('$ psql -d bank'), sql('bank=# BEGIN;'), output('BEGIN')],
   },
   {
     label: 'Step 3',
     activePane: 'A',
-    takeaway: 'Transaction A changes the only row versions. Until commit, a reader could see a half-finished transfer.',
+    takeaway: 'Transaction A obtains exclusive locks on both rows while it updates them. Transaction B isn\'t doing anything yet.',
     left: [
       shell('$ psql -d bank'),
       sql('bank=# BEGIN;'),
@@ -41,12 +42,12 @@ const steps = [
       sql("bank=*# UPDATE accounts\nSET balance = balance + 50\nWHERE name = 'Bob';"),
       output('UPDATE 1'),
     ],
-    right: [shell('$ psql -d bank'), comment('bank=# -- Transaction A has not committed')],
+    right: [shell('$ psql -d bank'), sql('bank=# BEGIN;'), output('BEGIN'), comment('bank=*# -- Transaction A has not committed')],
   },
   {
     label: 'Step 4',
     activePane: 'B',
-    takeaway: 'Reader blocked by writer: Transaction B begins, tries to read balances, and waits on A.',
+    takeaway: 'Transaction B begins, tries to read balances, and waits on A since transaction A has an exclusive lock on both rows.',
     left: [
       shell('$ psql -d bank'),
       sql('bank=# BEGIN;'),
@@ -68,7 +69,7 @@ const steps = [
   {
     label: 'Step 5',
     activePane: 'B',
-    takeaway: 'After A commits, B is unblocked and can finally read the completed transfer.',
+    takeaway: 'After A commits, B is finally unblocked and can read the rows.',
     left: [
       shell('$ psql -d bank'),
       sql('bank=# BEGIN;'),
@@ -84,7 +85,7 @@ const steps = [
       sql('bank=# BEGIN;'),
       output('BEGIN'),
       sql(`bank=*# ${accountsQuery}`),
-      blocked('waiting... Transaction A holds the account rows'),
+      success('unblocked... Transaction A committed', { delay: 1.2 }),
       output(accountsAfter, { delay: 1.35 }),
     ],
   },
@@ -185,47 +186,47 @@ const MvccTransactionAnimation = () => {
 
       <div className={`mvcc-animated-view${viewMode === 'simple' ? ' is-hidden-by-choice' : ''}`}>
         <div className="mvcc-psql-terminal">
-        <div className="mvcc-zellij-tabbar">
-          <span className="mvcc-zellij-title">Zellij (no-mvcc-bank-transfer)</span>
-          {steps.map((step, index) => (
-            <button
-              key={step.label}
-              type="button"
-              className={`mvcc-zellij-tab${index === activeStepIndex ? ' is-active' : ''}`}
-              aria-pressed={index === activeStepIndex}
-              onClick={() => setActiveStepIndex(index)}
-            >
-              {step.label}
-            </button>
-          ))}
-          <span className="mvcc-zellij-mode">Alt &lt;[]&gt; BASE</span>
-        </div>
+          <div className="mvcc-zellij-tabbar">
+            <span className="mvcc-zellij-title">Zellij (no-mvcc-bank-transfer)</span>
+            {steps.map((step, index) => (
+              <button
+                key={step.label}
+                type="button"
+                className={`mvcc-zellij-tab${index === activeStepIndex ? ' is-active' : ''}`}
+                aria-pressed={index === activeStepIndex}
+                onClick={() => setActiveStepIndex(index)}
+              >
+                {step.label}
+              </button>
+            ))}
+            <span className="mvcc-zellij-mode">Alt &lt;[]&gt; BASE</span>
+          </div>
 
-        <div className={`mvcc-zellij-panes${activeStep.layout === 'single' ? ' is-single-pane' : ''}`}>
-          {activeStep.layout === 'single' ? (
-            <ZellijPane title={activeStep.title} active blocks={activeStep.left} shouldAnimate={hasEnteredView} />
-          ) : (
-            <>
-              <ZellijPane
-                title="Transaction A"
-                active={activeStep.activePane === 'A'}
-                blocks={activeStep.left}
-                shouldAnimate={hasEnteredView}
-              />
-              <ZellijPane
-                title="Transaction B"
-                active={activeStep.activePane === 'B'}
-                blocks={activeStep.right}
-                shouldAnimate={hasEnteredView}
-              />
-            </>
-          )}
-        </div>
+          <div className={`mvcc-zellij-panes${activeStep.layout === 'single' ? ' is-single-pane' : ''}`}>
+            {activeStep.layout === 'single' ? (
+              <ZellijPane title={activeStep.title} active blocks={activeStep.left} shouldAnimate={hasEnteredView} />
+            ) : (
+              <>
+                <ZellijPane
+                  title="Transaction A"
+                  active={activeStep.activePane === 'A'}
+                  blocks={activeStep.left}
+                  shouldAnimate={hasEnteredView}
+                />
+                <ZellijPane
+                  title="Transaction B"
+                  active={activeStep.activePane === 'B'}
+                  blocks={activeStep.right}
+                  shouldAnimate={hasEnteredView}
+                />
+              </>
+            )}
+          </div>
 
-        <div className="mvcc-zellij-footer" aria-hidden="true">
-          <span>Ctrl +</span>
-          <span>&lt;<b>g</b>&gt; LOCK</span>
-        </div>
+          <div className="mvcc-zellij-footer" aria-hidden="true">
+            <span>Ctrl +</span>
+            <span>&lt;<b>g</b>&gt; LOCK</span>
+          </div>
         </div>
 
         <motion.p
