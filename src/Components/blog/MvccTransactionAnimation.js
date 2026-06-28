@@ -186,7 +186,7 @@ const MvccTransactionAnimation = () => {
       <div className={`mvcc-animated-view${viewMode === 'simple' ? ' is-hidden-by-choice' : ''}`}>
         <div className="mvcc-psql-terminal">
         <div className="mvcc-zellij-tabbar">
-          <span className="mvcc-zellij-title">Zellij (mvcc-bank-transfer)</span>
+          <span className="mvcc-zellij-title">Zellij (no-mvcc-bank-transfer)</span>
           {steps.map((step, index) => (
             <button
               key={step.label}
@@ -222,21 +222,21 @@ const MvccTransactionAnimation = () => {
           )}
         </div>
 
-        <motion.div
-          key={activeStep.takeaway}
-          className="mvcc-zellij-status"
-          initial={{ opacity: 0, y: 6 }}
-          animate={hasEnteredView ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
-          transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-        >
-          {activeStep.takeaway}
-        </motion.div>
-
         <div className="mvcc-zellij-footer" aria-hidden="true">
           <span>Ctrl +</span>
           <span>&lt;<b>g</b>&gt; LOCK</span>
         </div>
         </div>
+
+        <motion.p
+          key={activeStep.takeaway}
+          className="mvcc-step-caption"
+          initial={{ opacity: 0, y: 6 }}
+          animate={hasEnteredView ? { opacity: 1, y: 0 } : { opacity: 0, y: 6 }}
+          transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+        >
+          {activeStep.takeaway}
+        </motion.p>
       </div>
 
       <div className={`mvcc-simple-view${viewMode === 'animated' ? ' is-hidden-by-choice' : ''}`}>

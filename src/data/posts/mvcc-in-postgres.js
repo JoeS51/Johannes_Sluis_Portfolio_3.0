@@ -23,12 +23,12 @@ If one transaction has modified a row but hasn't committed yet, should other tra
 
 Reading another transaction's uncommitted change is called a **dirty read**. The issue with dirty reads is that a transaction might read data from a transaction that eventually rolls back, meaning that data never officially existed.
 
-Most databases prevent dirty reads in one of three ways:
+Most databases prevent concurrency anomalies, like dirty reads, by using one of these three concurrency control mechanisms:
 1. MVCC
-2. Strict two-phase locking - Writers take exclusive locks on rows they modify, and readers may need shared locks before reading those rows 
-3. Optimistic concurrency control - WHAT IS THIS
+2. Strict two-phase locking (S2PL) - Writers take exclusive locks on rows they modify, and readers may need shared locks before reading those rows 
+3. Optimistic concurrency control (OCC) - WHAT IS THIS
 
-The first option sounds easier to implement, but it slows things down. We can see why with this example below where a database DOESN'T use MVCC:
+There are tradeoffs for each of these options, but the main argument for MVCC is that it is faster compared to S2PL. We can see why with this example below where a database DOESN'T use MVCC:
 
 [[MVCC_TRANSACTION_ANIMATION]]
 
