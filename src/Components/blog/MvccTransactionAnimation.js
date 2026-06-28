@@ -1,11 +1,11 @@
 import React, { useRef, useState } from 'react';
 import { motion, useInView } from 'framer-motion';
 
-const scoreQuery = 'SELECT team_name, goals_for, goals_against\nFROM world_cup_score\nWHERE match_id = 26;';
+const accountsQuery = 'SELECT name, balance\nFROM accounts\nWHERE name IN (\'Alice\', \'Bob\');';
 
-const scoreOneOne = ` team_name   | goals_for | goals_against\n-------------+-----------+---------------\n Argentina   |         1 |             1\n Netherlands |         1 |             1\n(2 rows)`;
+const accountsBefore = ` name  | balance\n-------+---------\n Alice |     100\n Bob   |     100\n(2 rows)`;
 
-const scoreTwoOne = ` team_name   | goals_for | goals_against\n-------------+-----------+---------------\n Argentina   |         2 |             1\n Netherlands |         1 |             2\n(2 rows)`;
+const accountsAfter = ` name  | balance\n-------+---------\n Alice |      50\n Bob   |     150\n(2 rows)`;
 
 const shell = (text, options = {}) => ({ kind: 'shell', text, ...options });
 const sql = (text, options = {}) => ({ kind: 'sql', text, ...options });
@@ -18,74 +18,74 @@ const steps = [
     label: 'Step 1',
     layout: 'single',
     activePane: 'A',
-    takeaway: 'No MVCC yet: imagine the database has only one version of each score row.',
-    title: 'Starting score',
-    left: [shell('$ psql -d worldcup'), sql(`worldcup=# ${scoreQuery}`), output(scoreOneOne)],
+    takeaway: 'No MVCC yet: imagine the database has only one version of each account row.',
+    title: 'Starting balances',
+    left: [shell('$ psql -d bank'), sql(`bank=# ${accountsQuery}`), output(accountsBefore)],
   },
   {
     label: 'Step 2',
     activePane: 'A',
-    takeaway: 'Transaction A starts a write transaction and will need exclusive access to the score rows.',
-    left: [shell('$ psql -d worldcup'), sql('worldcup=# BEGIN;'), output('BEGIN')],
-    right: [shell('$ psql -d worldcup'), comment('worldcup=# -- still idle')],
+    takeaway: 'Transaction A starts a transfer and will need exclusive access to the account rows it changes.',
+    left: [shell('$ psql -d bank'), sql('bank=# BEGIN;'), output('BEGIN')],
+    right: [shell('$ psql -d bank'), comment('bank=# -- still idle')],
   },
   {
     label: 'Step 3',
     activePane: 'A',
-    takeaway: 'Transaction A changes the only row versions. Until commit, those rows are not safe for readers.',
+    takeaway: 'Transaction A changes the only row versions. Until commit, a reader could see a half-finished transfer.',
     left: [
-      shell('$ psql -d worldcup'),
-      sql('worldcup=# BEGIN;'),
-      sql("worldcup=*# UPDATE world_cup_score\nSET goals_for = goals_for + 1\nWHERE match_id = 26\n  AND team_name = 'Argentina';"),
+      shell('$ psql -d bank'),
+      sql('bank=# BEGIN;'),
+      sql("bank=*# UPDATE accounts\nSET balance = balance - 50\nWHERE name = 'Alice';"),
       output('UPDATE 1'),
-      sql("worldcup=*# UPDATE world_cup_score\nSET goals_against = goals_against + 1\nWHERE match_id = 26\n  AND team_name = 'Netherlands';"),
+      sql("bank=*# UPDATE accounts\nSET balance = balance + 50\nWHERE name = 'Bob';"),
       output('UPDATE 1'),
     ],
-    right: [shell('$ psql -d worldcup'), comment('worldcup=# -- Transaction A has not committed')],
+    right: [shell('$ psql -d bank'), comment('bank=# -- Transaction A has not committed')],
   },
   {
     label: 'Step 4',
     activePane: 'B',
-    takeaway: 'Reader blocked by writer: Transaction B begins, tries to read, and waits on A.',
+    takeaway: 'Reader blocked by writer: Transaction B begins, tries to read balances, and waits on A.',
     left: [
-      shell('$ psql -d worldcup'),
-      sql('worldcup=# BEGIN;'),
-      sql("worldcup=*# UPDATE world_cup_score\nSET goals_for = goals_for + 1\nWHERE match_id = 26\n  AND team_name = 'Argentina';"),
+      shell('$ psql -d bank'),
+      sql('bank=# BEGIN;'),
+      sql("bank=*# UPDATE accounts\nSET balance = balance - 50\nWHERE name = 'Alice';"),
       output('UPDATE 1'),
-      sql("worldcup=*# UPDATE world_cup_score\nSET goals_against = goals_against + 1\nWHERE match_id = 26\n  AND team_name = 'Netherlands';"),
+      sql("bank=*# UPDATE accounts\nSET balance = balance + 50\nWHERE name = 'Bob';"),
       output('UPDATE 1'),
-      comment('worldcup=*# -- transaction still open'),
+      comment('bank=*# -- transaction still open'),
     ],
     right: [
-      shell('$ psql -d worldcup'),
-      sql('worldcup=# BEGIN;'),
+      shell('$ psql -d bank'),
+      sql('bank=# BEGIN;'),
       output('BEGIN'),
-      sql(`worldcup=*# ${scoreQuery}`),
-      blocked('waiting... Transaction A holds the score rows'),
+      sql(`bank=*# ${accountsQuery}`),
+      blocked('waiting... Transaction A holds the account rows'),
       comment('-- with only one row version, B must wait for A to commit or roll back'),
     ],
   },
   {
     label: 'Step 5',
     activePane: 'B',
-    takeaway: 'After A commits, B is unblocked and can finally read the new committed score.',
+    takeaway: 'After A commits, B is unblocked and can finally read the completed transfer.',
     left: [
-      shell('$ psql -d worldcup'),
-      sql('worldcup=# BEGIN;'),
-      sql("worldcup=*# UPDATE world_cup_score\nSET goals_for = goals_for + 1\nWHERE match_id = 26\n  AND team_name = 'Argentina';"),
+      shell('$ psql -d bank'),
+      sql('bank=# BEGIN;'),
+      sql("bank=*# UPDATE accounts\nSET balance = balance - 50\nWHERE name = 'Alice';"),
       output('UPDATE 1'),
-      sql("worldcup=*# UPDATE world_cup_score\nSET goals_against = goals_against + 1\nWHERE match_id = 26\n  AND team_name = 'Netherlands';"),
+      sql("bank=*# UPDATE accounts\nSET balance = balance + 50\nWHERE name = 'Bob';"),
       output('UPDATE 1'),
-      sql('worldcup=*# COMMIT;'),
+      sql('bank=*# COMMIT;'),
       output('COMMIT'),
     ],
     right: [
-      shell('$ psql -d worldcup'),
-      sql('worldcup=# BEGIN;'),
+      shell('$ psql -d bank'),
+      sql('bank=# BEGIN;'),
       output('BEGIN'),
-      sql(`worldcup=*# ${scoreQuery}`),
-      blocked('waiting... Transaction A holds the score rows'),
-      output(scoreTwoOne, { delay: 1.35 }),
+      sql(`bank=*# ${accountsQuery}`),
+      blocked('waiting... Transaction A holds the account rows'),
+      output(accountsAfter, { delay: 1.35 }),
     ],
   },
 ];
@@ -101,7 +101,7 @@ const TerminalLine = ({ block }) => {
   }
 
   if (block.kind === 'sql') {
-    const match = block.text.match(/^(worldcup=(?:\*|)#\s)([\s\S]*)$/);
+    const match = block.text.match(/^(\w+=(?:\*|)#\s)([\s\S]*)$/);
 
     if (match) {
       return (
@@ -140,18 +140,18 @@ const ZellijPane = ({ title, active, blocks, shouldAnimate, delayStart = 0 }) =>
 const SimpleMvccView = () => (
   <section className="mvcc-simple-view-text" aria-label="Simplified no-MVCC blocking explanation">
     <p>
-      Start with a tied World Cup match. In the database, the score rows look like this:
+      Start with two bank accounts. In the database, the rows look like this:
     </p>
 
-    <pre aria-label="Starting World Cup score table">{scoreOneOne}</pre>
+    <pre aria-label="Starting account balances table">{accountsBefore}</pre>
 
     <p>
-      Now imagine the database does not use MVCC, so there is only one version of each row. Transaction A updates
-      Argentina's <code>goals_for</code> and the Netherlands' <code>goals_against</code>, but has not committed yet.
+      Now imagine the database does not use MVCC, so there is only one version of each row. Transaction A transfers
+      $50 from Alice to Bob, but has not committed yet.
     </p>
 
     <p>
-      If Transaction B reads those rows immediately, it could see changes that later roll back. To avoid that dirty
+      If Transaction B reads those rows immediately, it could see a half-finished transfer or changes that later roll back. To avoid that dirty
       read, Transaction B has to wait until Transaction A commits or rolls back.
     </p>
   </section>
@@ -165,7 +165,7 @@ const MvccTransactionAnimation = () => {
   const activeStep = steps[activeStepIndex];
 
   return (
-    <figure ref={demoRef} className="mvcc-demo mvcc-demo-initial" aria-label="MVCC transaction steps in Zellij and psql">
+    <figure ref={demoRef} className="mvcc-demo mvcc-demo-initial" aria-label="No-MVCC account transfer steps in Zellij and psql">
       <div className="mvcc-view-toggle" aria-label="MVCC visual display mode">
         <button
           type="button"
@@ -186,7 +186,7 @@ const MvccTransactionAnimation = () => {
       <div className={`mvcc-animated-view${viewMode === 'simple' ? ' is-hidden-by-choice' : ''}`}>
         <div className="mvcc-psql-terminal">
         <div className="mvcc-zellij-tabbar">
-          <span className="mvcc-zellij-title">Zellij (mvcc-world-cup)</span>
+          <span className="mvcc-zellij-title">Zellij (mvcc-bank-transfer)</span>
           {steps.map((step, index) => (
             <button
               key={step.label}
