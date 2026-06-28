@@ -1333,6 +1333,67 @@ html.dark-mode.blog-body,
   transform: none;
 }
 
+.mvcc-view-toggle {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0;
+}
+
+.mvcc-view-toggle button {
+  border: 1px solid #0f172a;
+  border-radius: 0;
+  padding: 0.45rem 0.85rem;
+  background: #ffffff;
+  color: #0f172a;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.82rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.mvcc-view-toggle button + button {
+  margin-left: -1px;
+}
+
+.mvcc-view-toggle button.is-active {
+  border-color: #0f172a;
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.mvcc-animated-view.is-hidden-by-choice,
+.mvcc-simple-view.is-hidden-by-choice {
+  display: none;
+}
+
+.mvcc-simple-view-text p {
+  margin: 0 0 1rem !important;
+  color: rgba(15, 23, 42, 0.78) !important;
+  font-size: 1rem !important;
+  line-height: 1.7 !important;
+}
+
+.mvcc-simple-view-text p:last-child {
+  margin-bottom: 0 !important;
+}
+
+.mvcc-simple-view-text pre {
+  margin: 0 0 1rem;
+  padding: 0.9rem 1rem;
+  overflow-x: auto;
+  border: 1px solid rgba(15, 23, 42, 0.1);
+  border-radius: 0.65rem;
+  background: #f8fafc;
+  color: #334155;
+  font-family: 'Source Code Pro', monospace;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.mvcc-simple-view-text code {
+  color: #0f172a;
+}
+
 .mvcc-tx-panel-header,
 .mvcc-db-header,
 .mvcc-demo-controls {
@@ -1643,6 +1704,23 @@ html.dark-mode.blog-body,
   background: transparent;
   box-shadow: none;
 }
+.dark-mode .mvcc-view-toggle button {
+  border-color: #f8fafc;
+  background: #020617;
+  color: #f8fafc;
+}
+.dark-mode .mvcc-view-toggle button.is-active {
+  border-color: #f8fafc;
+  background: #f8fafc;
+  color: #020617;
+}
+.dark-mode .mvcc-simple-view-text p { color: rgba(226, 232, 240, 0.78) !important; }
+.dark-mode .mvcc-simple-view-text pre {
+  border-color: rgba(148, 163, 184, 0.2);
+  background: rgba(15, 23, 42, 0.72);
+  color: rgba(226, 232, 240, 0.84);
+}
+.dark-mode .mvcc-simple-view-text code { color: #e2e8f0; }
 .dark-mode .mvcc-db-panel { border-color: rgba(148, 163, 184, 0.2); background: rgba(15, 23, 42, 0.72); }
 .dark-mode .mvcc-db-panel h4 { color: #f8fafc; }
 .dark-mode .mvcc-world-cup-table th { color: rgba(226, 232, 240, 0.58); background: rgba(15, 23, 42, 0.9); }
@@ -1656,6 +1734,18 @@ html.dark-mode.blog-body,
 .dark-mode .mvcc-demo-controls button { background: rgba(15, 23, 42, 0.9); color: #f8fafc; border-color: rgba(148, 163, 184, 0.24); }
 
 @media (max-width: 760px) {
+  .mvcc-view-toggle {
+    display: none;
+  }
+
+  .mvcc-animated-view {
+    display: none !important;
+  }
+
+  .mvcc-simple-view {
+    display: block !important;
+  }
+
   .mvcc-demo-initial {
     width: 100%;
     margin-left: 0;
