@@ -1593,15 +1593,11 @@ html.dark-mode.blog-body,
   font-weight: 900;
 }
 
-.mvcc-zellij-status {
-  border-top: 1px solid #1f2937;
-  padding: 0.55rem 0.75rem;
-  background: rgba(163, 255, 18, 0.08);
-  color: #d9f99d;
-  font-family: 'Source Code Pro', monospace;
-  font-size: 0.9rem;
-  font-weight: 700;
-  line-height: 1.45;
+.mvcc-step-caption {
+  margin: 0.85rem 0 0 !important;
+  color: rgba(15, 23, 42, 0.72) !important;
+  font-size: 0.98rem !important;
+  line-height: 1.6 !important;
 }
 
 .mvcc-tx-panel-header {
@@ -1637,29 +1633,29 @@ html.dark-mode.blog-body,
 }
 .mvcc-sql-window code + code { margin-top: 0.45rem; }
 .mvcc-sql-window code.is-active { outline: 1px solid rgba(134, 239, 172, 0.12); }
-.mvcc-terminal-shell { color: #67e8f9 !important; }
-.mvcc-terminal-sql { color: #c4b5fd !important; }
-.mvcc-terminal-output { color: #9ca3af !important; }
-.mvcc-terminal-comment { color: #fbbf24 !important; }
-.mvcc-terminal-blocked {
+.mvcc-terminal-shell,
+.mvcc-terminal-sql { color: #e5e7eb !important; }
+.mvcc-terminal-output { color: #8b949e !important; }
+.mvcc-terminal-comment { color: #6b7280 !important; }
+.mvcc-sql-window code.mvcc-terminal-blocked {
   color: #fb7185 !important;
   background: rgba(251, 113, 133, 0.08) !important;
   border-left: 3px solid #fb7185;
-  padding: 0.08rem 0 0.08rem 1.35rem !important;
+  padding: 0.08rem 0 0.08rem 1.5rem !important;
   margin-left: 0.15rem;
 }
 .mvcc-shell-prompt,
 .mvcc-psql-prompt {
-  color: #86efac !important;
-  font-weight: 900;
+  color: #94a3b8 !important;
+  font-weight: 800;
 }
 
 .mvcc-shell-command {
-  color: #22d3ee !important;
+  color: #e5e7eb !important;
 }
 
 .mvcc-sql-command {
-  color: #c4b5fd !important;
+  color: #e5e7eb !important;
 }
 
 .mvcc-terminal-command { color: #94a3b8 !important; }
@@ -1717,6 +1713,7 @@ html.dark-mode.blog-body,
   color: #020617;
 }
 .dark-mode .mvcc-simple-view-text p { color: rgba(226, 232, 240, 0.78) !important; }
+.dark-mode .mvcc-step-caption { color: rgba(226, 232, 240, 0.74) !important; }
 .dark-mode .mvcc-simple-view-text pre {
   border-color: rgba(148, 163, 184, 0.2);
   background: rgba(15, 23, 42, 0.72);
