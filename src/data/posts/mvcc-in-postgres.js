@@ -18,7 +18,7 @@ As it turns out, this isn't a bug in Postgres but an intentional feature called 
 It also turns out that many major OLTP databases like MySQL, Turso, etc. all use some form of MVCC. In this article, I'll only be covering how MVCC works in Postgres (ignoring some of the specifics like freezing).
 To understand the broader picture, let's quickly go over isolation levels and dirty reads.
 
-### Dirty Reads
+### Concurrency Control
 If one transaction has modified a row but hasn't committed yet, should other transactions see that row? Usually, the answer is no. 
 
 Reading another transaction's uncommitted change is called a **dirty read**. The issue with dirty reads is that a transaction might read data from a transaction that eventually rolls back, meaning that data never officially existed.
@@ -32,10 +32,26 @@ There are tradeoffs for each of these options, but the main argument for MVCC is
 
 [[MVCC_TRANSACTION_ANIMATION]]
 
+There's a clear issue in the example above: readers are blocked by writers. That means a long-running write transaction can block all read operations. The vice versa is true too where long-running read operations on a row can block writers.
+MVCC solves this problem.
 
-### MVCC in Postgres (xmin/xmax)
-Each transaction in postgres comes with an XID (or transaction ID), 
-(INCLUDE actual postgres header file)
+### MVCC in Postgres
+Each transaction in postgres is associated with a 32-bit integer for its transaction ID (txid). Each row in Postgres is physically stored as a heap tuple, and every tuple carries some hidden metadata fields that make MVCC work. 
+Each tuple contains:
+- t_xmin - the txid of the transaction that created this tuple
+- t_xmax - the txid of the transaction that deleted this tuple
+- t_cid - a counter within a transaction that tracks which SQL command created or deleted a tuple
+- t_ctid - a physical pointer to the current version of a tuple. It stores the page number and offset of where the tuple lives
+
+![Postgres heap page and tuple metadata](/images/postgres-mvcc-tuple-header.svg)
+Looking at the image above, you can see the xmin of both tuples is 99. That means a transaction with txid 99 inserted both of those tuples. The xmax for both of these tuples is 0 which means these tuples have not been deleted by any transaction yet.
+For the purposes of simplicity, let's ignore t_cid and t_ctid since they aren't central to MVCC.
+
+You might already be seeing how these fields help with MVCC, but we will continue with an example. Let's say Alice sends Bob $100:
+
+If you are curious, you can check out the actual implementation in Postgres: [htup_details.h](https://github.com/postgres/postgres/blob/ee943004466418595363d567f18c053bae407792/src/include/access/htup_details.h)
+
+(NOTE ABOUT FREEZING)
 
 ### Snapshots
 
