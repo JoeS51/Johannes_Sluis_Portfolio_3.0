@@ -9,32 +9,36 @@ import MvccTransactionAnimation from './MvccTransactionAnimation';
 const mvccSqlTransactions = [
   {
     title: 'Transaction 100',
-    code: `BEGIN; -- txid 100
-
-SELECT name, balance
-FROM accounts;
-
- name  | balance
--------+---------
- Alice |     100
- Bob   |     100
-(2 rows)
-
--- still open`,
+    blocks: [
+      { type: 'line', text: 'BEGIN; -- txid 100' },
+      { type: 'spacer', lines: 10 },
+      { type: 'line', text: 'SELECT name, balance' },
+      { type: 'line', text: 'FROM accounts;' },
+      { type: 'line', text: '' },
+      { type: 'line', text: ' name  | balance' },
+      { type: 'line', text: '-------+---------' },
+      { type: 'line', text: ' Alice |     100' },
+      { type: 'line', text: ' Bob   |     100' },
+      { type: 'line', text: '(2 rows)' },
+      { type: 'line', text: '' },
+      { type: 'line', text: '-- still open' },
+    ],
   },
   {
     title: 'Transaction 101',
-    code: `BEGIN; -- txid 101
-
-UPDATE accounts
-SET balance = balance - 50
-WHERE name = 'Alice';
-
-UPDATE accounts
-SET balance = balance + 50
-WHERE name = 'Bob';
-
--- still open`,
+    blocks: [
+      { type: 'line', text: 'BEGIN; -- txid 101' },
+      { type: 'line', text: '' },
+      { type: 'line', text: 'UPDATE accounts' },
+      { type: 'line', text: 'SET balance = balance - 50' },
+      { type: 'line', text: "WHERE name = 'Alice';" },
+      { type: 'line', text: '' },
+      { type: 'line', text: 'UPDATE accounts' },
+      { type: 'line', text: 'SET balance = balance + 50' },
+      { type: 'line', text: "WHERE name = 'Bob';" },
+      { type: 'line', text: '' },
+      { type: 'line', text: '-- still open' },
+    ],
   },
 ];
 
@@ -44,7 +48,22 @@ const MvccSqlSplit = () => (
       <section key={transaction.title}>
         <p>{transaction.title}</p>
         <pre>
-          <code>{transaction.code}</code>
+          <code>
+            {transaction.blocks.map((block, index) =>
+              block.type === 'spacer' ? (
+                <span
+                  key={`${transaction.title}-${index}`}
+                  className="mvcc-sql-spacer"
+                  style={{ '--mvcc-sql-spacer-lines': block.lines }}
+                  aria-hidden="true"
+                />
+              ) : (
+                <span key={`${transaction.title}-${index}`} className="mvcc-sql-line">
+                  {block.text || '\u00a0'}
+                </span>
+              )
+            )}
+          </code>
         </pre>
       </section>
     ))}
