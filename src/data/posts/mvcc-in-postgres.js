@@ -65,7 +65,11 @@ COMMIT;
 
 ![Postgres heap page after account transfer update](/images/postgres-mvcc-account-update.svg)
 
-
+You can see that Postgres didn't update the tuples in-place despite the two UPDATEs. Postgres creates two new tuples for the updated values and 
+sets the xmin to 100 for both tuples to indicate that txid 100 created these tuples. Also, notice that the xmax for both the "old" tuples were set 
+to 100. This means that these tuples were "deleted" by a transaction with txid 100. 
+  
+}
 
 If you are curious, you can check out the actual implementation in Postgres: [htup_details.h](https://github.com/postgres/postgres/blob/ee943004466418595363d567f18c053bae407792/src/include/access/htup_details.h)
 
