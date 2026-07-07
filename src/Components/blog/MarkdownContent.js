@@ -6,6 +6,51 @@ import Prism from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import MvccTransactionAnimation from './MvccTransactionAnimation';
 
+const mvccSqlTransactions = [
+  {
+    title: 'Transaction 100',
+    code: `BEGIN; -- txid 100
+
+SELECT name, balance
+FROM accounts;
+
+ name  | balance
+-------+---------
+ Alice |     100
+ Bob   |     100
+(2 rows)
+
+-- still open`,
+  },
+  {
+    title: 'Transaction 101',
+    code: `BEGIN; -- txid 101
+
+UPDATE accounts
+SET balance = balance - 50
+WHERE name = 'Alice';
+
+UPDATE accounts
+SET balance = balance + 50
+WHERE name = 'Bob';
+
+-- still open`,
+  },
+];
+
+const MvccSqlSplit = () => (
+  <div className="mvcc-sql-split" aria-label="Transaction 100 and Transaction 101 SQL">
+    {mvccSqlTransactions.map((transaction) => (
+      <section key={transaction.title}>
+        <p>{transaction.title}</p>
+        <pre>
+          <code>{transaction.code}</code>
+        </pre>
+      </section>
+    ))}
+  </div>
+);
+
 const CodeBlock = ({ children, className, ...props }) => {
   const [copied, setCopied] = useState(false);
   const code = String(children).replace(/\n$/, '');
@@ -106,14 +151,18 @@ const markdownComponents = {
       };
 
 const MarkdownContent = ({ content }) => {
-  const parts = content.split('[[MVCC_TRANSACTION_ANIMATION]]');
+  const parts = content.split(/(\[\[MVCC_TRANSACTION_ANIMATION\]\]|\[\[MVCC_SQL_SPLIT\]\])/g);
 
   if (parts.length > 1) {
     return (
       <>
         {parts.map((part, index) => (
           <React.Fragment key={`${index}-${part.slice(0, 12)}`}>
-            {part && (
+            {part === '[[MVCC_TRANSACTION_ANIMATION]]' ? (
+              <MvccTransactionAnimation />
+            ) : part === '[[MVCC_SQL_SPLIT]]' ? (
+              <MvccSqlSplit />
+            ) : part ? (
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
                 rehypePlugins={[rehypeRaw]}
@@ -121,8 +170,7 @@ const MarkdownContent = ({ content }) => {
               >
                 {part}
               </ReactMarkdown>
-            )}
-            {index < parts.length - 1 && <MvccTransactionAnimation />}
+            ) : null}
           </React.Fragment>
         ))}
       </>
