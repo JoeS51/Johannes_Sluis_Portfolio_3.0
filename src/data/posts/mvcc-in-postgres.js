@@ -47,27 +47,15 @@ Each tuple contains:
 Looking at the image above, you can see the xmin of both tuples is 99. That means a transaction with txid 99 inserted both of those tuples. The xmax for both of these tuples is 0 which means these tuples have not been deleted by any transaction yet.
 For the purposes of simplicity, let's ignore t_cid and t_ctid since they aren't central to MVCC.
 
-You might already be seeing how these fields help with MVCC, but we will continue with an example. Let's say Alice sends Bob $50:
+You might already be seeing how these fields help with MVCC, but we will continue with an example. Let's say Alice sends Bob $50. Transaction 101 performs the transfer, but does not commit yet. While transaction 101 is still open, transaction 100 reads the balances:
 
-~~~sql
-BEGIN; -- txid 100
-
-UPDATE accounts
-SET balance = balance - 50
-WHERE name = 'Alice';
-
-UPDATE accounts
-SET balance = balance + 50
-WHERE name = 'Bob';
-
-COMMIT;
-~~~
+[[MVCC_SQL_SPLIT]]
 
 ![Postgres heap page after account transfer update](/images/postgres-mvcc-account-update.svg)
 
 You can see that Postgres didn't update the tuples in-place despite the two UPDATEs. Postgres creates two new tuples for the updated values and 
-sets the xmin to 100 for both tuples to indicate that txid 100 created these tuples. Also, notice that the xmax for both the "old" tuples were set 
-to 100. This means that these tuples were "deleted" by a transaction with txid 100. 
+sets the xmin to 101 for both tuples to indicate that txid 101 created these tuples. Also, notice that the xmax for both the "old" tuples were set 
+to 101. This means that these tuples were "deleted" by a transaction with txid 101. Since transaction 101 has not committed yet, transaction 100 ignores the new tuples and continues reading the old committed versions.
   
 }
 

@@ -1,6 +1,6 @@
 <svg width="1536" height="430" viewBox="0 0 1536 430" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
   <title id="title">Postgres heap page after account transfer update</title>
-  <desc id="desc">A heap page after transaction 100 updates Alice and Bob. The old tuples have xmax 100 and point to new tuple versions. The new tuples have xmin 100 and xmax 0.</desc>
+  <desc id="desc">A heap page while transaction 101 is still open after updating Alice and Bob. The old tuples have xmax 101 and point to new tuple versions. The new tuples have xmin 101 and xmax 0.</desc>
   <rect width="1536" height="430" fill="white"/>
 
   <defs>
@@ -85,27 +85,27 @@
     </g>
 
     <text x="912" y="124" text-anchor="middle">99</text>
-    <text x="1007" y="124" text-anchor="middle">100</text>
+    <text x="1007" y="124" text-anchor="middle">101</text>
     <text x="1085" y="124" text-anchor="middle">0</text>
     <text x="1163" y="124" text-anchor="middle">(0,3)</text>
     <text x="1260" y="124" text-anchor="middle">Alice</text>
     <text x="1360" y="124" text-anchor="middle">100</text>
 
     <text x="912" y="179" text-anchor="middle">99</text>
-    <text x="1007" y="179" text-anchor="middle">100</text>
+    <text x="1007" y="179" text-anchor="middle">101</text>
     <text x="1085" y="179" text-anchor="middle">1</text>
     <text x="1163" y="179" text-anchor="middle">(0,4)</text>
     <text x="1260" y="179" text-anchor="middle">Bob</text>
     <text x="1360" y="179" text-anchor="middle">100</text>
 
-    <text x="912" y="234" text-anchor="middle">100</text>
+    <text x="912" y="234" text-anchor="middle">101</text>
     <text x="1007" y="234" text-anchor="middle">0</text>
     <text x="1085" y="234" text-anchor="middle">0</text>
     <text x="1163" y="234" text-anchor="middle">(0,3)</text>
     <text x="1260" y="234" text-anchor="middle">Alice</text>
     <text x="1360" y="234" text-anchor="middle">50</text>
 
-    <text x="912" y="289" text-anchor="middle">100</text>
+    <text x="912" y="289" text-anchor="middle">101</text>
     <text x="1007" y="289" text-anchor="middle">0</text>
     <text x="1085" y="289" text-anchor="middle">1</text>
     <text x="1163" y="289" text-anchor="middle">(0,4)</text>
