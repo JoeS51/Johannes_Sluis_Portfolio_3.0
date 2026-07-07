@@ -623,6 +623,7 @@ body.blog-body {
 }
 
 .mvcc-sql-split pre {
+  --mvcc-sql-line-height: 1.55em;
   flex: 1;
   margin: 0;
   padding: 0.85rem 0.75rem 1rem;
@@ -635,9 +636,23 @@ body.blog-body {
 }
 
 .mvcc-sql-split code {
+  display: block;
   background: transparent !important;
   color: inherit !important;
   padding: 0 !important;
+}
+
+.mvcc-sql-line,
+.mvcc-sql-spacer {
+  display: block;
+}
+
+.mvcc-sql-line {
+  min-height: var(--mvcc-sql-line-height);
+}
+
+.mvcc-sql-spacer {
+  height: calc(var(--mvcc-sql-line-height) * var(--mvcc-sql-spacer-lines));
 }
 
 .blog-code-block::-webkit-scrollbar,
