@@ -59,14 +59,14 @@
       <rect x="1371" y="158" width="96" height="60" fill="#d2d2d2"/>
     </g>
 
-    <text x="946" y="136" text-anchor="middle">99</text>
+    <text x="946" y="136" text-anchor="middle">100</text>
     <text x="1056" y="136" text-anchor="middle">0</text>
     <text x="1141" y="136" text-anchor="middle">0</text>
     <text x="1223" y="136" text-anchor="middle">(0,1)</text>
     <text x="1323" y="136" text-anchor="middle">Alice</text>
     <text x="1420" y="136" text-anchor="middle">100</text>
 
-    <text x="946" y="196" text-anchor="middle">99</text>
+    <text x="946" y="196" text-anchor="middle">100</text>
     <text x="1056" y="196" text-anchor="middle">0</text>
     <text x="1141" y="196" text-anchor="middle">1</text>
     <text x="1223" y="196" text-anchor="middle">(0,2)</text>

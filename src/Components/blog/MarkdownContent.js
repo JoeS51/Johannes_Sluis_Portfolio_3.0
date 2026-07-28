@@ -6,70 +6,6 @@ import Prism from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import MvccTransactionAnimation from './MvccTransactionAnimation';
 
-const mvccSqlTransactions = [
-  {
-    title: 'Reader (READ COMMITTED)',
-    blocks: [
-      { type: 'line', text: 'BEGIN;' },
-      { type: 'spacer', lines: 10 },
-      { type: 'line', text: 'SELECT name, balance' },
-      { type: 'line', text: 'FROM accounts;' },
-      { type: 'line', text: '' },
-      { type: 'line', text: ' name  | balance' },
-      { type: 'line', text: '-------+---------' },
-      { type: 'line', text: ' Alice |     100' },
-      { type: 'line', text: ' Bob   |     100' },
-      { type: 'line', text: '(2 rows)' },
-      { type: 'line', text: '' },
-      { type: 'line', text: '-- still open' },
-    ],
-  },
-  {
-    title: 'Transaction 101',
-    blocks: [
-      { type: 'line', text: 'BEGIN; -- txid 101' },
-      { type: 'line', text: '' },
-      { type: 'line', text: 'UPDATE accounts' },
-      { type: 'line', text: 'SET balance = balance - 50' },
-      { type: 'line', text: "WHERE name = 'Alice';" },
-      { type: 'line', text: '' },
-      { type: 'line', text: 'UPDATE accounts' },
-      { type: 'line', text: 'SET balance = balance + 50' },
-      { type: 'line', text: "WHERE name = 'Bob';" },
-      { type: 'line', text: '' },
-      { type: 'line', text: '-- still open' },
-    ],
-  },
-];
-
-const MvccSqlSplit = () => (
-  <div className="mvcc-sql-split" aria-label="Transaction 100 and Transaction 101 SQL">
-    {mvccSqlTransactions.map((transaction) => (
-      <section key={transaction.title}>
-        <p>{transaction.title}</p>
-        <pre>
-          <code>
-            {transaction.blocks.map((block, index) =>
-              block.type === 'spacer' ? (
-                <span
-                  key={`${transaction.title}-${index}`}
-                  className="mvcc-sql-spacer"
-                  style={{ '--mvcc-sql-spacer-lines': block.lines }}
-                  aria-hidden="true"
-                />
-              ) : (
-                <span key={`${transaction.title}-${index}`} className="mvcc-sql-line">
-                  {block.text || '\u00a0'}
-                </span>
-              )
-            )}
-          </code>
-        </pre>
-      </section>
-    ))}
-  </div>
-);
-
 const CodeBlock = ({ children, className, ...props }) => {
   const [copied, setCopied] = useState(false);
   const code = String(children).replace(/\n$/, '');
@@ -170,7 +106,7 @@ const markdownComponents = {
       };
 
 const MarkdownContent = ({ content }) => {
-  const parts = content.split(/(\[\[MVCC_TRANSACTION_ANIMATION\]\]|\[\[MVCC_SQL_SPLIT\]\])/g);
+  const parts = content.split(/(\[\[MVCC_TRANSACTION_ANIMATION\]\])/g);
 
   if (parts.length > 1) {
     return (
@@ -179,8 +115,6 @@ const MarkdownContent = ({ content }) => {
           <React.Fragment key={`${index}-${part.slice(0, 12)}`}>
             {part === '[[MVCC_TRANSACTION_ANIMATION]]' ? (
               <MvccTransactionAnimation />
-            ) : part === '[[MVCC_SQL_SPLIT]]' ? (
-              <MvccSqlSplit />
             ) : part ? (
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
