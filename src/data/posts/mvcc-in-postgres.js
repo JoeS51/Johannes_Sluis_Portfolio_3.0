@@ -47,17 +47,17 @@ Each tuple contains:
 Looking at the image above, you can see the xmin of both tuples is 99. That means a transaction with txid 99 inserted both of those tuples. The xmax for both of these tuples is 0 which means these tuples have not been deleted by any transaction yet.
 For the purposes of simplicity, let's ignore t_cid and t_ctid since they aren't central to MVCC.
 
-You might already be seeing how these fields help with MVCC, but we will continue with an example. Let's say Alice sends Bob $50. Transaction 101 performs the transfer, but does not commit yet. While transaction 101 is still open, transaction 100 reads the balances:
+You might already be seeing how these fields help with MVCC, but let's continue with an example. Suppose Alice sends Bob $50. Transaction 101 performs the transfer but has not committed yet. While transaction 101 is still open, another session reads the balances using Postgres's default **READ COMMITTED** isolation level:
 
 [[MVCC_SQL_SPLIT]]
 
 ![Postgres heap page after account transfer update](/images/postgres-mvcc-account-update.svg)
 
-You can see that Postgres didn't update the tuples in-place despite the two UPDATEs. Postgres creates two new tuples for the updated values and 
-sets the xmin to 101 for both tuples to indicate that txid 101 created these tuples. Also, notice that the xmax for both the "old" tuples were set 
-to 101. This means that these tuples were "deleted" by a transaction with txid 101. Since transaction 101 has not committed yet, transaction 100 ignores the new tuples and continues reading the old committed versions.
-  
-}
+You can see that Postgres didn't update the tuples in-place despite the two **UPDATEs**. It created two new tuples with **xmin = 101** and set **xmax = 101** on the old tuples. In other words, transaction 101 created the new versions and marked the old versions as replaced.
+
+At the beginning of the reader's **SELECT**, Postgres takes a snapshot of which transactions are currently in progress. That snapshot records transaction 101 as uncommitted, so the new tuples created by transaction 101 are not visible. Its replacement of the old tuples is not visible either, which means the reader can still see the old committed balances without waiting for the writer.
+
+If transaction 101 commits and the reader runs the **SELECT** again, **READ COMMITTED** gives the new statement a new snapshot. The old tuples are then hidden and the new balances, Alice with $50 and Bob with $150, become visible. If transaction 101 commits while the first **SELECT** is still running, that statement continues using its original snapshot and sees a consistent view for its entire execution.
 
 If you are curious, you can check out the actual implementation in Postgres: [htup_details.h](https://github.com/postgres/postgres/blob/ee943004466418595363d567f18c053bae407792/src/include/access/htup_details.h)
 
