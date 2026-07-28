@@ -8,9 +8,9 @@ import MvccTransactionAnimation from './MvccTransactionAnimation';
 
 const mvccSqlTransactions = [
   {
-    title: 'Transaction 100',
+    title: 'Reader (READ COMMITTED)',
     blocks: [
-      { type: 'line', text: 'BEGIN; -- txid 100' },
+      { type: 'line', text: 'BEGIN;' },
       { type: 'spacer', lines: 10 },
       { type: 'line', text: 'SELECT name, balance' },
       { type: 'line', text: 'FROM accounts;' },
