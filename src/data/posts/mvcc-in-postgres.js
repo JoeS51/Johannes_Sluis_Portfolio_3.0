@@ -44,26 +44,107 @@ Each tuple contains:
 - t_ctid - a physical pointer to the current version of a tuple. It stores the page number and offset of where the tuple lives
 
 ![Postgres heap page and tuple metadata](/images/postgres-mvcc-tuple-header.svg)
-Looking at the image above, you can see the xmin of both tuples is 99. That means a transaction with txid 99 inserted both of those tuples. The xmax for both of these tuples is 0 which means these tuples have not been deleted by any transaction yet.
+Looking at the image above, you can see the xmin of both tuples is 100. That means a transaction with txid 100 inserted both of those tuples. The xmax for both of these tuples is 0 which means these tuples have not been deleted by any transaction yet.
 For the purposes of simplicity, let's ignore t_cid and t_ctid since they aren't central to MVCC.
 
-You might already be seeing how these fields help with MVCC, but let's continue with an example. Suppose Alice sends Bob $50. Transaction 101 performs the transfer but has not committed yet. While transaction 101 is still open, another session reads the balances using Postgres's default **READ COMMITTED** isolation level:
+You might already be seeing how these fields help with MVCC, but let's continue with an example. We will use transaction IDs 100 and 101 to keep the tuple versions easy to follow.
 
-[[MVCC_SQL_SPLIT]]
+#### Setup
+
+First, let's assume there are two accounts with $100 each, as shown in the image above. Transaction 100 created both tuples and has already committed:
+
+~~~text
+ xmin | xmax | name  | balance
+------+------+-------+--------
+  100 |    0 | Alice |     100
+  100 |    0 | Bob   |     100
+~~~
+
+This is the state of the table before our example sessions begin. The **xmin** value is 100 for both tuples because transaction 100 created them. Their **xmax** is 0 because no transaction has deleted or updated them yet. You can run all the following commands in psql to see everything for yourself!
+
+#### Session A: long-running reader
+
+Session A uses **REPEATABLE READ** (INCLUDE LINK HERE), which reuses the snapshot acquired by its first query for the rest of the transaction.
+
+~~~sql
+BEGIN ISOLATION LEVEL REPEATABLE READ;
+
+SELECT xmin, name, balance FROM accounts;
+
+ xmin | name  | balance
+------+-------+--------
+  100 | Alice |     100
+  100 | Bob   |     100
+~~~
+
+Leave Session A open. Its ordinary **SELECT** does not hold row-level locks on Alice or Bob; it only retains the snapshot needed to decide which tuple versions are visible.
+
+#### Session B: writer
+
+While Session A remains open, Session B transfers $50 from Alice to Bob and commits:
+
+~~~sql
+BEGIN; -- txid 101
+
+UPDATE accounts
+SET balance = balance - 50
+WHERE name = 'Alice';
+
+UPDATE accounts
+SET balance = balance + 50
+WHERE name = 'Bob';
+
+COMMIT;
+~~~
+
+Session B does not have to wait for Session A because Session A holds no conflicting row lock. Postgres does not overwrite the Alice and Bob tuples in place. It creates new tuples with **xmin = 101** and sets **xmax = 101** on the old tuples.
 
 ![Postgres heap page after account transfer update](/images/postgres-mvcc-account-update.svg)
 
-You can see that Postgres didn't update the tuples in-place despite the two **UPDATEs**. It created two new tuples with **xmin = 101** and set **xmax = 101** on the old tuples. In other words, transaction 101 created the new versions and marked the old versions as replaced.
+After Session B commits, the old tuples are no longer visible to new snapshots. However, Postgres cannot remove them yet because Session A's older snapshot can still see them.
 
-At the beginning of the reader's **SELECT**, Postgres takes a snapshot of which transactions are currently in progress. That snapshot records transaction 101 as uncommitted, so the new tuples created by transaction 101 are not visible. Its replacement of the old tuples is not visible either, which means the reader can still see the old committed balances without waiting for the writer.
+#### Session C: new reader
 
-If transaction 101 commits and the reader runs the **SELECT** again, **READ COMMITTED** gives the new statement a new snapshot. The old tuples are then hidden and the new balances, Alice with $50 and Bob with $150, become visible. If transaction 101 commits while the first **SELECT** is still running, that statement continues using its original snapshot and sees a consistent view for its entire execution.
+Session C queries the table after Session B commits:
+
+~~~sql
+SELECT xmin, name, balance FROM accounts;
+
+ xmin | name  | balance
+------+-------+--------
+  101 | Alice |      50
+  101 | Bob   |     150
+~~~
+
+Session C receives a new snapshot. Transaction 101 had committed before that snapshot was taken, so the new tuples are visible.
+
+#### Back in Session A
+
+Session A runs the same query again after Session B commits:
+
+~~~sql
+SELECT xmin, name, balance FROM accounts;
+
+ xmin | name  | balance
+------+-------+--------
+  100 | Alice |     100
+  100 | Bob   |     100
+
+COMMIT;
+~~~
+
+Session A still sees the old balances because **REPEATABLE READ** continues using its original snapshot. It sees neither dirty data nor a mixture of old and new values; it sees the same self-consistent version of the rows for the entire transaction. Once Session A commits, a new transaction will acquire a new snapshot and see the tuples created by transaction 101.
+
+With strict two-phase locking instead of MVCC, Session A's reads would take shared row locks and Session B's updates would need conflicting exclusive locks. Session B would then wait for Session A to commit. MVCC avoids that conflict for ordinary reads by preserving the old tuple versions rather than overwriting them. Writers can still block other writers that update the same rows.
 
 If you are curious, you can check out the actual implementation in Postgres: [htup_details.h](https://github.com/postgres/postgres/blob/ee943004466418595363d567f18c053bae407792/src/include/access/htup_details.h)
 
 (NOTE ABOUT FREEZING)
 
 ### Snapshots
+The snapshot is what turns the transaction IDs in each tuple into a consistent view of the database. It records an upper transaction ID boundary along with the transactions that were still active when the snapshot was acquired. A transaction ID being lower than another transaction's ID is not enough by itself to make its changes visible; it must also have committed before the snapshot was taken.
+
+In the example above, transaction 101 started after Session A acquired its snapshot. The new tuples with **xmin = 101** are therefore too new for Session A, while the old tuples' **xmax = 101** is also too new to hide them from that snapshot. Session C's later snapshot sees the opposite: transaction 101 is committed, so its new tuples are visible and the old versions are hidden.
 
 ### VACUUM
 Postgres needs to eventually garbage collect all the extra tuples that were deleted. This garbage collection process is called **VACUUMing** in Postgres. 
