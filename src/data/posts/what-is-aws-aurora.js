@@ -8,9 +8,9 @@ const post = {
     cover: null
   },
   content: `
-AWS has many database products: DynamoDB, RDS, ElastiCache, DocumentDB, and more. Perhaps the most popular among them is Amazon Aurora, but Aurora isn't just one database. There are four different Aurora offerings, and each one is quite different. As an outsider, this can be very confusing. So let's dive into the differences, focusing more on their architecture and systems design than on how application developers use them.
+As we all know, AWS has many database products: DynamoDB, RDS, ElastiCache, DocumentDB, etc. Perhaps the most popular (and confusing) among them is Amazon Aurora. It becomes confusing because Aurora isn't just a single database offering, there are four different Aurora products, and each one is quite different. I read the Aurora DSQL and Aurora Limitless research papers, so I have a better understanding of the differences (and so you don't have to). I'll be focusing more on the differences in their architecture and design rather than on how application developers use them.
 
-Under the Amazon Aurora umbrella, there are four offerings:
+To start off, there are four offerings under the Amazon Aurora umbrella:
 
 - [Aurora MySQL](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.AuroraMySQL.html)
 - [Aurora PostgreSQL](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.AuroraPostgreSQL.html)
