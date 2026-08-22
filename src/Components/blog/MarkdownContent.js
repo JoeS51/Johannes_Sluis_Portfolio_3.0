@@ -2,9 +2,20 @@ import React, { useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import rehypeRaw from 'rehype-raw';
+import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import Prism from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import MvccTransactionAnimation from './MvccTransactionAnimation';
+
+const markdownSchema = {
+  ...defaultSchema,
+  tagNames: [...defaultSchema.tagNames, 'video', 'source'],
+  attributes: {
+    ...defaultSchema.attributes,
+    video: ['autoPlay', 'className', 'controls', 'loop', 'muted', 'playsInline', 'poster'],
+    source: ['src', 'type'],
+  },
+};
 
 const CodeBlock = ({ children, className, ...props }) => {
   const [copied, setCopied] = useState(false);
@@ -118,7 +129,7 @@ const MarkdownContent = ({ content }) => {
             ) : part ? (
               <ReactMarkdown
                 remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeRaw]}
+                rehypePlugins={[rehypeRaw, [rehypeSanitize, markdownSchema]]}
                 components={markdownComponents}
               >
                 {part}
@@ -133,7 +144,7 @@ const MarkdownContent = ({ content }) => {
   return (
     <ReactMarkdown
       remarkPlugins={[remarkGfm]}
-      rehypePlugins={[rehypeRaw]}
+      rehypePlugins={[rehypeRaw, [rehypeSanitize, markdownSchema]]}
       components={markdownComponents}
     >
       {content}

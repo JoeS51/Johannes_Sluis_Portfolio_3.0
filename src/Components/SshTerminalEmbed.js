@@ -3,9 +3,9 @@ import { useEffect, useMemo, useState } from 'react';
 const DEFAULT_TIMEOUT_MS = 9000;
 
 const getEmbedConfig = () => {
-  const terminalUrl = process.env.REACT_APP_SSH_TERMINAL_URL?.trim() || '';
-  const embedMode = process.env.REACT_APP_SSH_TERMINAL_EMBED_MODE?.trim() || 'iframe';
-  const healthcheckUrl = process.env.REACT_APP_SSH_TERMINAL_HEALTHCHECK_URL?.trim() || '';
+  const terminalUrl = import.meta.env.VITE_SSH_TERMINAL_URL?.trim() || '';
+  const embedMode = import.meta.env.VITE_SSH_TERMINAL_EMBED_MODE?.trim() || 'iframe';
+  const healthcheckUrl = import.meta.env.VITE_SSH_TERMINAL_HEALTHCHECK_URL?.trim() || '';
 
   return {
     terminalUrl,
@@ -14,7 +14,14 @@ const getEmbedConfig = () => {
   };
 };
 
-const isAbsoluteHttpUrl = (value) => /^https?:\/\//i.test(value);
+const isSafeHttpsUrl = (value) => {
+  try {
+    const url = new URL(value);
+    return url.protocol === 'https:' && !url.username && !url.password;
+  } catch {
+    return false;
+  }
+};
 
 const SshTerminalEmbed = () => {
   const { terminalUrl, embedMode, healthcheckUrl } = useMemo(() => getEmbedConfig(), []);
@@ -27,7 +34,7 @@ const SshTerminalEmbed = () => {
       return 'unsupported-mode';
     }
 
-    if (!isAbsoluteHttpUrl(terminalUrl)) {
+    if (!isSafeHttpsUrl(terminalUrl)) {
       return 'invalid-config';
     }
 
@@ -59,17 +66,17 @@ const SshTerminalEmbed = () => {
       case 'missing-config':
         return {
           title: 'Live terminal not configured',
-          body: 'Set REACT_APP_SSH_TERMINAL_URL to your hosted terminal bridge to enable the embedded session.',
+          body: 'Set VITE_SSH_TERMINAL_URL to your hosted terminal bridge to enable the embedded session.',
         };
       case 'unsupported-mode':
         return {
           title: 'Unsupported terminal embed mode',
-          body: 'This page currently supports iframe embeds only. Set REACT_APP_SSH_TERMINAL_EMBED_MODE=iframe.',
+          body: 'This page currently supports iframe embeds only. Set VITE_SSH_TERMINAL_EMBED_MODE=iframe.',
         };
       case 'invalid-config':
         return {
           title: 'Terminal URL is invalid',
-          body: 'REACT_APP_SSH_TERMINAL_URL must be an absolute http or https URL.',
+          body: 'VITE_SSH_TERMINAL_URL must be an absolute HTTPS URL without embedded credentials.',
         };
       case 'timeout':
         return {
@@ -97,12 +104,12 @@ const SshTerminalEmbed = () => {
           <p className="ssh-eyebrow">Live session</p>
           <h2 id="ssh-live-terminal-title">Embedded browser terminal</h2>
         </div>
-        {terminalUrl && isAbsoluteHttpUrl(terminalUrl) ? (
+        {terminalUrl && isSafeHttpsUrl(terminalUrl) ? (
           <a
             className="ssh-terminal-link"
             href={terminalUrl}
             target="_blank"
-            rel="noreferrer"
+            rel="noopener noreferrer"
           >
             Open full terminal
           </a>
@@ -118,6 +125,8 @@ const SshTerminalEmbed = () => {
             onLoad={handleLoad}
             onError={handleError}
             allow="clipboard-read; clipboard-write"
+            sandbox="allow-forms allow-scripts"
+            referrerPolicy="no-referrer"
           />
         ) : (
           <div className="ssh-terminal-frame ssh-terminal-frame--placeholder" aria-hidden="true" />
@@ -137,12 +146,12 @@ const SshTerminalEmbed = () => {
               <>
                 <p className="ssh-terminal-status-title">{message?.title}</p>
                 <p className="ssh-terminal-status-body">{message?.body}</p>
-                {healthcheckUrl && isAbsoluteHttpUrl(healthcheckUrl) ? (
+                {healthcheckUrl && isSafeHttpsUrl(healthcheckUrl) ? (
                   <a
                     className="ssh-terminal-inline-link"
                     href={healthcheckUrl}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                   >
                     Check terminal service status
                   </a>
