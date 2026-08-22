@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import './analytics';
 import './index.css';
 import App from './App';
 import Random from './Random';

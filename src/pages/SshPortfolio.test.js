@@ -13,17 +13,12 @@ const renderPage = () =>
   );
 
 describe('SshPortfolio', () => {
-  const originalEnv = process.env;
-
   beforeEach(() => {
-    process.env = { ...originalEnv };
-    delete process.env.REACT_APP_SSH_TERMINAL_URL;
-    delete process.env.REACT_APP_SSH_TERMINAL_EMBED_MODE;
-    delete process.env.REACT_APP_SSH_TERMINAL_HEALTHCHECK_URL;
+    vi.unstubAllEnvs();
   });
 
-  afterAll(() => {
-    process.env = originalEnv;
+  afterEach(() => {
+    vi.unstubAllEnvs();
   });
 
   it('renders fallback messaging when the terminal URL is not configured', () => {
@@ -35,12 +30,13 @@ describe('SshPortfolio', () => {
   });
 
   it('renders the embedded terminal when configured and clears the loading state on load', () => {
-    process.env.REACT_APP_SSH_TERMINAL_URL = 'https://terminal.joesluis.dev';
+    vi.stubEnv('VITE_SSH_TERMINAL_URL', 'https://terminal.joesluis.dev');
 
     renderPage();
 
     const iframe = screen.getByTitle(/ssh portfolio terminal/i);
     expect(iframe).toHaveAttribute('src', 'https://terminal.joesluis.dev');
+    expect(iframe).toHaveAttribute('sandbox', 'allow-forms allow-scripts');
     expect(screen.getByText(/connecting to terminal service/i)).toBeInTheDocument();
 
     fireEvent.load(iframe);
