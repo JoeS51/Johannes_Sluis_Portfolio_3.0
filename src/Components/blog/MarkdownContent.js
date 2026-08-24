@@ -7,6 +7,7 @@ import Prism from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import AuroraArchitectureAnimation from './AuroraArchitectureAnimation';
 import AuroraLimitlessAnimation from './AuroraLimitlessAnimation';
+import AuroraRobuxAnimation from './AuroraRobuxAnimation';
 import MvccTransactionAnimation from './MvccTransactionAnimation';
 
 const markdownSchema = {
@@ -119,11 +120,12 @@ const markdownComponents = {
       };
 
 const MarkdownContent = ({ content }) => {
-  const animationPattern = /(\[\[(?:AURORA_ARCHITECTURE|AURORA_LIMITLESS|MVCC_TRANSACTION)_ANIMATION\]\])/g;
+  const animationPattern = /(\[\[(?:AURORA_ARCHITECTURE|AURORA_LIMITLESS|AURORA_ROBUX|MVCC_TRANSACTION)_ANIMATION\]\])/g;
   const parts = content.split(animationPattern);
   const animations = {
     '[[AURORA_ARCHITECTURE_ANIMATION]]': AuroraArchitectureAnimation,
     '[[AURORA_LIMITLESS_ANIMATION]]': AuroraLimitlessAnimation,
+    '[[AURORA_ROBUX_ANIMATION]]': AuroraRobuxAnimation,
     '[[MVCC_TRANSACTION_ANIMATION]]': MvccTransactionAnimation,
   };
 

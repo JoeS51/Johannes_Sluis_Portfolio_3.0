@@ -1389,6 +1389,20 @@ html.dark-mode.blog-body,
   font-weight: 650;
 }
 
+.aurora-client-label {
+  fill: var(--aurora-muted);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.09em;
+}
+
+.aurora-client-image-frame {
+  fill: none;
+  stroke: var(--aurora-ink);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
 .aurora-connectors path {
   fill: none;
   stroke: var(--aurora-line);
@@ -1526,6 +1540,76 @@ html.dark-mode.blog-body,
   font-size: 11px;
 }
 
+.aurora-robux-animation {
+  padding-top: 1.4rem;
+}
+
+.robux-meme-title,
+.robux-commit-message text {
+  fill: var(--aurora-ink);
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 18px;
+  letter-spacing: 0.04em;
+}
+
+.robux-client-frame {
+  fill: none;
+  stroke: var(--aurora-ink);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.robux-query rect {
+  fill: #090d14;
+  stroke: var(--aurora-line);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.robux-query text {
+  fill: #d7ffe1;
+  font-family: 'Source Code Pro', Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.robux-query .robux-query-prompt {
+  fill: #6ee7a0;
+  font-size: 11px;
+}
+
+.robux-writer .robux-writer-flash {
+  fill: #39d477;
+  stroke: none;
+}
+
+.robux-storage .robux-storage-flash {
+  fill: #39d477;
+  stroke: none;
+}
+
+.robux-reward rect {
+  fill: #20b85a;
+  stroke: #0b6d32;
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+
+.robux-reward text {
+  fill: #ffffff;
+  font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+  font-size: 16px;
+  letter-spacing: 0.025em;
+}
+
+.robux-commit-message text {
+  font-size: 16px;
+}
+
+.dark-mode .robux-query rect {
+  stroke: #657187;
+}
+
 .aurora-architecture figcaption {
   margin-top: 0.25rem;
   color: var(--aurora-muted);
@@ -1569,6 +1653,22 @@ html.dark-mode.blog-body,
 
   .aurora-diagram-mobile .aurora-node-eyebrow {
     font-size: 8px;
+  }
+
+  .robux-diagram .robux-meme-title {
+    font-size: 16px;
+  }
+
+  .robux-diagram .robux-query text {
+    font-size: 12px;
+  }
+
+  .robux-diagram .robux-query-prompt {
+    font-size: 10px;
+  }
+
+  .robux-diagram .robux-commit-message text {
+    font-size: 12px;
   }
 
   .aurora-architecture figcaption {
