@@ -4,6 +4,7 @@ const post = {
     title: 'What Is AWS Aurora and Why Are There So Many?',
     description: '',
     date: '2026-08-22',
+    readingTime: 10,
     tags: ['AWS', 'Databases'],
     cover: null
   },
@@ -11,9 +12,9 @@ const post = {
 
 ### Intro
 
-Among all the hyperscalers, AWS has the most database products. There's DynamoDB, RDS, ElastiCache, DocumentDB, etc and the list goes on. Among them, there's a popular one named Amazon Aurora. The confusing thing is that there are multiple database offerings that have the name Aurora in it. 
+Out of all the hyperscalers, AWS has the most database products. There's DynamoDB, RDS, ElastiCache, DocumentDB, and the list goes on. One of the more popular offerings is Amazon Aurora. The confusing partis that there are multiple database offerings with Aurora in the name.
 
-In fact, you can argue there are four (or three if you count Aurora MySQL/PostgreSQL as the same) offerings under the Amazon Aurora umbrella:
+In fact, there are four (or you can argue three) offerings under the Amazon Aurora umbrella:
 
 - [Aurora MySQL](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.AuroraMySQL.html)
 - [Aurora PostgreSQL](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.AuroraPostgreSQL.html)
