@@ -1,7 +1,7 @@
 const post = {
   slug: 'what-is-aws-aurora',
   frontmatter: {
-    title: 'What Is AWS Aurora and Why Are There So Many?',
+    title: 'What Is Amazon Aurora and Why Are There So Many?',
     description: '',
     date: '2026-08-22',
     readingTime: 10,
