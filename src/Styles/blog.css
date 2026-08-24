@@ -1318,6 +1318,205 @@ html.dark-mode.blog-body,
   }
 }
 
+.aurora-architecture {
+  --aurora-ink: #172033;
+  --aurora-muted: #677184;
+  --aurora-line: #aeb6c3;
+  --aurora-panel: #ffffff;
+  --aurora-soft: #f3f5f7;
+  margin: 2rem 0 2.5rem;
+  padding: 1rem 1.25rem 1.1rem;
+  overflow: hidden;
+  border: 1px solid rgba(15, 23, 42, 0.14);
+  border-radius: 12px;
+  background: var(--aurora-panel);
+  color: var(--aurora-ink);
+}
+
+.aurora-architecture-key {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  color: var(--aurora-muted);
+  font-size: 0.73rem;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+
+.aurora-architecture-key span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.aurora-architecture-key i {
+  width: 0.55rem;
+  height: 0.55rem;
+  border: 1.5px solid var(--aurora-ink);
+  border-radius: 50%;
+}
+
+.aurora-architecture-key i.is-write {
+  background: var(--aurora-ink);
+}
+
+.aurora-diagram {
+  display: block;
+  width: 100%;
+  height: auto;
+  font-family: inherit;
+}
+
+.aurora-diagram-mobile {
+  display: none;
+}
+
+.aurora-layer-label,
+.aurora-storage-title {
+  fill: var(--aurora-muted);
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.12em;
+}
+
+.aurora-flow-label {
+  fill: var(--aurora-muted);
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.aurora-connectors path {
+  fill: none;
+  stroke: var(--aurora-line);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.aurora-node rect {
+  fill: var(--aurora-panel);
+  stroke: var(--aurora-ink);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.aurora-node.is-writer rect {
+  fill: var(--aurora-ink);
+}
+
+.aurora-node-eyebrow {
+  fill: var(--aurora-muted);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.09em;
+}
+
+.aurora-node-label {
+  fill: var(--aurora-ink);
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.aurora-node.is-writer .aurora-node-eyebrow,
+.aurora-node.is-writer .aurora-node-label {
+  fill: var(--aurora-panel);
+}
+
+.aurora-storage-layer > rect {
+  fill: var(--aurora-soft);
+  stroke: var(--aurora-line);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.aurora-storage-cell {
+  fill: var(--aurora-panel);
+  stroke: var(--aurora-line);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.aurora-storage-pulse {
+  fill: var(--aurora-ink);
+}
+
+.aurora-storage-az {
+  fill: var(--aurora-ink);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.aurora-storage-copy {
+  fill: var(--aurora-muted);
+  font-size: 11px;
+}
+
+.aurora-flow-dot {
+  vector-effect: non-scaling-stroke;
+}
+
+.aurora-flow-dot.is-write {
+  fill: var(--aurora-ink);
+}
+
+.aurora-flow-dot.is-read {
+  fill: var(--aurora-panel);
+  stroke: var(--aurora-ink);
+  stroke-width: 2;
+}
+
+.aurora-architecture figcaption {
+  margin-top: 0.25rem;
+  color: var(--aurora-muted);
+  font-size: 0.82rem;
+  line-height: 1.55;
+  text-align: center;
+}
+
+.dark-mode .aurora-architecture {
+  --aurora-ink: #e5e9ef;
+  --aurora-muted: #9da7b7;
+  --aurora-line: #4a5567;
+  --aurora-panel: #111827;
+  --aurora-soft: #192231;
+  border-color: rgba(148, 163, 184, 0.25);
+}
+
+@media (max-width: 600px) {
+  .aurora-architecture {
+    margin: 1.5rem 0 2rem;
+    padding: 0.85rem 0.6rem 1rem;
+  }
+
+  .aurora-architecture-key {
+    padding-right: 0.4rem;
+    gap: 0.75rem;
+    font-size: 0.68rem;
+  }
+
+  .aurora-diagram-desktop {
+    display: none;
+  }
+
+  .aurora-diagram-mobile {
+    display: block;
+  }
+
+  .aurora-diagram-mobile .aurora-node-label {
+    font-size: 13px;
+  }
+
+  .aurora-diagram-mobile .aurora-node-eyebrow {
+    font-size: 8px;
+  }
+
+  .aurora-architecture figcaption {
+    padding: 0 0.5rem;
+    font-size: 0.76rem;
+  }
+}
+
 .mvcc-demo {
   margin: 2rem 0 2.5rem;
   border: 0;
