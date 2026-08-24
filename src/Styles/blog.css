@@ -1403,6 +1403,18 @@ html.dark-mode.blog-body,
   vector-effect: non-scaling-stroke;
 }
 
+.aurora-sql-query rect {
+  fill: transparent;
+  stroke: none;
+}
+
+.aurora-sql-query text {
+  fill: var(--aurora-ink);
+  font-family: 'Source Code Pro', Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  font-weight: 600;
+}
+
 .aurora-connectors path {
   fill: none;
   stroke: var(--aurora-line);

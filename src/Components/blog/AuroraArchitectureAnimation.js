@@ -31,6 +31,46 @@ const FlowDot = ({ animate, x, y, times, kind, delay = 0 }) => (
   />
 );
 
+const SqlQuery = ({ animate, kind, mobile = false }) => {
+  const isWrite = kind === 'write';
+  const box = mobile
+    ? { x: 35, y: 130, width: 330, height: 70 }
+    : { x: isWrite ? 20 : 550, y: 48, width: 310, height: 78 };
+  const targetX = mobile ? (isWrite ? 170 : 230) : (isWrite ? 400 : 480);
+  const targetY = mobile ? 125 : 130;
+  const centerX = box.x + box.width / 2;
+  const centerY = box.y + box.height / 2;
+  const delay = isWrite ? 0 : 3.5;
+
+  return (
+    <motion.g
+      className={`aurora-sql-query is-${kind}`}
+      initial={{ opacity: 0, x: 0, y: 0, scale: 0.96 }}
+      animate={animate ? {
+        opacity: [0, 1, 1, 1, 0],
+        x: [0, 0, 0, targetX - centerX, targetX - centerX],
+        y: [0, 0, 0, targetY - centerY, targetY - centerY],
+        scale: [0.96, 1, 1, 0.08, 0.08],
+      } : { opacity: 0 }}
+      transition={{ ...loopTransition, delay, times: [0, 0.02, 0.2, 0.27, 0.3] }}
+      style={{ transformOrigin: `${centerX}px ${centerY}px` }}
+    >
+      <rect x={box.x} y={box.y} width={box.width} height={box.height} rx="8" />
+      {isWrite ? (
+        <>
+          <text x={box.x + 14} y={box.y + 28}>UPDATE players SET robux = robux + 100</text>
+          <text x={box.x + 14} y={box.y + 52}>WHERE username = 'Builderman';</text>
+        </>
+      ) : (
+        <>
+          <text x={box.x + 14} y={box.y + 28}>SELECT robux FROM players</text>
+          <text x={box.x + 14} y={box.y + 52}>WHERE username = 'Builderman';</text>
+        </>
+      )}
+    </motion.g>
+  );
+};
+
 const Client = ({ mobile = false, clipId }) => {
   const frame = mobile
     ? { x: 110, y: 45, width: 180, height: 80 }
@@ -86,7 +126,7 @@ const StorageLayer = ({ animate, mobile = false }) => {
             height={height}
             rx="6"
             animate={animate ? { opacity: [0, 0, 0.18, 0.18, 0, 0] } : { opacity: 0 }}
-            transition={{ ...loopTransition, delay: index * 0.12, times: [0, 0.28, 0.34, 0.46, 0.54, 1] }}
+            transition={{ ...loopTransition, delay: index * 0.12, times: [0, 0.5, 0.56, 0.68, 0.76, 1] }}
           />
           <text className="aurora-storage-az" x={cell.x + width / 2} y={y + 26} textAnchor="middle">
             {cell.label}
@@ -135,19 +175,22 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       <StorageLayer animate={animate} />
     </g>
 
+    <SqlQuery animate={animate} kind="write" />
+    <SqlQuery animate={animate} kind="read" />
+
     <FlowDot
       animate={animate}
       kind="write"
       x={[400, 400, 120, 120, 120]}
       y={[130, 150, 150, 200, 365]}
-      times={[0, 0.06, 0.18, 0.23, 0.38]}
+      times={[0, 0.28, 0.36, 0.43, 0.56]}
     />
     <FlowDot
       animate={animate}
       kind="read"
       x={[480, 480, 320, 320, 320, 320, 320, 480, 480]}
       y={[130, 160, 160, 200, 365, 200, 160, 160, 130]}
-      times={[0, 0.06, 0.16, 0.2, 0.34, 0.48, 0.52, 0.62, 0.68]}
+      times={[0, 0.28, 0.34, 0.38, 0.46, 0.54, 0.58, 0.64, 0.68]}
       delay={3.5}
     />
     <FlowDot
@@ -155,7 +198,7 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       kind="read"
       x={[480, 480, 520, 520, 520, 520, 520, 480, 480]}
       y={[130, 160, 160, 200, 365, 200, 160, 160, 130]}
-      times={[0, 0.06, 0.16, 0.2, 0.34, 0.48, 0.52, 0.62, 0.68]}
+      times={[0, 0.28, 0.34, 0.38, 0.46, 0.54, 0.58, 0.64, 0.68]}
       delay={3.75}
     />
     <FlowDot
@@ -163,7 +206,7 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       kind="read"
       x={[480, 480, 720, 720, 720, 720, 720, 480, 480]}
       y={[130, 160, 160, 200, 365, 200, 160, 160, 130]}
-      times={[0, 0.06, 0.16, 0.2, 0.34, 0.48, 0.52, 0.62, 0.68]}
+      times={[0, 0.28, 0.34, 0.38, 0.46, 0.54, 0.58, 0.64, 0.68]}
       delay={4}
     />
   </svg>
@@ -204,19 +247,22 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       <StorageLayer animate={animate} mobile />
     </g>
 
+    <SqlQuery animate={animate} kind="write" mobile />
+    <SqlQuery animate={animate} kind="read" mobile />
+
     <FlowDot
       animate={animate}
       kind="write"
       x={[170, 170, 52, 52, 52]}
       y={[125, 160, 160, 215, 420]}
-      times={[0, 0.06, 0.18, 0.24, 0.4]}
+      times={[0, 0.28, 0.36, 0.43, 0.56]}
     />
     <FlowDot
       animate={animate}
       kind="read"
       x={[230, 230, 148, 148, 148, 148, 148, 230, 230]}
       y={[125, 175, 175, 215, 420, 215, 175, 175, 125]}
-      times={[0, 0.07, 0.15, 0.2, 0.36, 0.52, 0.57, 0.66, 0.73]}
+      times={[0, 0.28, 0.34, 0.38, 0.46, 0.54, 0.58, 0.64, 0.68]}
       delay={3.5}
     />
     <FlowDot
@@ -224,7 +270,7 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       kind="read"
       x={[230, 230, 243, 243, 243, 243, 243, 230, 230]}
       y={[125, 175, 175, 215, 420, 215, 175, 175, 125]}
-      times={[0, 0.07, 0.15, 0.2, 0.36, 0.52, 0.57, 0.66, 0.73]}
+      times={[0, 0.28, 0.34, 0.38, 0.46, 0.54, 0.58, 0.64, 0.68]}
       delay={3.75}
     />
     <FlowDot
@@ -232,7 +278,7 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       kind="read"
       x={[230, 230, 338, 338, 338, 338, 338, 230, 230]}
       y={[125, 175, 175, 215, 420, 215, 175, 175, 125]}
-      times={[0, 0.07, 0.15, 0.2, 0.36, 0.52, 0.57, 0.66, 0.73]}
+      times={[0, 0.28, 0.34, 0.38, 0.46, 0.54, 0.58, 0.64, 0.68]}
       delay={4}
     />
   </svg>
