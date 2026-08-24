@@ -12,9 +12,9 @@ const post = {
 
 ### Intro
 
-Out of all the hyperscalers, AWS has the most database products. There's DynamoDB, RDS, ElastiCache, DocumentDB, and the list goes on. One of the more popular offerings is Amazon Aurora. The confusing partis that there are multiple database offerings with Aurora in the name.
+Out of all the hyperscalers, AWS has the most database products. There's DynamoDB, RDS, ElastiCache, DocumentDB, and the list goes on. One of the more popular offerings is Amazon Aurora. The confusing part is that there are multiple database offerings with Aurora in the name.
 
-In fact, there are four (or you can argue three) offerings under the Amazon Aurora umbrella:
+In fact, there are four (or you could argue three) offerings under the Amazon Aurora umbrella:
 
 - [Aurora MySQL](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.AuroraMySQL.html)
 - [Aurora PostgreSQL](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/Aurora.AuroraPostgreSQL.html)
