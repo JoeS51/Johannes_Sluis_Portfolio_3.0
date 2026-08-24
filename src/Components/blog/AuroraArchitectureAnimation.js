@@ -85,8 +85,6 @@ const DesktopDiagram = ({ animate, titleId, descriptionId }) => (
       Applications send writes to one writer and reads to multiple replicas. All compute instances use the same storage distributed across three availability zones.
     </desc>
 
-    <text className="aurora-layer-label" x="20" y="28">APPLICATION</text>
-    <text className="aurora-layer-label" x="45" y="184">COMPUTE</text>
     <text className="aurora-flow-label" x="235" y="150">write</text>
     <text className="aurora-flow-label" x="570" y="160">reads</text>
 
@@ -156,8 +154,6 @@ const MobileDiagram = ({ animate, titleId, descriptionId }) => (
       Applications send writes to one writer and reads to multiple replicas. All compute instances use the same storage distributed across three availability zones.
     </desc>
 
-    <text className="aurora-layer-label" x="20" y="28">APPLICATION</text>
-    <text className="aurora-layer-label" x="10" y="198">COMPUTE</text>
     <text className="aurora-flow-label" x="66" y="168">write</text>
     <text className="aurora-flow-label" x="280" y="168">reads</text>
 
@@ -233,9 +229,6 @@ const AuroraArchitectureAnimation = () => {
       </div>
       <DesktopDiagram animate={shouldAnimate} titleId={titleId} descriptionId={descriptionId} />
       <MobileDiagram animate={shouldAnimate} titleId={mobileTitleId} descriptionId={mobileDescriptionId} />
-      <figcaption>
-        One writer and multiple read replicas share the same storage layer, distributed across availability zones.
-      </figcaption>
     </figure>
   );
 };

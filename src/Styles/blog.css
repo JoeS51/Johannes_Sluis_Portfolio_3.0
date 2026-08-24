@@ -1360,6 +1360,10 @@ html.dark-mode.blog-body,
   background: var(--aurora-ink);
 }
 
+.aurora-architecture-key i.is-control {
+  border-style: dashed;
+}
+
 .aurora-diagram {
   display: block;
   width: 100%;
@@ -1405,6 +1409,10 @@ html.dark-mode.blog-body,
   fill: var(--aurora-ink);
 }
 
+.aurora-node.is-router rect {
+  fill: var(--aurora-ink);
+}
+
 .aurora-node-eyebrow {
   fill: var(--aurora-muted);
   font-size: 10px;
@@ -1419,7 +1427,9 @@ html.dark-mode.blog-body,
 }
 
 .aurora-node.is-writer .aurora-node-eyebrow,
-.aurora-node.is-writer .aurora-node-label {
+.aurora-node.is-writer .aurora-node-label,
+.aurora-node.is-router .aurora-node-eyebrow,
+.aurora-node.is-router .aurora-node-label {
   fill: var(--aurora-panel);
 }
 
@@ -1464,6 +1474,56 @@ html.dark-mode.blog-body,
   fill: var(--aurora-panel);
   stroke: var(--aurora-ink);
   stroke-width: 2;
+}
+
+.aurora-flow-dot.is-control {
+  fill: var(--aurora-panel);
+  stroke: var(--aurora-ink);
+  stroke-width: 2;
+  stroke-dasharray: 2 2;
+}
+
+.limitless-boundary {
+  fill: none;
+  stroke: var(--aurora-line);
+  stroke-width: 1;
+  stroke-dasharray: 5 5;
+  vector-effect: non-scaling-stroke;
+}
+
+.limitless-control-connectors path {
+  fill: none;
+  stroke: var(--aurora-muted);
+  stroke-width: 1.5;
+  stroke-dasharray: 5 5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.limitless-control-plane rect {
+  fill: var(--aurora-soft);
+  stroke: var(--aurora-ink);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.limitless-control-plane > text:first-of-type {
+  fill: var(--aurora-muted);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+}
+
+.limitless-control-title {
+  fill: var(--aurora-ink);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.limitless-control-copy {
+  fill: var(--aurora-muted);
+  font-size: 11px;
 }
 
 .aurora-architecture figcaption {
