@@ -1,5 +1,6 @@
 import React, { useId, useRef } from 'react';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
+import nerdKid from '../../Pictures/nerd-kid.jpg';
 
 const loopTransition = {
   duration: 8,
@@ -29,6 +30,32 @@ const FlowDot = ({ animate, x, y, times, kind, delay = 0 }) => (
     transition={{ ...loopTransition, delay, times }}
   />
 );
+
+const Client = ({ mobile = false, clipId }) => {
+  const frame = mobile
+    ? { x: 110, y: 45, width: 180, height: 80 }
+    : { x: 355, y: 40, width: 170, height: 90 };
+
+  return (
+    <g className="aurora-client-image">
+      <defs>
+        <clipPath id={clipId}>
+          <rect {...frame} rx="8" />
+        </clipPath>
+      </defs>
+      <text className="aurora-client-label" x={frame.x + frame.width / 2} y={frame.y - 12} textAnchor="middle">
+        CLIENT
+      </text>
+      <image
+        href={nerdKid}
+        {...frame}
+        preserveAspectRatio="xMidYMid slice"
+        clipPath={`url(#${clipId})`}
+      />
+      <rect className="aurora-client-image-frame" {...frame} rx="8" />
+    </g>
+  );
+};
 
 const StorageLayer = ({ animate, mobile = false }) => {
   const cells = mobile
@@ -73,7 +100,7 @@ const StorageLayer = ({ animate, mobile = false }) => {
   );
 };
 
-const DesktopDiagram = ({ animate, titleId, descriptionId }) => (
+const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
   <svg
     className="aurora-diagram aurora-diagram-desktop"
     viewBox="0 0 880 520"
@@ -85,18 +112,18 @@ const DesktopDiagram = ({ animate, titleId, descriptionId }) => (
       Applications send writes to one writer and reads to multiple replicas. All compute instances use the same storage distributed across three availability zones.
     </desc>
 
-    <text className="aurora-flow-label" x="235" y="150">write</text>
-    <text className="aurora-flow-label" x="570" y="160">reads</text>
+    <text className="aurora-flow-label" x="235" y="138">write</text>
+    <text className="aurora-flow-label" x="570" y="148">reads</text>
 
     <g className="aurora-connectors">
       <path d="M400 130 V150 H120 V200" />
-      <path d="M480 130 V160 H720" />
+      <path d="M480 130 V160 M320 160 H720" />
       <path d="M320 160 V200 M520 160 V200 M720 160 V200" />
       <path d="M120 282 V365" />
       <path d="M320 282 V365 M520 282 V365 M720 282 V365" />
     </g>
 
-    <Node x={355} y={40} width={170} height={90} eyebrow="CLIENT" label="Application" className="is-application" />
+    <Client clipId={clipId} />
     <Node x={45} y={200} width={150} height={82} eyebrow="ONE INSTANCE" label="Writer" className="is-writer" />
     <Node x={245} y={200} width={150} height={82} eyebrow="READ ONLY" label="Replica 1" />
     <Node x={445} y={200} width={150} height={82} eyebrow="READ ONLY" label="Replica 2" />
@@ -142,7 +169,7 @@ const DesktopDiagram = ({ animate, titleId, descriptionId }) => (
   </svg>
 );
 
-const MobileDiagram = ({ animate, titleId, descriptionId }) => (
+const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
   <svg
     className="aurora-diagram aurora-diagram-mobile"
     viewBox="0 0 400 625"
@@ -154,8 +181,8 @@ const MobileDiagram = ({ animate, titleId, descriptionId }) => (
       Applications send writes to one writer and reads to multiple replicas. All compute instances use the same storage distributed across three availability zones.
     </desc>
 
-    <text className="aurora-flow-label" x="66" y="168">write</text>
-    <text className="aurora-flow-label" x="280" y="168">reads</text>
+    <text className="aurora-flow-label" x="66" y="148">write</text>
+    <text className="aurora-flow-label" x="280" y="162">reads</text>
 
     <g className="aurora-connectors">
       <path d="M170 125 V160 H52 V215" />
@@ -165,7 +192,7 @@ const MobileDiagram = ({ animate, titleId, descriptionId }) => (
       <path d="M148 305 V420 M243 305 V420 M338 305 V420" />
     </g>
 
-    <Node x={110} y={45} width={180} height={80} eyebrow="CLIENT" label="Application" className="is-application" />
+    <Client mobile clipId={clipId} />
     <Node x={10} y={215} width={85} height={90} eyebrow="WRITES" label="Writer" className="is-writer" />
     <Node x={105} y={215} width={85} height={90} eyebrow="READ" label="Replica 1" />
     <Node x={200} y={215} width={85} height={90} eyebrow="READ" label="Replica 2" />
@@ -215,8 +242,10 @@ const AuroraArchitectureAnimation = () => {
   const figureRef = useRef(null);
   const titleId = useId();
   const descriptionId = useId();
+  const desktopClipId = useId().replace(/:/g, '');
   const mobileTitleId = useId();
   const mobileDescriptionId = useId();
+  const mobileClipId = useId().replace(/:/g, '');
   const isInView = useInView(figureRef, { amount: 0.25 });
   const reduceMotion = useReducedMotion();
   const shouldAnimate = isInView && !reduceMotion;
@@ -227,8 +256,8 @@ const AuroraArchitectureAnimation = () => {
         <span><i className="is-write" /> Write path</span>
         <span><i className="is-read" /> Read path</span>
       </div>
-      <DesktopDiagram animate={shouldAnimate} titleId={titleId} descriptionId={descriptionId} />
-      <MobileDiagram animate={shouldAnimate} titleId={mobileTitleId} descriptionId={mobileDescriptionId} />
+      <DesktopDiagram animate={shouldAnimate} titleId={titleId} descriptionId={descriptionId} clipId={desktopClipId} />
+      <MobileDiagram animate={shouldAnimate} titleId={mobileTitleId} descriptionId={mobileDescriptionId} clipId={mobileClipId} />
     </figure>
   );
 };
