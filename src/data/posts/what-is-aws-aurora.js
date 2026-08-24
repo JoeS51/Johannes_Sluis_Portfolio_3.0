@@ -27,6 +27,8 @@ Note: I don't work for AWS and am not affiliated with them at all
 ### Aurora MySQL/PostgreSQL
 This is the classic Aurora offering and the first in the Aurora series, GA'ing in 2015. If you're familiar with AlloyDB, HorizonDB, or Neon, then you can think of it as something similar to those systems. The basic idea is that your Postgres/MySQL database doesn't live on a single machine. Aurora disaggregates compute and storage (basically Query Processor and Storage engine are separated). There is a single writer compute instance and you can add multiple read replicas, which are all backed by the same distributed storage layer.
 
+[[AURORA_ARCHITECTURE_ANIMATION]]
+
 
 
 `

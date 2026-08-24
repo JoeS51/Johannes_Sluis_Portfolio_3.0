@@ -5,6 +5,7 @@ import rehypeRaw from 'rehype-raw';
 import rehypeSanitize, { defaultSchema } from 'rehype-sanitize';
 import Prism from 'react-syntax-highlighter';
 import { atomOneDark } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import AuroraArchitectureAnimation from './AuroraArchitectureAnimation';
 import MvccTransactionAnimation from './MvccTransactionAnimation';
 
 const markdownSchema = {
@@ -117,24 +118,29 @@ const markdownComponents = {
       };
 
 const MarkdownContent = ({ content }) => {
-  const parts = content.split(/(\[\[MVCC_TRANSACTION_ANIMATION\]\])/g);
+  const animationPattern = /(\[\[(?:AURORA_ARCHITECTURE|MVCC_TRANSACTION)_ANIMATION\]\])/g;
+  const parts = content.split(animationPattern);
+  const animations = {
+    '[[AURORA_ARCHITECTURE_ANIMATION]]': AuroraArchitectureAnimation,
+    '[[MVCC_TRANSACTION_ANIMATION]]': MvccTransactionAnimation,
+  };
 
   if (parts.length > 1) {
     return (
       <>
         {parts.map((part, index) => (
           <React.Fragment key={`${index}-${part.slice(0, 12)}`}>
-            {part === '[[MVCC_TRANSACTION_ANIMATION]]' ? (
-              <MvccTransactionAnimation />
-            ) : part ? (
-              <ReactMarkdown
-                remarkPlugins={[remarkGfm]}
-                rehypePlugins={[rehypeRaw, [rehypeSanitize, markdownSchema]]}
-                components={markdownComponents}
-              >
-                {part}
-              </ReactMarkdown>
-            ) : null}
+            {animations[part]
+              ? React.createElement(animations[part])
+              : part ? (
+                <ReactMarkdown
+                  remarkPlugins={[remarkGfm]}
+                  rehypePlugins={[rehypeRaw, [rehypeSanitize, markdownSchema]]}
+                  components={markdownComponents}
+                >
+                  {part}
+                </ReactMarkdown>
+              ) : null}
           </React.Fragment>
         ))}
       </>
