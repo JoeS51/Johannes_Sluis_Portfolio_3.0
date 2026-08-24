@@ -8,7 +8,7 @@ const post = {
     cover: null
   },
   content: `
-As we all know, AWS has many database products: DynamoDB, RDS, ElastiCache, DocumentDB, etc. Perhaps the most popular (and confusing) among them is Amazon Aurora. It becomes confusing because Aurora isn't just a single database offering, there are four different Aurora products, and each one is quite different. I read the Aurora DSQL and Aurora Limitless research papers, so I have a better understanding of the differences (and so you don't have to). I'll be focusing more on the differences in their architecture and design rather than on how application developers use them.
+You might already know this, but AWS has a lot of database products(DynamoDB, RDS, ElastiCache, DocumentDB, etc) and among all of them, the most popular one is most likely Amazon Aurora. It becomes confusing because Aurora isn't just a single database offering, there are four different Aurora products, and each one is quite different. I read the Aurora DSQL and Aurora Limitless research papers, so I have a better understanding of the differences (and so you don't have to). I'll be focusing more on the differences in their architecture and design rather than on how application developers use them.
 
 To start off, there are four offerings under the Amazon Aurora umbrella:
 
