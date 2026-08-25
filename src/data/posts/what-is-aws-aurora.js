@@ -63,7 +63,11 @@ built on s3, serverless, sharded differently.
 
 ### Conclusion
 
-To finish it off, I have some personal thoughts on all of these systems. First of all, I think these are all great systems and it's obviously easy to critique each of them just reading the research apper but an immense amount of effort goes into making these databases functional and stable. I've seen some critique about DSQL but I really like tha tAmazon is taking a lead and trying to innovate in the database space. 
+To finish it off, I have some personal thoughts on all of these systems. I recently saw a tweet by James Cowling, the CTO of Convex, that really resonated with me when reading the DSQL paper.
+
+![one of my favorite voices on twitter](/images/convex-cto-tweet.png)
+
+It's easy to find flaws in a paper and critique/question the decisions that they made. At the end of the day, an immense amount of time and effort went into the making of each of these databases and the folks at Amazon are probably more informed than the reader of the drawbacks of their system. DSQL is especially interestg which is probably why it sparks more debate. but if we think back to A couple of years ago if you mentioned using S3 for your database, you would probably be seen as crazy but now it's common sense. Who knows maybe DSQL is the future. Only time will tell 
 
 `
 };
