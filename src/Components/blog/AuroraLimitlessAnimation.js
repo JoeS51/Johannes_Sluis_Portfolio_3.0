@@ -1,5 +1,6 @@
 import React, { useId, useRef } from 'react';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
+import dogComputer from '../../Pictures/dog-computer.jpg';
 
 const transition = {
   duration: 8.5,
@@ -34,6 +35,32 @@ const FlowDot = ({ animate, x, y, times, kind, delay = 0 }) => (
   />
 );
 
+const Client = ({ mobile = false, clipId }) => {
+  const frame = mobile
+    ? { x: 110, y: 30, width: 180, height: 80 }
+    : { x: 355, y: 25, width: 170, height: 80 };
+
+  return (
+    <g className="aurora-client-image">
+      <defs>
+        <clipPath id={clipId}>
+          <rect {...frame} rx="8" />
+        </clipPath>
+      </defs>
+      <text className="aurora-client-label" x={frame.x + frame.width / 2} y={frame.y - 10} textAnchor="middle">
+        CLIENT
+      </text>
+      <image
+        href={dogComputer}
+        {...frame}
+        preserveAspectRatio="xMidYMid slice"
+        clipPath={`url(#${clipId})`}
+      />
+      <rect className="aurora-client-image-frame" {...frame} rx="8" />
+    </g>
+  );
+};
+
 const Storage = ({ animate, mobile = false }) => {
   const cells = mobile
     ? [{ x: 35, label: 'AZ 1' }, { x: 152, label: 'AZ 2' }, { x: 269, label: 'AZ 3' }]
@@ -61,7 +88,7 @@ const Storage = ({ animate, mobile = false }) => {
   ));
 };
 
-const DesktopDiagram = ({ animate, titleId, descriptionId }) => (
+const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
   <svg
     className="aurora-diagram aurora-diagram-desktop limitless-diagram"
     viewBox="0 0 880 630"
@@ -89,7 +116,7 @@ const DesktopDiagram = ({ animate, titleId, descriptionId }) => (
       <path d="M710 370 H670 V320 H595" />
     </g>
 
-    <Node x={355} y={25} width={170} height={80} eyebrow="CLIENT" label="Application" />
+    <Client clipId={clipId} />
     <Node x={50} y={175} width={130} height={82} eyebrow="QUERY LAYER" label="Router 1" className="is-router" />
     <Node x={210} y={175} width={130} height={82} eyebrow="QUERY LAYER" label="Router 2" className="is-router" />
     <Node x={370} y={175} width={130} height={82} eyebrow="QUERY LAYER" label="Router 3" className="is-router" />
@@ -121,7 +148,7 @@ const DesktopDiagram = ({ animate, titleId, descriptionId }) => (
   </svg>
 );
 
-const MobileDiagram = ({ animate, titleId, descriptionId }) => (
+const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
   <svg
     className="aurora-diagram aurora-diagram-mobile limitless-diagram"
     viewBox="0 0 400 700"
@@ -146,7 +173,7 @@ const MobileDiagram = ({ animate, titleId, descriptionId }) => (
       <path d="M305 385 H280 V315 H250" />
     </g>
 
-    <Node x={110} y={30} width={180} height={80} eyebrow="CLIENT" label="Application" />
+    <Client mobile clipId={clipId} />
     <Node x={20} y={180} width={84} height={82} eyebrow="QUERY" label="Router 1" className="is-router" />
     <Node x={114} y={180} width={84} height={82} eyebrow="QUERY" label="Router 2" className="is-router" />
     <Node x={208} y={180} width={84} height={82} eyebrow="QUERY" label="Router 3" className="is-router" />
@@ -179,8 +206,10 @@ const AuroraLimitlessAnimation = () => {
   const figureRef = useRef(null);
   const titleId = useId();
   const descriptionId = useId();
+  const desktopClipId = useId().replace(/:/g, '');
   const mobileTitleId = useId();
   const mobileDescriptionId = useId();
+  const mobileClipId = useId().replace(/:/g, '');
   const isInView = useInView(figureRef, { amount: 0.25 });
   const reduceMotion = useReducedMotion();
   const shouldAnimate = isInView && !reduceMotion;
@@ -191,8 +220,8 @@ const AuroraLimitlessAnimation = () => {
         <span><i className="is-write" /> Query path</span>
         <span><i className="is-control" /> Control plane</span>
       </div>
-      <DesktopDiagram animate={shouldAnimate} titleId={titleId} descriptionId={descriptionId} />
-      <MobileDiagram animate={shouldAnimate} titleId={mobileTitleId} descriptionId={mobileDescriptionId} />
+      <DesktopDiagram animate={shouldAnimate} titleId={titleId} descriptionId={descriptionId} clipId={desktopClipId} />
+      <MobileDiagram animate={shouldAnimate} titleId={mobileTitleId} descriptionId={mobileDescriptionId} clipId={mobileClipId} />
     </figure>
   );
 };
