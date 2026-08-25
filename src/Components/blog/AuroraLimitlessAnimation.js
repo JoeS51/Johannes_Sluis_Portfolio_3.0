@@ -3,7 +3,7 @@ import { motion, useInView, useReducedMotion } from 'framer-motion';
 import dogComputer from '../../Pictures/dog-computer.jpg';
 
 const transition = {
-  duration: 8.5,
+  duration: 10,
   ease: 'linear',
   repeat: Infinity,
   repeatDelay: 0.8,
@@ -111,7 +111,7 @@ const Storage = ({ animate, mobile = false }) => {
         height={height}
         rx="6"
         animate={animate ? { opacity: [0, 0, 0.18, 0.18, 0, 0] } : { opacity: 0 }}
-        transition={{ ...transition, delay: index * 0.12, times: [0, 0.6, 0.66, 0.74, 0.82, 1] }}
+        transition={{ ...transition, delay: index * 0.12, times: [0, 0.4, 0.47, 0.56, 0.64, 1] }}
       />
       <text className="aurora-storage-az" x={cell.x + width / 2} y={y + 27} textAnchor="middle">{cell.label}</text>
       <text className="aurora-storage-copy" x={cell.x + width / 2} y={y + 50} textAnchor="middle">storage copies</text>
@@ -128,12 +128,12 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
   >
     <title id={titleId}>Aurora Limitless architecture with routers, shards, control plane, and distributed storage</title>
     <desc id={descriptionId}>
-      One client request enters one router. The router hashes each shard-key value and routes operations to the shards that own those noncontiguous key subsets.
+      One read request enters one router. The router hashes each dog ID, reads from the shards that own those noncontiguous key subsets, and returns one combined result.
     </desc>
 
     <rect className="limitless-boundary" x="20" y="130" width="840" height="485" rx="12" />
     <g className="aurora-connectors">
-      <path d="M440 105 V145 H435 V175" />
+      <path d="M440 105 V175" />
       <path d="M435 257 V300" />
       <path d="M115 300 H595" />
       <path d="M115 300 V335 M275 300 V335 M435 300 V335 M595 300 V335" />
@@ -148,8 +148,9 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
     <Node x={210} y={175} width={130} height={82} eyebrow="QUERY LAYER" label="Router 2" className="is-router" />
     <Node x={370} y={175} width={130} height={82} eyebrow="SELECTED ROUTER" label="Router 3" className="is-router is-selected" />
     <Node x={530} y={175} width={130} height={82} eyebrow="QUERY LAYER" label="Router 4" className="is-router" />
-    <text className="limitless-query-keys" x="548" y="92">user_id IN (17, 42, 8)</text>
-    <text className="limitless-hash-label" x="435" y="286" textAnchor="middle">hash(user_id)</text>
+    <text className="limitless-query-keys" x="548" y="78">SELECT dog_treats FROM dogs</text>
+    <text className="limitless-query-keys" x="548" y="98">WHERE dog_id IN (17, 42, 8)</text>
+    <text className="limitless-hash-label" x="435" y="286" textAnchor="middle">hash(dog_id)</text>
     <Shard x={50} y={335} width={130} label="Shard 1" keys="17 · 104 · 901" />
     <Shard x={210} y={335} width={130} label="Shard 2" keys="42 · 205 · 777" />
     <Shard x={370} y={335} width={130} label="Shard 3" keys="8 · 319 · 650" />
@@ -169,10 +170,11 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       <Storage animate={animate} />
     </g>
 
-    <FlowDot animate={animate} kind="write" x={[440, 440, 440, 435, 435, 435]} y={[105, 105, 145, 145, 175, 257]} times={[0, 0.06, 0.121, 0.129, 0.175, 0.3]} />
-    <KeyFlow animate={animate} value="17" x={[435, 435, 435, 115, 115, 115, 115]} y={[257, 257, 300, 300, 335, 435, 485]} times={[0, 0.3, 0.33, 0.552, 0.576, 0.645, 0.68]} />
-    <KeyFlow animate={animate} value="42" x={[435, 435, 435, 275, 275, 275, 275]} y={[257, 257, 300, 300, 335, 435, 485]} times={[0, 0.3, 0.342, 0.499, 0.533, 0.631, 0.68]} delay={0.18} />
-    <KeyFlow animate={animate} value="8" x={[435, 435, 435, 435, 435, 435]} y={[257, 257, 300, 335, 435, 485]} times={[0, 0.3, 0.372, 0.43, 0.597, 0.68]} delay={0.36} />
+    <FlowDot animate={animate} kind="read" x={[440, 440, 440, 440, 435]} y={[105, 105, 145, 175, 257]} times={[0, 0.05, 0.108, 0.151, 0.24]} />
+    <KeyFlow animate={animate} value="17" x={[435, 435, 435, 115, 115, 115, 115, 115, 115, 115, 435, 435, 435]} y={[257, 257, 300, 300, 335, 435, 485, 435, 335, 300, 300, 257, 257]} times={[0, 0.24, 0.26, 0.412, 0.429, 0.476, 0.5, 0.524, 0.571, 0.588, 0.74, 0.76, 0.78]} />
+    <KeyFlow animate={animate} value="42" x={[435, 435, 435, 275, 275, 275, 275, 275, 275, 275, 435, 435, 435]} y={[257, 257, 300, 300, 335, 435, 485, 435, 335, 300, 300, 257, 257]} times={[0, 0.24, 0.26, 0.336, 0.353, 0.4, 0.424, 0.448, 0.495, 0.512, 0.588, 0.608, 0.628]} />
+    <KeyFlow animate={animate} value="8" x={[435, 435, 435, 435, 435, 435, 435, 435, 435, 435, 435]} y={[257, 257, 300, 335, 435, 485, 435, 335, 300, 257, 257]} times={[0, 0.24, 0.26, 0.277, 0.324, 0.348, 0.372, 0.419, 0.436, 0.456, 0.476]} />
+    <FlowDot animate={animate} kind="read" x={[435, 435, 435, 440, 440, 440]} y={[257, 257, 175, 145, 145, 105]} times={[0, 0.8, 0.873, 0.9, 0.904, 0.94]} />
     <FlowDot animate={animate} kind="control" x={[710, 710, 690, 690, 500, 500]} y={[225, 225, 225, 120, 120, 175]} times={[0, 0.08, 0.099, 0.201, 0.386, 0.44]} delay={4.5} />
   </svg>
 );
@@ -186,10 +188,10 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
   >
     <title id={titleId}>Aurora Limitless architecture with routers, shards, control plane, and distributed storage</title>
     <desc id={descriptionId}>
-      One client request enters one router, which hashes multiple shard-key values and routes them to shards containing noncontiguous key subsets.
+      One dog-treat read enters one router, which hashes multiple dog IDs, reads the relevant shards, and returns one combined result.
     </desc>
 
-    <rect className="limitless-boundary" x="10" y="135" width="380" height="545" rx="12" />
+    <rect className="limitless-boundary" x="10" y="155" width="380" height="525" rx="12" />
     <g className="aurora-connectors">
       <path d="M200 110 V145 H156 V180" />
       <path d="M156 262 V315" />
@@ -205,8 +207,9 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
     <Node x={20} y={180} width={84} height={82} eyebrow="QUERY" label="Router 1" className="is-router" />
     <Node x={114} y={180} width={84} height={82} eyebrow="SELECTED" label="Router 2" className="is-router is-selected" />
     <Node x={208} y={180} width={84} height={82} eyebrow="QUERY" label="Router 3" className="is-router" />
-    <text className="limitless-query-keys" x="200" y="130" textAnchor="middle">user_id IN (17, 42, 8)</text>
-    <text className="limitless-hash-label" x="156" y="302" textAnchor="middle">hash(user_id)</text>
+    <text className="limitless-query-keys" x="200" y="128" textAnchor="middle">SELECT dog_treats FROM dogs</text>
+    <text className="limitless-query-keys" x="200" y="144" textAnchor="middle">WHERE dog_id IN (17, 42, 8)</text>
+    <text className="limitless-hash-label" x="156" y="302" textAnchor="middle">hash(dog_id)</text>
     <Shard mobile x={20} y={345} width={84} label="Shard 1" keys="17,104,901" />
     <Shard mobile x={114} y={345} width={84} label="Shard 2" keys="42,205,777" />
     <Shard mobile x={208} y={345} width={84} label="Shard 3" keys="8,319,650" />
@@ -224,10 +227,11 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       <Storage animate={animate} mobile />
     </g>
 
-    <FlowDot animate={animate} kind="write" x={[200, 200, 200, 156, 156, 156]} y={[110, 110, 145, 145, 180, 262]} times={[0, 0.06, 0.103, 0.157, 0.2, 0.3]} />
-    <KeyFlow animate={animate} value="17" x={[156, 156, 156, 62, 62, 62, 62]} y={[262, 262, 315, 315, 345, 440, 510]} times={[0, 0.3, 0.359, 0.464, 0.498, 0.603, 0.68]} />
-    <KeyFlow animate={animate} value="42" x={[156, 156, 156, 156, 156, 156]} y={[262, 262, 315, 345, 440, 510]} times={[0, 0.3, 0.381, 0.427, 0.573, 0.68]} delay={0.18} />
-    <KeyFlow animate={animate} value="8" x={[156, 156, 156, 250, 250, 250, 250]} y={[262, 262, 315, 315, 345, 440, 510]} times={[0, 0.3, 0.359, 0.464, 0.498, 0.603, 0.68]} delay={0.36} />
+    <FlowDot animate={animate} kind="read" x={[200, 200, 200, 156, 156, 156]} y={[110, 110, 145, 145, 180, 262]} times={[0, 0.05, 0.093, 0.147, 0.19, 0.24]} />
+    <KeyFlow animate={animate} value="17" x={[156, 156, 156, 62, 62, 62, 62, 62, 62, 62, 156, 156, 156]} y={[262, 262, 315, 315, 345, 440, 510, 440, 345, 315, 315, 262, 262]} times={[0, 0.24, 0.281, 0.353, 0.376, 0.449, 0.503, 0.557, 0.63, 0.653, 0.725, 0.766, 0.786]} />
+    <KeyFlow animate={animate} value="42" x={[156, 156, 156, 156, 156, 156, 156, 156, 156, 156, 156]} y={[262, 262, 315, 345, 440, 510, 440, 345, 315, 262, 262]} times={[0, 0.24, 0.281, 0.304, 0.377, 0.431, 0.485, 0.558, 0.581, 0.622, 0.642]} />
+    <KeyFlow animate={animate} value="8" x={[156, 156, 156, 250, 250, 250, 250, 250, 250, 250, 156, 156, 156]} y={[262, 262, 315, 315, 345, 440, 510, 440, 345, 315, 315, 262, 262]} times={[0, 0.24, 0.281, 0.353, 0.376, 0.449, 0.503, 0.557, 0.63, 0.653, 0.725, 0.766, 0.786]} />
+    <FlowDot animate={animate} kind="read" x={[156, 156, 156, 200, 200, 200]} y={[262, 262, 180, 145, 145, 110]} times={[0, 0.8, 0.863, 0.89, 0.923, 0.95]} />
     <FlowDot animate={animate} kind="control" x={[305, 305, 300, 300, 198, 198]} y={[225, 225, 225, 165, 165, 180]} times={[0, 0.08, 0.09, 0.209, 0.41, 0.44]} delay={4.5} />
   </svg>
 );
@@ -247,7 +251,7 @@ const AuroraLimitlessAnimation = () => {
   return (
     <figure ref={figureRef} className="aurora-architecture limitless-architecture">
       <div className="aurora-architecture-key" aria-hidden="true">
-        <span><i className="is-write" /> Query path</span>
+        <span><i className="is-read" /> Read path</span>
         <span><i className="is-control" /> Control plane</span>
       </div>
       <DesktopDiagram animate={shouldAnimate} titleId={titleId} descriptionId={descriptionId} clipId={desktopClipId} />

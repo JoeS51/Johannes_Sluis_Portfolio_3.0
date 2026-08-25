@@ -1,5 +1,6 @@
 import React, { useId, useRef } from 'react';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
+import jackedDudeComputer from '../../Pictures/jacked-dude-computer.jpeg';
 
 const loop = {
   duration: 11,
@@ -38,6 +39,32 @@ const FlowDot = ({ animate, kind, x, y, times, delay = 0, radius = 6 }) => (
   />
 );
 
+const Client = ({ mobile = false, clipId }) => {
+  const frame = mobile
+    ? { x: 110, y: -105, width: 180, height: 100 }
+    : { x: 355, y: -105, width: 170, height: 90 };
+
+  return (
+    <g className="aurora-client-image">
+      <defs>
+        <clipPath id={clipId}>
+          <rect {...frame} rx="8" />
+        </clipPath>
+      </defs>
+      <text className="aurora-client-label" x={frame.x + frame.width / 2} y={frame.y - 10} textAnchor="middle">
+        CLIENT
+      </text>
+      <image
+        href={jackedDudeComputer}
+        {...frame}
+        preserveAspectRatio="xMidYMid slice"
+        clipPath={`url(#${clipId})`}
+      />
+      <rect className="aurora-client-image-frame" {...frame} rx="8" />
+    </g>
+  );
+};
+
 const Clock = ({ animate, x, y }) => (
   <g className="dsql-clock">
     <motion.circle
@@ -75,10 +102,10 @@ const Storage = ({ mobile = false }) => {
   ));
 };
 
-const DesktopDiagram = ({ animate, titleId, descriptionId }) => (
+const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
   <svg
     className="aurora-diagram aurora-diagram-desktop dsql-diagram"
-    viewBox="0 0 880 665"
+    viewBox="0 -125 880 790"
     role="img"
     aria-labelledby={`${titleId} ${descriptionId}`}
   >
@@ -88,6 +115,7 @@ const DesktopDiagram = ({ animate, titleId, descriptionId }) => (
     </desc>
 
     <g className="aurora-connectors dsql-commit-connectors">
+      <path d="M440 -15 V25" />
       <path d="M440 105 V130 H290 V150" />
       <path d="M440 130 H590 V150" />
       <path d="M290 232 V270" />
@@ -103,6 +131,7 @@ const DesktopDiagram = ({ animate, titleId, descriptionId }) => (
     </g>
     <path className="dsql-clock-connector" d="M525 65 H552" />
 
+    <Client clipId={clipId} />
     <Node x={355} y={25} width={170} height={80} eyebrow="SQL FRONTEND" label="Query processor" className="is-router" />
     <Clock animate={animate} x={575} y={65} />
     <Node x={200} y={150} width={180} height={82} eyebrow="TRANSACTION" label="Adjudicator 1" />
@@ -119,9 +148,23 @@ const DesktopDiagram = ({ animate, titleId, descriptionId }) => (
     <FlowDot
       animate={animate}
       kind="read"
+      x={[440, 440, 440]}
+      y={[-15, -15, 25]}
+      times={[0, 0.01, 0.05]}
+    />
+    <FlowDot
+      animate={animate}
+      kind="read"
       x={[355, 355, 80, 80, 190, 190, 80, 80, 355, 355]}
       y={[65, 65, 65, 540, 540, 570, 540, 65, 65, 65]}
       times={[0, 0.06, 0.11, 0.23, 0.28, 0.32, 0.37, 0.48, 0.53, 0.56]}
+    />
+    <FlowDot
+      animate={animate}
+      kind="write"
+      x={[440, 440, 440]}
+      y={[-15, -15, 25]}
+      times={[0, 0.36, 0.42]}
     />
     <FlowDot
       animate={animate}
@@ -144,10 +187,10 @@ const DesktopDiagram = ({ animate, titleId, descriptionId }) => (
   </svg>
 );
 
-const MobileDiagram = ({ animate, titleId, descriptionId }) => (
+const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
   <svg
     className="aurora-diagram aurora-diagram-mobile dsql-diagram"
-    viewBox="0 0 400 730"
+    viewBox="0 -125 400 855"
     role="img"
     aria-labelledby={`${titleId} ${descriptionId}`}
   >
@@ -157,6 +200,7 @@ const MobileDiagram = ({ animate, titleId, descriptionId }) => (
     </desc>
 
     <g className="aurora-connectors dsql-commit-connectors">
+      <path d="M200 -5 V30" />
       <path d="M200 110 V135 H105 V155" />
       <path d="M200 135 H295 V155" />
       <path d="M105 237 V275 M295 237 V275" />
@@ -170,6 +214,7 @@ const MobileDiagram = ({ animate, titleId, descriptionId }) => (
     </g>
     <path className="dsql-clock-connector" d="M285 70 H307" />
 
+    <Client mobile clipId={clipId} />
     <Node x={115} y={30} width={170} height={80} eyebrow="SQL FRONTEND" label="Query processor" className="is-router" />
     <Clock animate={animate} x={330} y={70} />
     <Node x={20} y={155} width={170} height={82} eyebrow="TRANSACTION" label="Adjudicator 1" />
@@ -186,10 +231,18 @@ const MobileDiagram = ({ animate, titleId, descriptionId }) => (
     <FlowDot
       animate={animate}
       kind="read"
+      x={[200, 200, 200]}
+      y={[-5, -5, 30]}
+      times={[0, 0.01, 0.05]}
+    />
+    <FlowDot
+      animate={animate}
+      kind="read"
       x={[115, 115, 15, 15, 85, 85, 15, 15, 115, 115]}
       y={[70, 70, 70, 555, 555, 595, 555, 70, 70, 70]}
       times={[0, 0.06, 0.11, 0.23, 0.28, 0.32, 0.37, 0.48, 0.53, 0.56]}
     />
+    <FlowDot animate={animate} kind="write" x={[200, 200, 200]} y={[-5, -5, 30]} times={[0, 0.36, 0.42]} />
     <FlowDot animate={animate} kind="write" x={[180, 180, 105, 105, 105, 110, 150, 150]} y={[110, 135, 135, 155, 237, 405, 445, 445]} times={[0, 0.42, 0.47, 0.5, 0.56, 0.64, 0.7, 0.72]} />
     <FlowDot animate={animate} kind="write" x={[220, 220, 295, 295, 295, 300, 250, 250]} y={[110, 135, 135, 155, 237, 405, 445, 445]} times={[0, 0.42, 0.47, 0.5, 0.56, 0.64, 0.7, 0.72]} delay={0.18} />
     <FlowDot animate={animate} kind="write" radius={5} x={[200, 200, 85, 85]} y={[520, 555, 555, 595]} times={[0, 0.73, 0.8, 0.85]} />
@@ -202,8 +255,10 @@ const AuroraDsqlAnimation = () => {
   const figureRef = useRef(null);
   const desktopTitleId = useId();
   const desktopDescriptionId = useId();
+  const desktopClipId = useId().replace(/:/g, '');
   const mobileTitleId = useId();
   const mobileDescriptionId = useId();
+  const mobileClipId = useId().replace(/:/g, '');
   const isInView = useInView(figureRef, { amount: 0.2 });
   const reduceMotion = useReducedMotion();
   const shouldAnimate = isInView && !reduceMotion;
@@ -214,8 +269,8 @@ const AuroraDsqlAnimation = () => {
         <span><i className="is-write" /> Commit path</span>
         <span><i className="is-read" /> Read path</span>
       </div>
-      <DesktopDiagram animate={shouldAnimate} titleId={desktopTitleId} descriptionId={desktopDescriptionId} />
-      <MobileDiagram animate={shouldAnimate} titleId={mobileTitleId} descriptionId={mobileDescriptionId} />
+      <DesktopDiagram animate={shouldAnimate} titleId={desktopTitleId} descriptionId={desktopDescriptionId} clipId={desktopClipId} />
+      <MobileDiagram animate={shouldAnimate} titleId={mobileTitleId} descriptionId={mobileDescriptionId} clipId={mobileClipId} />
     </figure>
   );
 };
