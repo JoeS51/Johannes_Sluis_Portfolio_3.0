@@ -33,7 +33,9 @@ This animation shows the flow for both read and write paths. Writes pass through
 The single writer is the biggest limitation of classic Aurora. The single writer bottlenecks the write throughput of this system. You have the option to vertically scale your writer, but at some point, the vertical scaling won't be able to handle all your writes. At which point, you want to horizontally scale your writer. That leads us to Aurora Limitless.
 
 ### Aurora Limitless
-The folks at Amazon noticed the bottlenecks of classic Aurora and wanted to tackle them in a new system called Aurora Limitless (which we find out has its own limits). It also turns out that Aurora Limitless builds a lot on top of the ideas that classic Aurora established. 
+The folks at Amazon noticed the bottlenecks of classic Aurora and wanted to tackle them in a new system called *Aurora Limitless* (which we find out has its own limits). Aurora Limitless builds on top of a lot of the same ideas that classic Aurora had. Unlike classic Aurora, Aurora Limitless supports any number of writers, which they call **routers**, and the data in the system is all sharded. Each router handles client requests and forwards those requests to a **shard**, which is essentially just a Postgres instance, that fetches or modifies rows in the underlying data in Aurora distributed storage. Each shard is responsible for a subset of the data (they do hash-based partitioning)
+
+The last component is a **control plane** that manages the life cycle of the shards, monitors the health of all the routers/shards, handles auto-scaling, etc. 
 
 [[AURORA_LIMITLESS_ANIMATION]]
 
@@ -42,6 +44,8 @@ The final evolution of Aurora is Aurora DSQL.
 
 
 built on s3, serverless, sharded differently.
+
+[[AURORA_DSQL_ANIMATION]]
 
 `
 };
