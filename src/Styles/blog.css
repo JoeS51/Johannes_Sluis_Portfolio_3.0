@@ -1580,7 +1580,10 @@ html.dark-mode.blog-body,
 }
 
 .limitless-key-flow circle {
-  fill: var(--aurora-ink);
+  fill: var(--aurora-panel);
+  stroke: var(--aurora-ink);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
 }
 
 .limitless-key-flow text {

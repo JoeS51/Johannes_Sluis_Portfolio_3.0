@@ -41,6 +41,12 @@ The last component is a **control plane** that manages the life cycle of the sha
 
 [[AURORA_LIMITLESS_ANIMATION]]
 
+In this animation, the client issues a read query to router 3. Router 3 then uses its hash function on the dog_ids + routing metadata to understand which shard each of them belong to. The router then sends the reads to those shards, combines their results and returns the result to the client.
+
+You might be asking, "but what if one shard gets a majority of the requests?" That's where *shard splitting* comes in. Either the customer or the control plane notices that one of the shards needs more capacity and initiates a shard split. If a shard is already overloaded, the last thing that you want to do is make it read and rewrite all of its data into a new shard. Aurora Limitless avoids that initial overhead of copying data to a new shard through Aurora's storage level CoW mechansim.
+
+There are other issues with sharding your data such as expensive joins. Limitless addresses some of these issues through **collocation**. With collocation, you can place related tables on the same shard to make JOINs less expensive. Additionally, Limitless supports three different table types: sharded, reference, and standard tables so tables can be distributed across the shards in different ways.
+
 
 
 ### Aurora DSQL
