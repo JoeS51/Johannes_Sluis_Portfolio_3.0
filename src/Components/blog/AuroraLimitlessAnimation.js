@@ -21,6 +21,21 @@ const Node = ({ x, y, width, height, eyebrow, label, className = '' }) => (
   </g>
 );
 
+const Shard = ({ x, y, width, label, keys, mobile = false }) => (
+  <g className="aurora-node limitless-node limitless-shard">
+    <rect x={x} y={y} width={width} height={mobile ? 95 : 100} rx="8" />
+    <text className="aurora-node-eyebrow" x={x + width / 2} y={y + 23} textAnchor="middle">
+      HASHED KEY SUBSET
+    </text>
+    <text className="aurora-node-label" x={x + width / 2} y={y + 49} textAnchor="middle">
+      {label}
+    </text>
+    <text className="limitless-shard-keys" x={x + width / 2} y={y + 76} textAnchor="middle">
+      {keys}
+    </text>
+  </g>
+);
+
 const FlowDot = ({ animate, x, y, times, kind, delay = 0 }) => (
   <motion.circle
     className={`aurora-flow-dot is-${kind}`}
@@ -33,6 +48,22 @@ const FlowDot = ({ animate, x, y, times, kind, delay = 0 }) => (
     } : { opacity: 0 }}
     transition={{ ...transition, delay, times }}
   />
+);
+
+const KeyFlow = ({ animate, value, x, y, times, delay = 0 }) => (
+  <motion.g
+    className="limitless-key-flow"
+    initial={{ x: x[0], y: y[0], opacity: 0 }}
+    animate={animate ? {
+      x,
+      y,
+      opacity: x.map((_, index) => index === 0 || index === x.length - 1 ? 0 : 1),
+    } : { opacity: 0 }}
+    transition={{ ...transition, delay, times }}
+  >
+    <circle r="6" />
+    <text x="0" y="-11" textAnchor="middle">{value}</text>
+  </motion.g>
 );
 
 const Client = ({ mobile = false, clipId }) => {
@@ -80,7 +111,7 @@ const Storage = ({ animate, mobile = false }) => {
         height={height}
         rx="6"
         animate={animate ? { opacity: [0, 0, 0.18, 0.18, 0, 0] } : { opacity: 0 }}
-        transition={{ ...transition, delay: index * 0.12, times: [0, 0.36, 0.42, 0.54, 0.62, 1] }}
+        transition={{ ...transition, delay: index * 0.12, times: [0, 0.6, 0.66, 0.74, 0.82, 1] }}
       />
       <text className="aurora-storage-az" x={cell.x + width / 2} y={y + 27} textAnchor="middle">{cell.label}</text>
       <text className="aurora-storage-copy" x={cell.x + width / 2} y={y + 50} textAnchor="middle">storage copies</text>
@@ -97,34 +128,32 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
   >
     <title id={titleId}>Aurora Limitless architecture with routers, shards, control plane, and distributed storage</title>
     <desc id={descriptionId}>
-      Client queries pass through scalable routers to read and write shards. A separate control plane manages the routers and shards, which use distributed storage across three availability zones.
+      One client request enters one router. The router hashes each shard-key value and routes operations to the shards that own those noncontiguous key subsets.
     </desc>
 
     <rect className="limitless-boundary" x="20" y="130" width="840" height="485" rx="12" />
     <g className="aurora-connectors">
-      <path d="M440 105 V145 H595" />
-      <path d="M115 145 H440" />
-      <path d="M115 145 V175 M275 145 V175 M435 145 V175 M595 145 V175" />
-      <path d="M115 257 V335" />
-      <path d="M275 257 V300 H435 V335" />
-      <path d="M435 257 V300 H275 V335" />
-      <path d="M595 257 V335" />
-      <path d="M115 417 V485 M275 417 V485 M435 417 V485 M595 417 V485" />
+      <path d="M440 105 V145 H435 V175" />
+      <path d="M435 257 V300" />
+      <path d="M115 300 H595" />
+      <path d="M115 300 V335 M275 300 V335 M435 300 V335 M595 300 V335" />
+      <path d="M115 435 V485 M275 435 V485 M435 435 V485 M595 435 V485" />
     </g>
     <g className="limitless-control-connectors">
-      <path d="M710 225 H680 V145 H595" />
-      <path d="M710 370 H670 V320 H595" />
+      <path d="M710 225 H690 V120 H500 V175" />
     </g>
 
     <Client clipId={clipId} />
     <Node x={50} y={175} width={130} height={82} eyebrow="QUERY LAYER" label="Router 1" className="is-router" />
     <Node x={210} y={175} width={130} height={82} eyebrow="QUERY LAYER" label="Router 2" className="is-router" />
-    <Node x={370} y={175} width={130} height={82} eyebrow="QUERY LAYER" label="Router 3" className="is-router" />
+    <Node x={370} y={175} width={130} height={82} eyebrow="SELECTED ROUTER" label="Router 3" className="is-router is-selected" />
     <Node x={530} y={175} width={130} height={82} eyebrow="QUERY LAYER" label="Router 4" className="is-router" />
-    <Node x={50} y={335} width={130} height={82} eyebrow="READ / WRITE" label="Shard 1" />
-    <Node x={210} y={335} width={130} height={82} eyebrow="READ / WRITE" label="Shard 2" />
-    <Node x={370} y={335} width={130} height={82} eyebrow="READ / WRITE" label="Shard 3" />
-    <Node x={530} y={335} width={130} height={82} eyebrow="READ / WRITE" label="Shard 4" />
+    <text className="limitless-query-keys" x="548" y="92">user_id IN (17, 42, 8)</text>
+    <text className="limitless-hash-label" x="435" y="286" textAnchor="middle">hash(user_id)</text>
+    <Shard x={50} y={335} width={130} label="Shard 1" keys="17 · 104 · 901" />
+    <Shard x={210} y={335} width={130} label="Shard 2" keys="42 · 205 · 777" />
+    <Shard x={370} y={335} width={130} label="Shard 3" keys="8 · 319 · 650" />
+    <Shard x={530} y={335} width={130} label="Shard 4" keys="63 · 488 · 812" />
 
     <g className="limitless-control-plane">
       <rect x="710" y="175" width="120" height="242" rx="8" />
@@ -140,11 +169,11 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       <Storage animate={animate} />
     </g>
 
-    <FlowDot animate={animate} kind="write" x={[420, 420, 115, 115, 115, 115]} y={[105, 145, 145, 175, 335, 485]} times={[0, 0.06, 0.17, 0.22, 0.36, 0.48]} />
-    <FlowDot animate={animate} kind="write" x={[440, 440, 275, 275, 435, 435, 435]} y={[105, 145, 145, 257, 300, 335, 485]} times={[0, 0.06, 0.14, 0.24, 0.31, 0.36, 0.5]} delay={0.35} />
-    <FlowDot animate={animate} kind="write" x={[460, 460, 595, 595, 595, 595]} y={[105, 145, 145, 175, 335, 485]} times={[0, 0.06, 0.15, 0.2, 0.36, 0.5]} delay={0.7} />
-    <FlowDot animate={animate} kind="control" x={[710, 680, 680, 595]} y={[225, 225, 145, 145]} times={[0, 0.12, 0.26, 0.4]} delay={4.5} />
-    <FlowDot animate={animate} kind="control" x={[710, 670, 670, 595]} y={[370, 370, 320, 320]} times={[0, 0.12, 0.26, 0.4]} delay={4.8} />
+    <FlowDot animate={animate} kind="write" x={[440, 440, 440, 435, 435, 435]} y={[105, 105, 145, 145, 175, 257]} times={[0, 0.06, 0.121, 0.129, 0.175, 0.3]} />
+    <KeyFlow animate={animate} value="17" x={[435, 435, 435, 115, 115, 115, 115]} y={[257, 257, 300, 300, 335, 435, 485]} times={[0, 0.3, 0.33, 0.552, 0.576, 0.645, 0.68]} />
+    <KeyFlow animate={animate} value="42" x={[435, 435, 435, 275, 275, 275, 275]} y={[257, 257, 300, 300, 335, 435, 485]} times={[0, 0.3, 0.342, 0.499, 0.533, 0.631, 0.68]} delay={0.18} />
+    <KeyFlow animate={animate} value="8" x={[435, 435, 435, 435, 435, 435]} y={[257, 257, 300, 335, 435, 485]} times={[0, 0.3, 0.372, 0.43, 0.597, 0.68]} delay={0.36} />
+    <FlowDot animate={animate} kind="control" x={[710, 710, 690, 690, 500, 500]} y={[225, 225, 225, 120, 120, 175]} times={[0, 0.08, 0.099, 0.201, 0.386, 0.44]} delay={4.5} />
   </svg>
 );
 
@@ -157,29 +186,30 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
   >
     <title id={titleId}>Aurora Limitless architecture with routers, shards, control plane, and distributed storage</title>
     <desc id={descriptionId}>
-      Client queries pass through routers to read and write shards. A control plane manages the cluster, and shards use distributed storage across three availability zones.
+      One client request enters one router, which hashes multiple shard-key values and routes them to shards containing noncontiguous key subsets.
     </desc>
 
     <rect className="limitless-boundary" x="10" y="135" width="380" height="545" rx="12" />
     <g className="aurora-connectors">
-      <path d="M200 110 V145 H250" />
-      <path d="M62 145 H200" />
-      <path d="M62 145 V180 M156 145 V180 M250 145 V180" />
-      <path d="M62 262 V345 M156 262 V345 M250 262 V345" />
-      <path d="M62 427 V510 M156 427 V510 M250 427 V510" />
+      <path d="M200 110 V145 H156 V180" />
+      <path d="M156 262 V315" />
+      <path d="M62 315 H250" />
+      <path d="M62 315 V345 M156 315 V345 M250 315 V345" />
+      <path d="M62 440 V510 M156 440 V510 M250 440 V510" />
     </g>
     <g className="limitless-control-connectors">
-      <path d="M305 225 H285 V145 H250" />
-      <path d="M305 385 H280 V315 H250" />
+      <path d="M305 225 H300 V165 H198 V180" />
     </g>
 
     <Client mobile clipId={clipId} />
     <Node x={20} y={180} width={84} height={82} eyebrow="QUERY" label="Router 1" className="is-router" />
-    <Node x={114} y={180} width={84} height={82} eyebrow="QUERY" label="Router 2" className="is-router" />
+    <Node x={114} y={180} width={84} height={82} eyebrow="SELECTED" label="Router 2" className="is-router is-selected" />
     <Node x={208} y={180} width={84} height={82} eyebrow="QUERY" label="Router 3" className="is-router" />
-    <Node x={20} y={345} width={84} height={82} eyebrow="R / W" label="Shard 1" />
-    <Node x={114} y={345} width={84} height={82} eyebrow="R / W" label="Shard 2" />
-    <Node x={208} y={345} width={84} height={82} eyebrow="R / W" label="Shard 3" />
+    <text className="limitless-query-keys" x="200" y="130" textAnchor="middle">user_id IN (17, 42, 8)</text>
+    <text className="limitless-hash-label" x="156" y="302" textAnchor="middle">hash(user_id)</text>
+    <Shard mobile x={20} y={345} width={84} label="Shard 1" keys="17,104,901" />
+    <Shard mobile x={114} y={345} width={84} label="Shard 2" keys="42,205,777" />
+    <Shard mobile x={208} y={345} width={84} label="Shard 3" keys="8,319,650" />
 
     <g className="limitless-control-plane">
       <rect x="305" y="180" width="75" height="247" rx="8" />
@@ -194,11 +224,11 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       <Storage animate={animate} mobile />
     </g>
 
-    <FlowDot animate={animate} kind="write" x={[185, 185, 62, 62, 62, 62]} y={[110, 145, 145, 180, 345, 510]} times={[0, 0.06, 0.16, 0.21, 0.36, 0.49]} />
-    <FlowDot animate={animate} kind="write" x={[200, 200, 156, 156, 156, 156]} y={[110, 145, 145, 180, 345, 510]} times={[0, 0.06, 0.14, 0.2, 0.36, 0.49]} delay={0.35} />
-    <FlowDot animate={animate} kind="write" x={[215, 215, 250, 250, 250, 250]} y={[110, 145, 145, 180, 345, 510]} times={[0, 0.06, 0.14, 0.2, 0.36, 0.49]} delay={0.7} />
-    <FlowDot animate={animate} kind="control" x={[305, 285, 285, 250]} y={[225, 225, 145, 145]} times={[0, 0.12, 0.26, 0.4]} delay={4.5} />
-    <FlowDot animate={animate} kind="control" x={[305, 280, 280, 250]} y={[385, 385, 315, 315]} times={[0, 0.12, 0.26, 0.4]} delay={4.8} />
+    <FlowDot animate={animate} kind="write" x={[200, 200, 200, 156, 156, 156]} y={[110, 110, 145, 145, 180, 262]} times={[0, 0.06, 0.103, 0.157, 0.2, 0.3]} />
+    <KeyFlow animate={animate} value="17" x={[156, 156, 156, 62, 62, 62, 62]} y={[262, 262, 315, 315, 345, 440, 510]} times={[0, 0.3, 0.359, 0.464, 0.498, 0.603, 0.68]} />
+    <KeyFlow animate={animate} value="42" x={[156, 156, 156, 156, 156, 156]} y={[262, 262, 315, 345, 440, 510]} times={[0, 0.3, 0.381, 0.427, 0.573, 0.68]} delay={0.18} />
+    <KeyFlow animate={animate} value="8" x={[156, 156, 156, 250, 250, 250, 250]} y={[262, 262, 315, 315, 345, 440, 510]} times={[0, 0.3, 0.359, 0.464, 0.498, 0.603, 0.68]} delay={0.36} />
+    <FlowDot animate={animate} kind="control" x={[305, 305, 300, 300, 198, 198]} y={[225, 225, 225, 165, 165, 180]} times={[0, 0.08, 0.09, 0.209, 0.41, 0.44]} delay={4.5} />
   </svg>
 );
 

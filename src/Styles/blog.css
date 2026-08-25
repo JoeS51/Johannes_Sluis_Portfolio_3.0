@@ -1552,6 +1552,42 @@ html.dark-mode.blog-body,
   font-size: 11px;
 }
 
+.limitless-node.is-selected rect {
+  stroke-width: 2.5;
+}
+
+.limitless-shard-keys,
+.limitless-query-keys,
+.limitless-hash-label,
+.limitless-key-flow text {
+  fill: var(--aurora-muted);
+  font-family: 'Source Code Pro', Menlo, Monaco, Consolas, monospace;
+}
+
+.limitless-shard-keys {
+  font-size: 10px;
+  font-weight: 650;
+}
+
+.limitless-query-keys {
+  font-size: 12px;
+  font-weight: 650;
+}
+
+.limitless-hash-label {
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.limitless-key-flow circle {
+  fill: var(--aurora-ink);
+}
+
+.limitless-key-flow text {
+  font-size: 10px;
+  font-weight: 750;
+}
+
 .dsql-read-connectors path {
   fill: none;
   stroke: var(--aurora-muted);
@@ -1734,6 +1770,19 @@ html.dark-mode.blog-body,
 
   .aurora-diagram-mobile .aurora-node-eyebrow {
     font-size: 8px;
+  }
+
+  .aurora-diagram-mobile .limitless-shard .aurora-node-eyebrow {
+    font-size: 6px;
+    letter-spacing: 0.04em;
+  }
+
+  .aurora-diagram-mobile .limitless-shard-keys {
+    font-size: 7px;
+  }
+
+  .aurora-diagram-mobile .limitless-query-keys {
+    font-size: 10px;
   }
 
   .robux-diagram .robux-meme-title {
