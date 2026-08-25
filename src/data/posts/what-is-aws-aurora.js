@@ -1,5 +1,5 @@
 const post = {
-  slug: 'what-is-aws-aurora',
+  slug: 'what-is-amazon-aurora',
   frontmatter: {
     title: 'What Is Amazon Aurora and Why Are There So Many?',
     description: '',
@@ -33,7 +33,7 @@ This animation shows the flow for both read and write paths. Writes pass through
 The single writer is the biggest limitation of classic Aurora. The single writer bottlenecks the write throughput of this system. You have the option to vertically scale your writer, but at some point, the vertical scaling won't be able to handle all your writes. At which point, you want to horizontally scale your writer. That leads us to Aurora Limitless.
 
 ### Aurora Limitless
-The Amazon folks noticed the bottlenecks of classic Aurora and wanted to tackle it with a new system called Aurora Limitless (which we find out has its own limits).
+The folks at Amazon noticed the bottlenecks of classic Aurora and wanted to tackle them in a new system called Aurora Limitless (which we find out has its own limits). It also turns out that Aurora Limitless builds a lot on top of the ideas that classic Aurora established. 
 
 [[AURORA_LIMITLESS_ANIMATION]]
 

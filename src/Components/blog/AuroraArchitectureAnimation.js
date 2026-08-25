@@ -3,7 +3,7 @@ import { motion, useInView, useReducedMotion } from 'framer-motion';
 import nerdKid from '../../Pictures/nerd-kid.jpg';
 
 const loopTransition = {
-  duration: 18,
+  duration: 20,
   ease: 'linear',
   repeat: Infinity,
   repeatDelay: 1,
@@ -46,14 +46,14 @@ const SqlQuery = ({ animate, kind, mobile = false }) => {
         x: [0, 0, 0, targetX - centerX, targetX - centerX, targetX - centerX],
         y: [0, 0, 0, targetY - centerY, targetY - centerY, targetY - centerY],
         scale: [0.96, 1, 1, 0.08, 0.08, 0.08],
-        times: [0, 0.015, 0.11, 0.12, 0.145, 1],
+        times: [0, 0.015, 0.1, 0.11, 0.13, 1],
       }
     : {
         opacity: [0, 0, 1, 1, 1, 0, 0],
         x: [0, 0, 0, 0, targetX - centerX, targetX - centerX, targetX - centerX],
         y: [0, 0, 0, 0, targetY - centerY, targetY - centerY, targetY - centerY],
         scale: [0.96, 0.96, 1, 1, 0.08, 0.08, 0.08],
-        times: [0, 0.46, 0.48, 0.59, 0.62, 0.64, 1],
+        times: [0, 0.53, 0.55, 0.65, 0.68, 0.7, 1],
       };
 
   return (
@@ -140,7 +140,7 @@ const StorageLayer = ({ animate, mobile = false }) => {
             height={height}
             rx="6"
             animate={animate ? { opacity: [0, 0, 0.18, 0.18, 0, 0] } : { opacity: 0 }}
-            transition={{ ...loopTransition, delay: index * 0.1, times: [0, 0.3, 0.33, 0.37, 0.4, 1] }}
+            transition={{ ...loopTransition, delay: index * 0.1, times: [0, 0.28, 0.32, 0.37, 0.4, 1] }}
           />
           <text className="aurora-storage-az" x={cell.x + width / 2} y={y + 26} textAnchor="middle">
             {cell.label}
@@ -192,26 +192,30 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
     <SqlQuery animate={animate} kind="write" />
     <SqlQuery animate={animate} kind="read" />
 
+    <FlowDot animate={animate} kind="write" x={[120, 120, 160, 160, 120]} y={[365, 365, 408, 408, 365]} times={[0, 0.29, 0.34, 0.38, 0.4]} />
+    <FlowDot animate={animate} kind="write" x={[120, 120, 420, 420, 120]} y={[365, 365, 408, 408, 365]} times={[0, 0.29, 0.34, 0.38, 0.4]} delay={0.1} />
+    <FlowDot animate={animate} kind="write" x={[120, 120, 680, 680, 120]} y={[365, 365, 408, 408, 365]} times={[0, 0.29, 0.34, 0.38, 0.4]} delay={0.2} />
+
     <FlowDot
       animate={animate}
       kind="write"
-      x={[400, 400, 400, 120, 120, 120, 120, 120, 400, 400]}
-      y={[130, 130, 150, 150, 200, 365, 200, 150, 150, 130]}
-      times={[0, 0.145, 0.17, 0.22, 0.25, 0.32, 0.37, 0.4, 0.44, 0.46]}
+      x={[400, 400, 400, 120, 120, 120, 120, 120, 120, 400, 400]}
+      y={[130, 130, 150, 150, 200, 365, 365, 200, 150, 150, 130]}
+      times={[0, 0.13, 0.15, 0.19, 0.22, 0.28, 0.4, 0.45, 0.48, 0.51, 0.52]}
     />
     <FlowDot
       animate={animate}
       kind="read"
       x={[480, 480, 480, 320, 320, 320, 320, 320, 480, 480]}
       y={[130, 130, 160, 160, 200, 365, 200, 160, 160, 130]}
-      times={[0, 0.64, 0.67, 0.71, 0.74, 0.8, 0.86, 0.89, 0.93, 0.96]}
+      times={[0, 0.7, 0.73, 0.76, 0.79, 0.84, 0.89, 0.91, 0.94, 0.96]}
     />
     <FlowDot
       animate={animate}
       kind="read"
       x={[480, 480, 480, 520, 520, 520, 520, 520, 480, 480]}
       y={[130, 130, 160, 160, 200, 365, 200, 160, 160, 130]}
-      times={[0, 0.64, 0.67, 0.71, 0.74, 0.8, 0.86, 0.89, 0.93, 0.96]}
+      times={[0, 0.7, 0.73, 0.76, 0.79, 0.84, 0.89, 0.91, 0.94, 0.96]}
       delay={0.2}
     />
     <FlowDot
@@ -219,7 +223,7 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       kind="read"
       x={[480, 480, 480, 720, 720, 720, 720, 720, 480, 480]}
       y={[130, 130, 160, 160, 200, 365, 200, 160, 160, 130]}
-      times={[0, 0.64, 0.67, 0.71, 0.74, 0.8, 0.86, 0.89, 0.93, 0.96]}
+      times={[0, 0.7, 0.73, 0.76, 0.79, 0.84, 0.89, 0.91, 0.94, 0.96]}
       delay={0.4}
     />
   </svg>
@@ -263,26 +267,30 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
     <SqlQuery animate={animate} kind="write" mobile />
     <SqlQuery animate={animate} kind="read" mobile />
 
+    <FlowDot animate={animate} kind="write" x={[52, 52, 98, 98, 52]} y={[420, 420, 455, 455, 420]} times={[0, 0.29, 0.34, 0.38, 0.4]} />
+    <FlowDot animate={animate} kind="write" x={[52, 52, 202, 202, 52]} y={[420, 420, 455, 455, 420]} times={[0, 0.29, 0.34, 0.38, 0.4]} delay={0.1} />
+    <FlowDot animate={animate} kind="write" x={[52, 52, 306, 306, 52]} y={[420, 420, 455, 455, 420]} times={[0, 0.29, 0.34, 0.38, 0.4]} delay={0.2} />
+
     <FlowDot
       animate={animate}
       kind="write"
-      x={[170, 170, 170, 52, 52, 52, 52, 52, 170, 170]}
-      y={[125, 125, 160, 160, 215, 420, 215, 160, 160, 125]}
-      times={[0, 0.145, 0.17, 0.22, 0.25, 0.32, 0.37, 0.4, 0.44, 0.46]}
+      x={[170, 170, 170, 52, 52, 52, 52, 52, 52, 170, 170]}
+      y={[125, 125, 160, 160, 215, 420, 420, 215, 160, 160, 125]}
+      times={[0, 0.13, 0.15, 0.19, 0.22, 0.28, 0.4, 0.45, 0.48, 0.51, 0.52]}
     />
     <FlowDot
       animate={animate}
       kind="read"
       x={[230, 230, 230, 148, 148, 148, 148, 148, 230, 230]}
       y={[125, 125, 175, 175, 215, 420, 215, 175, 175, 125]}
-      times={[0, 0.64, 0.67, 0.71, 0.74, 0.8, 0.86, 0.89, 0.93, 0.96]}
+      times={[0, 0.7, 0.73, 0.76, 0.79, 0.84, 0.89, 0.91, 0.94, 0.96]}
     />
     <FlowDot
       animate={animate}
       kind="read"
       x={[230, 230, 230, 243, 243, 243, 243, 243, 230, 230]}
       y={[125, 125, 175, 175, 215, 420, 215, 175, 175, 125]}
-      times={[0, 0.64, 0.67, 0.71, 0.74, 0.8, 0.86, 0.89, 0.93, 0.96]}
+      times={[0, 0.7, 0.73, 0.76, 0.79, 0.84, 0.89, 0.91, 0.94, 0.96]}
       delay={0.2}
     />
     <FlowDot
@@ -290,7 +298,7 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       kind="read"
       x={[230, 230, 230, 338, 338, 338, 338, 338, 230, 230]}
       y={[125, 125, 175, 175, 215, 420, 215, 175, 175, 125]}
-      times={[0, 0.64, 0.67, 0.71, 0.74, 0.8, 0.86, 0.89, 0.93, 0.96]}
+      times={[0, 0.7, 0.73, 0.76, 0.79, 0.84, 0.89, 0.91, 0.94, 0.96]}
       delay={0.4}
     />
   </svg>
