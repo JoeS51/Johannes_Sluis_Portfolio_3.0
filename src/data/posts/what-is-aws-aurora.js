@@ -47,10 +47,13 @@ You might be asking, "but what if one shard gets a majority of the requests?" Th
 
 There are other issues with sharding your data such as expensive joins. Limitless addresses some of these issues through **collocation**. With collocation, you can place related tables on the same shard to make JOINs less expensive. Additionally, Limitless supports three different table types: sharded, reference, and standard tables so tables can be distributed across the shards in different ways.
 
-
+Aurora Limitless sounds great! where does Aurora DSQL come in? There are a couple of things:
+1. Limitless cannot scale down to 0. It is not truly serverless
+2. Limitless doesn't support active-active multi-region writes
+3. Limitless still exposes sharding decisions to the customer. DSQL hides that partitioning from the client
 
 ### Aurora DSQL
-The final evolution of Aurora is Aurora DSQL.
+This leads us to the final evolution of Aurora is Aurora DSQL.
 
 
 built on s3, serverless, sharded differently.

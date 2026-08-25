@@ -41,8 +41,8 @@ const FlowDot = ({ animate, kind, x, y, times, delay = 0, radius = 6 }) => (
 
 const Client = ({ mobile = false, clipId }) => {
   const frame = mobile
-    ? { x: 110, y: -105, width: 180, height: 100 }
-    : { x: 355, y: -105, width: 170, height: 90 };
+    ? { x: 109, y: -185, width: 182, height: 180 }
+    : { x: 351.5, y: -190, width: 177, height: 175 };
 
   return (
     <g className="aurora-client-image">
@@ -57,7 +57,7 @@ const Client = ({ mobile = false, clipId }) => {
       <image
         href={jackedDudeComputer}
         {...frame}
-        preserveAspectRatio="xMidYMid slice"
+        preserveAspectRatio="xMidYMid meet"
         clipPath={`url(#${clipId})`}
       />
       <rect className="aurora-client-image-frame" {...frame} rx="8" />
@@ -105,7 +105,7 @@ const Storage = ({ mobile = false }) => {
 const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
   <svg
     className="aurora-diagram aurora-diagram-desktop dsql-diagram"
-    viewBox="0 -125 880 790"
+    viewBox="0 -215 880 880"
     role="img"
     aria-labelledby={`${titleId} ${descriptionId}`}
   >
@@ -190,7 +190,7 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
 const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
   <svg
     className="aurora-diagram aurora-diagram-mobile dsql-diagram"
-    viewBox="0 -125 400 855"
+    viewBox="0 -210 400 940"
     role="img"
     aria-labelledby={`${titleId} ${descriptionId}`}
   >
