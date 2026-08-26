@@ -78,7 +78,7 @@ The last difference I'll cover is is that DSQL was designed for active-active mu
 | Scaling | Writer only scales up | Cannot scale down to zero | Fully serverless |
 | Multi-region writes | Not supported | Not supported | Supported with strong consistency |
 | Concurrency control | Postgres-style | Postgres-style with timestamp-based MVCC | Optimistic concurrency control |
-| Postgres compat | High | High with a couple restrictions | Not full feature parity |
+| Postgres compat | High | High with some limitless-specific restrictions | Postgres compatible, but not full feature parity (no foreign keys, no pg extensions, only repeatable read isolation level) |
 
 ### Reflection
 

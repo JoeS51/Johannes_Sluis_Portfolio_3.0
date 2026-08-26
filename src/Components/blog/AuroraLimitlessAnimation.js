@@ -50,6 +50,35 @@ const FlowDot = ({ animate, x, y, times, kind, delay = 0 }) => (
   />
 );
 
+const ReadQuery = ({ animate, mobile = false }) => {
+  const centerX = mobile ? 200 : 700;
+  const centerY = mobile ? 136 : 88;
+  const targetX = mobile ? 200 : 440;
+  const targetY = mobile ? 110 : 105;
+
+  return (
+    <motion.g
+      className="limitless-query-keys"
+      initial={{ opacity: 0, x: 0, y: 0, scale: 0.96 }}
+      animate={animate ? {
+        opacity: [0, 1, 1, 1, 0],
+        x: [0, 0, 0, targetX - centerX, targetX - centerX],
+        y: [0, 0, 0, targetY - centerY, targetY - centerY],
+        scale: [0.96, 1, 1, 0.08, 0.08],
+      } : { opacity: 1, x: 0, y: 0, scale: 1 }}
+      transition={{ ...transition, times: [0, 0.01, 0.12, 0.145, 0.16] }}
+      style={{ transformOrigin: `${centerX}px ${centerY}px` }}
+    >
+      <text x={mobile ? 200 : 548} y={mobile ? 128 : 78} textAnchor={mobile ? 'middle' : undefined}>
+        SELECT dog_treats FROM dogs
+      </text>
+      <text x={mobile ? 200 : 548} y={mobile ? 144 : 98} textAnchor={mobile ? 'middle' : undefined}>
+        WHERE dog_id IN (17, 42, 8)
+      </text>
+    </motion.g>
+  );
+};
+
 const KeyFlow = ({ animate, value, x, y, times, delay = 0 }) => (
   <motion.g
     className="limitless-key-flow"
@@ -148,8 +177,7 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
     <Node x={210} y={175} width={130} height={82} eyebrow="QUERY LAYER" label="Router 2" className="is-router" />
     <Node x={370} y={175} width={130} height={82} eyebrow="SELECTED ROUTER" label="Router 3" className="is-router is-selected" />
     <Node x={530} y={175} width={130} height={82} eyebrow="QUERY LAYER" label="Router 4" className="is-router" />
-    <text className="limitless-query-keys" x="548" y="78">SELECT dog_treats FROM dogs</text>
-    <text className="limitless-query-keys" x="548" y="98">WHERE dog_id IN (17, 42, 8)</text>
+    <ReadQuery animate={animate} />
     <text className="limitless-hash-label" x="435" y="286" textAnchor="middle">hash(dog_id)</text>
     <Shard x={50} y={335} width={130} label="Shard 1" keys="17 · 104 · 901" />
     <Shard x={210} y={335} width={130} label="Shard 2" keys="42 · 205 · 777" />
@@ -170,11 +198,11 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       <Storage animate={animate} />
     </g>
 
-    <FlowDot animate={animate} kind="read" x={[440, 440, 440, 440, 435]} y={[105, 105, 145, 175, 257]} times={[0, 0.05, 0.108, 0.151, 0.24]} />
-    <KeyFlow animate={animate} value="17" x={[435, 435, 435, 115, 115, 115, 115, 115, 115, 115, 435, 435, 435]} y={[257, 257, 300, 300, 335, 435, 485, 435, 335, 300, 300, 257, 257]} times={[0, 0.24, 0.26, 0.412, 0.429, 0.476, 0.5, 0.524, 0.571, 0.588, 0.74, 0.76, 0.78]} />
-    <KeyFlow animate={animate} value="42" x={[435, 435, 435, 275, 275, 275, 275, 275, 275, 275, 435, 435, 435]} y={[257, 257, 300, 300, 335, 435, 485, 435, 335, 300, 300, 257, 257]} times={[0, 0.24, 0.26, 0.336, 0.353, 0.4, 0.424, 0.448, 0.495, 0.512, 0.588, 0.608, 0.628]} />
-    <KeyFlow animate={animate} value="8" x={[435, 435, 435, 435, 435, 435, 435, 435, 435, 435, 435]} y={[257, 257, 300, 335, 435, 485, 435, 335, 300, 257, 257]} times={[0, 0.24, 0.26, 0.277, 0.324, 0.348, 0.372, 0.419, 0.436, 0.456, 0.476]} />
-    <FlowDot animate={animate} kind="read" x={[435, 435, 435, 440, 440, 440]} y={[257, 257, 175, 145, 145, 105]} times={[0, 0.8, 0.873, 0.9, 0.904, 0.94]} />
+    <FlowDot animate={animate} kind="read" x={[440, 440, 440, 440, 435, 435]} y={[105, 105, 145, 175, 257, 257]} times={[0, 0.16, 0.2, 0.234, 0.28, 0.29]} />
+    <KeyFlow animate={animate} value="17" x={[435, 435, 435, 115, 115, 115, 115, 115, 115, 115, 435, 435, 435]} y={[257, 257, 300, 300, 335, 435, 485, 435, 335, 300, 300, 257, 257]} times={[0, 0.29, 0.31, 0.462, 0.479, 0.526, 0.55, 0.574, 0.621, 0.638, 0.79, 0.81, 0.83]} />
+    <KeyFlow animate={animate} value="42" x={[435, 435, 435, 275, 275, 275, 275, 275, 275, 275, 435, 435, 435]} y={[257, 257, 300, 300, 335, 435, 485, 435, 335, 300, 300, 257, 257]} times={[0, 0.29, 0.31, 0.386, 0.403, 0.45, 0.474, 0.498, 0.545, 0.562, 0.638, 0.658, 0.678]} />
+    <KeyFlow animate={animate} value="8" x={[435, 435, 435, 435, 435, 435, 435, 435, 435, 435, 435]} y={[257, 257, 300, 335, 435, 485, 435, 335, 300, 257, 257]} times={[0, 0.29, 0.31, 0.327, 0.374, 0.398, 0.422, 0.469, 0.486, 0.506, 0.526]} />
+    <FlowDot animate={animate} kind="read" x={[435, 435, 435, 440, 440, 440]} y={[257, 257, 175, 145, 145, 105]} times={[0, 0.84, 0.913, 0.94, 0.944, 0.98]} />
     <FlowDot animate={animate} kind="control" x={[710, 710, 690, 690, 500, 500]} y={[225, 225, 225, 120, 120, 175]} times={[0, 0.08, 0.099, 0.201, 0.386, 0.44]} delay={4.5} />
   </svg>
 );
@@ -207,8 +235,7 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
     <Node x={20} y={180} width={84} height={82} eyebrow="QUERY" label="Router 1" className="is-router" />
     <Node x={114} y={180} width={84} height={82} eyebrow="SELECTED" label="Router 2" className="is-router is-selected" />
     <Node x={208} y={180} width={84} height={82} eyebrow="QUERY" label="Router 3" className="is-router" />
-    <text className="limitless-query-keys" x="200" y="128" textAnchor="middle">SELECT dog_treats FROM dogs</text>
-    <text className="limitless-query-keys" x="200" y="144" textAnchor="middle">WHERE dog_id IN (17, 42, 8)</text>
+    <ReadQuery animate={animate} mobile />
     <text className="limitless-hash-label" x="156" y="302" textAnchor="middle">hash(dog_id)</text>
     <Shard mobile x={20} y={345} width={84} label="Shard 1" keys="17,104,901" />
     <Shard mobile x={114} y={345} width={84} label="Shard 2" keys="42,205,777" />
@@ -227,11 +254,11 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       <Storage animate={animate} mobile />
     </g>
 
-    <FlowDot animate={animate} kind="read" x={[200, 200, 200, 156, 156, 156]} y={[110, 110, 145, 145, 180, 262]} times={[0, 0.05, 0.093, 0.147, 0.19, 0.24]} />
-    <KeyFlow animate={animate} value="17" x={[156, 156, 156, 62, 62, 62, 62, 62, 62, 62, 156, 156, 156]} y={[262, 262, 315, 315, 345, 440, 510, 440, 345, 315, 315, 262, 262]} times={[0, 0.24, 0.281, 0.353, 0.376, 0.449, 0.503, 0.557, 0.63, 0.653, 0.725, 0.766, 0.786]} />
-    <KeyFlow animate={animate} value="42" x={[156, 156, 156, 156, 156, 156, 156, 156, 156, 156, 156]} y={[262, 262, 315, 345, 440, 510, 440, 345, 315, 262, 262]} times={[0, 0.24, 0.281, 0.304, 0.377, 0.431, 0.485, 0.558, 0.581, 0.622, 0.642]} />
-    <KeyFlow animate={animate} value="8" x={[156, 156, 156, 250, 250, 250, 250, 250, 250, 250, 156, 156, 156]} y={[262, 262, 315, 315, 345, 440, 510, 440, 345, 315, 315, 262, 262]} times={[0, 0.24, 0.281, 0.353, 0.376, 0.449, 0.503, 0.557, 0.63, 0.653, 0.725, 0.766, 0.786]} />
-    <FlowDot animate={animate} kind="read" x={[156, 156, 156, 200, 200, 200]} y={[262, 262, 180, 145, 145, 110]} times={[0, 0.8, 0.863, 0.89, 0.923, 0.95]} />
+    <FlowDot animate={animate} kind="read" x={[200, 200, 200, 156, 156, 156]} y={[110, 110, 145, 145, 180, 262]} times={[0, 0.16, 0.189, 0.226, 0.255, 0.29]} />
+    <KeyFlow animate={animate} value="17" x={[156, 156, 156, 62, 62, 62, 62, 62, 62, 62, 156, 156, 156]} y={[262, 262, 315, 315, 345, 440, 510, 440, 345, 315, 315, 262, 262]} times={[0, 0.29, 0.331, 0.403, 0.426, 0.499, 0.553, 0.607, 0.68, 0.703, 0.775, 0.816, 0.836]} />
+    <KeyFlow animate={animate} value="42" x={[156, 156, 156, 156, 156, 156, 156, 156, 156, 156, 156]} y={[262, 262, 315, 345, 440, 510, 440, 345, 315, 262, 262]} times={[0, 0.29, 0.331, 0.354, 0.427, 0.481, 0.535, 0.608, 0.631, 0.672, 0.692]} />
+    <KeyFlow animate={animate} value="8" x={[156, 156, 156, 250, 250, 250, 250, 250, 250, 250, 156, 156, 156]} y={[262, 262, 315, 315, 345, 440, 510, 440, 345, 315, 315, 262, 262]} times={[0, 0.29, 0.331, 0.403, 0.426, 0.499, 0.553, 0.607, 0.68, 0.703, 0.775, 0.816, 0.836]} />
+    <FlowDot animate={animate} kind="read" x={[156, 156, 156, 200, 200, 200]} y={[262, 262, 180, 145, 145, 110]} times={[0, 0.84, 0.903, 0.93, 0.963, 0.99]} />
     <FlowDot animate={animate} kind="control" x={[305, 305, 300, 300, 198, 198]} y={[225, 225, 225, 165, 165, 180]} times={[0, 0.08, 0.09, 0.209, 0.41, 0.44]} delay={4.5} />
   </svg>
 );

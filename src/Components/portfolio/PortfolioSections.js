@@ -247,10 +247,7 @@ export const AboutContent = () => {
 export const ContactFormContent = () => {
   return (
     <div className="max-w-4xl mx-auto px-4 md:px-8">
-      <PageHeading
-        title="Contact"
-        subtitle="Best ways to reach me."
-      />
+      <PageHeading title="Contact" />
       <div className="max-w-2xl mx-auto">
         <Stack spacing={2.5}>
           <a
