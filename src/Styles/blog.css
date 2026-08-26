@@ -884,14 +884,18 @@ body.blog-body {
 }
 
 .blog-table-wrapper {
+  max-width: 100%;
   margin: 2rem 0;
   overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
   border-radius: 12px;
   border: 1px solid rgba(15, 23, 42, 0.1);
 }
 
 .blog-table-wrapper table {
   width: 100%;
+  min-width: 680px;
   border-collapse: collapse;
 }
 
@@ -1331,10 +1335,13 @@ html.dark-mode.blog-body,
   border-radius: 12px;
   background: var(--aurora-panel);
   color: var(--aurora-ink);
+  box-sizing: border-box;
+  max-width: 100%;
 }
 
 .aurora-architecture-key {
   display: flex;
+  flex-wrap: wrap;
   justify-content: flex-end;
   gap: 1rem;
   color: var(--aurora-muted);
@@ -1747,7 +1754,7 @@ html.dark-mode.blog-body,
   border-color: rgba(148, 163, 184, 0.25);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 700px) {
   .aurora-architecture {
     margin: 1.5rem 0 2rem;
     padding: 0.85rem 0.6rem 1rem;
@@ -1765,6 +1772,9 @@ html.dark-mode.blog-body,
 
   .aurora-diagram-mobile {
     display: block;
+    max-width: 500px;
+    margin-right: auto;
+    margin-left: auto;
   }
 
   .aurora-diagram-mobile .aurora-node-label {
@@ -1776,16 +1786,40 @@ html.dark-mode.blog-body,
   }
 
   .aurora-diagram-mobile .limitless-shard .aurora-node-eyebrow {
-    font-size: 6px;
+    font-size: 7.5px;
     letter-spacing: 0.04em;
   }
 
   .aurora-diagram-mobile .limitless-shard-keys {
-    font-size: 7px;
+    font-size: 9px;
   }
 
   .aurora-diagram-mobile .limitless-query-keys {
-    font-size: 10px;
+    font-size: 12px;
+  }
+
+  .aurora-diagram-mobile .aurora-storage-az {
+    font-size: 14px;
+  }
+
+  .aurora-diagram-mobile .aurora-storage-copy {
+    font-size: 13px;
+  }
+
+  .aurora-diagram-mobile .aurora-sql-query text {
+    font-size: 13px;
+  }
+
+  .aurora-diagram-mobile.dsql-diagram .aurora-node-label {
+    font-size: 15px;
+  }
+
+  .aurora-diagram-mobile.dsql-diagram .dsql-journal text {
+    font-size: 13px;
+  }
+
+  .aurora-diagram-mobile.dsql-diagram .dsql-clock text {
+    font-size: 11px;
   }
 
   .robux-diagram .robux-meme-title {
@@ -1793,7 +1827,7 @@ html.dark-mode.blog-body,
   }
 
   .robux-diagram .robux-query text {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .robux-diagram .robux-query-prompt {
@@ -1801,12 +1835,28 @@ html.dark-mode.blog-body,
   }
 
   .robux-diagram .robux-commit-message text {
-    font-size: 12px;
+    font-size: 14px;
   }
 
   .aurora-architecture figcaption {
     padding: 0 0.5rem;
     font-size: 0.76rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .aurora-architecture {
+    margin-right: -0.25rem;
+    margin-left: -0.25rem;
+    padding-right: 0.35rem;
+    padding-left: 0.35rem;
+    max-width: calc(100% + 0.5rem);
+  }
+
+  .blog-table-header,
+  .blog-table-cell {
+    padding: 0.65rem 0.75rem;
+    font-size: 0.88rem;
   }
 }
 

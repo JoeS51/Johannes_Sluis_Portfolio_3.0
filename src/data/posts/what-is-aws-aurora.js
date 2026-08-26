@@ -69,19 +69,18 @@ In distributed systems 101, you're taught that you shouldn't rely on physical cl
 
 The last difference I'll cover is is that DSQL was designed for active-active multi-region writes while still providing strong consistency. That's a lot of words. Basically, clients can issue writes to DSQL from multiple regions and once a write is committed, all subsequent transactions will see the newest state.
 
-### Comparisons
+### Summary
 
 | Area | Classic Aurora | Aurora Limitless | Aurora DSQL |
 | --- | --- | --- | --- |
 | Architecture | Single writer with scalable read replicas | Routers coordinate work across Postgres shards | Fully disaggregated and hides its underlying resources |
 | Partitioning | No customer-managed sharding in this model | Hash-based sharding with customer-visible shard keys, collocation, and table types | Partitioning is hidden from the customer |
-| Distributed commits | Not sharded in this model | Multi-shard commits use 2PC | Distributed commit uses components such as the Journal and Adjudicator |
-| Serverless | Not covered | Cannot scale down to zero | Fully serverless |
-| Active-active multi-region writes | Not covered | Not supported | Supported with strong consistency |
-| Concurrency control | Not covered | Postgres-style locking | Optimistic concurrency control with conflict checks at commit time |
-| MVCC cleanup | Not covered | Timestamp-based snapshots with regular Postgres VACUUM | Timestamp-based snapshots with time-based garbage collection |
+| Scaling | Writer only scales up | Cannot scale down to zero | Fully serverless |
+| Multi-region writes | Not supported | Not supported | Supported with strong consistency |
+| Concurrency control | Postgres-style | Postgres-style with timestamp-based MVCC | Optimistic concurrency control |
+| Postgres compat | High | High with a couple restrictions | Not full feature parity |
 
-### Conclusion
+### Reflection
 
 This is more of a personal reflection that I had while reading this paper, but I recently saw a tweet by James Cowling, the CTO of Convex, that really resonated with me:
 
