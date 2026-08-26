@@ -59,6 +59,19 @@ DSQL achieves this with a fully disaggregated, serverless architecture that supp
 
 [[AURORA_DSQL_ANIMATION]]
 
+The first thing you might notice is that DSQL is even more disaggregated than Limitless. Unlike Limitless, where the DB is organized around routers and Postgres shards, DSQL abstracts those resources away from the customer entirely. Customers don't have to worry about choosing a shard key, thinking about table collocation, or when to shard (although Limitless also offers auto-sharding) with DSQL.
+
+Another major difference in DSQL is the use of [Optimistic Concurrency Control](https://www.databricks.com/blog/concurrency-control), or OCC, rather than relying on Postgres-style locking to prevent write conflicts. The basic idea behind OCC is that conflicts are checked at *commit time* rather than preventing conflicting work up front with locks. If conflicts are rare, then OCC works really well because transactions can proceed without waiting on one another. If contention is high, however, you will see many transactions rolling back and retrying.
+
+Because we're already talking about concurrency control, another interesting part of DSQL is its implementation of MVCC. Like Postgres, DSQL can keep multiple versions of a row so transactions can read from a consistent snapshot. Instead of transaction IDs, DSQL uses timestamps to determine which versions of a row are visible to a transaction. When a transaction begins, it gets a timestamp that defines its snapshot, and it only sees row versions that were committed before that point in time. 
+
+In distributed systems 101, you're taught that you shouldn't rely on physical clocks because they can drift, but DSQL gets around this by using tightly synchronized physical clocks with known error bounds. Relying on physical clocks isn't unique to DSQL though, Limitless also uses timestamps for its MVCC. The difference here is that DSQL does VACUUUM / garbage collection of old rows using a time-based approach (kinda like an expiration time) whereas Limitless VACUUM is just regular Postgres VACUUM.
+
+The last difference I'll cover is is that DSQL was designed for active-active multi-region writes while still providing strong consistency. That's a lot of words, so lets break it down.
+
+Applications can issue writes in multiple regions, but once a transaction commits, subsequent transactions won’t observe an older state. Achieving that requires DSQL’s distributed commit and logging architecture, including components like the Journal and Adjudicator.
+
+
 mention timestamp based MVCC
 
 ### Conclusion

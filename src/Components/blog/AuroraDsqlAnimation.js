@@ -3,7 +3,7 @@ import { motion, useInView, useReducedMotion } from 'framer-motion';
 import jackedDudeComputer from '../../Pictures/jacked-dude-computer.jpeg';
 
 const loop = {
-  duration: 11,
+  duration: 14,
   ease: 'linear',
   repeat: Infinity,
   repeatDelay: 1,
@@ -12,8 +12,8 @@ const loop = {
 const Node = ({ x, y, width, height, eyebrow, label, className = '' }) => (
   <g className={`aurora-node dsql-node ${className}`}>
     <rect x={x} y={y} width={width} height={height} rx="8" />
-    <text className="aurora-node-eyebrow" x={x + width / 2} y={y + 25} textAnchor="middle">{eyebrow}</text>
-    <text className="aurora-node-label" x={x + width / 2} y={y + 52} textAnchor="middle">{label}</text>
+    {eyebrow && <text className="aurora-node-eyebrow" x={x + width / 2} y={y + 25} textAnchor="middle">{eyebrow}</text>}
+    <text className="aurora-node-label" x={x + width / 2} y={y + (eyebrow ? 52 : 47)} textAnchor="middle">{label}</text>
   </g>
 );
 
@@ -73,7 +73,7 @@ const Clock = ({ animate, x, y }) => (
       cy={y}
       r="25"
       animate={animate ? { opacity: [0, 0, 0.3, 0, 0], scale: [0.8, 0.8, 1.2, 1.5, 1.5] } : { opacity: 0 }}
-      transition={{ ...loop, times: [0, 0.38, 0.43, 0.52, 1] }}
+      transition={{ ...loop, times: [0, 0.62, 0.67, 0.76, 1] }}
       style={{ transformOrigin: `${x}px ${y}px` }}
     />
     <circle cx={x} cy={y} r="18" />
@@ -111,7 +111,7 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
   >
     <title id={titleId}>Aurora DSQL query processor, adjudicators, journals, crossbar, and storage</title>
     <desc id={descriptionId}>
-      Reads travel directly from the query processor to storage. Commits pass through transaction adjudicators and journals, converge at a crossbar, and fan out to distributed storage.
+      Reads travel directly from the query processor to storage. Write commits pass through transaction adjudicators and journals, converge at a crossbar, and fan out to distributed storage.
     </desc>
 
     <g className="aurora-connectors dsql-commit-connectors">
@@ -134,8 +134,8 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
     <Client clipId={clipId} />
     <Node x={355} y={25} width={170} height={80} eyebrow="SQL FRONTEND" label="Query processor" className="is-router" />
     <Clock animate={animate} x={575} y={65} />
-    <Node x={200} y={150} width={180} height={82} eyebrow="TRANSACTION" label="Adjudicator 1" />
-    <Node x={500} y={150} width={180} height={82} eyebrow="TRANSACTION" label="Adjudicator 2" />
+    <Node x={200} y={150} width={180} height={82} label="Adjudicator 1" />
+    <Node x={500} y={150} width={180} height={82} label="Adjudicator 2" />
     <Journal x={240} y={270} number="1" />
     <Journal x={540} y={270} number="2" />
     <Node x={340} y={440} width={200} height={75} eyebrow="ROUTING" label="Crossbar" className="is-router" />
@@ -164,26 +164,27 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       kind="write"
       x={[440, 440, 440]}
       y={[-15, -15, 25]}
-      times={[0, 0.36, 0.42]}
+      times={[0, 0.63, 0.68]}
+    />
+    <FlowDot animate={animate} kind="read" x={[440, 440, 440]} y={[25, 25, -15]} times={[0, 0.56, 0.6]} />
+    <FlowDot
+      animate={animate}
+      kind="write"
+      x={[440, 440, 440, 290, 290, 290, 290, 290, 390, 390]}
+      y={[105, 105, 130, 130, 150, 232, 270, 400, 440, 440]}
+      times={[0, 0.69, 0.699, 0.753, 0.76, 0.79, 0.804, 0.851, 0.89, 0.9]}
     />
     <FlowDot
       animate={animate}
       kind="write"
-      x={[420, 420, 290, 290, 290, 290, 390, 390]}
-      y={[105, 130, 130, 150, 232, 270, 440, 440]}
-      times={[0, 0.42, 0.47, 0.5, 0.56, 0.59, 0.7, 0.72]}
+      x={[440, 440, 440, 590, 590, 590, 590, 590, 490, 490]}
+      y={[105, 105, 130, 130, 150, 232, 270, 400, 440, 440]}
+      times={[0, 0.69, 0.699, 0.753, 0.76, 0.79, 0.804, 0.851, 0.89, 0.9]}
+      delay={0.1}
     />
-    <FlowDot
-      animate={animate}
-      kind="write"
-      x={[460, 460, 590, 590, 590, 590, 490, 490]}
-      y={[105, 130, 130, 150, 232, 270, 440, 440]}
-      times={[0, 0.42, 0.47, 0.5, 0.56, 0.59, 0.7, 0.72]}
-      delay={0.18}
-    />
-    <FlowDot animate={animate} kind="write" radius={5} x={[440, 440, 190, 190]} y={[515, 540, 540, 570]} times={[0, 0.73, 0.8, 0.85]} />
-    <FlowDot animate={animate} kind="write" radius={5} x={[440, 440, 440, 440]} y={[515, 540, 540, 570]} times={[0, 0.73, 0.8, 0.85]} delay={0.12} />
-    <FlowDot animate={animate} kind="write" radius={5} x={[440, 440, 690, 690]} y={[515, 540, 540, 570]} times={[0, 0.73, 0.8, 0.85]} delay={0.24} />
+    <FlowDot animate={animate} kind="write" radius={5} x={[440, 440, 440, 190, 190, 190]} y={[515, 515, 540, 540, 570, 570]} times={[0, 0.9, 0.906, 0.963, 0.97, 0.98]} />
+    <FlowDot animate={animate} kind="write" radius={5} x={[440, 440, 440, 440, 440]} y={[515, 515, 540, 570, 570]} times={[0, 0.9, 0.932, 0.97, 0.98]} delay={0.04} />
+    <FlowDot animate={animate} kind="write" radius={5} x={[440, 440, 440, 690, 690, 690]} y={[515, 515, 540, 540, 570, 570]} times={[0, 0.9, 0.906, 0.963, 0.97, 0.98]} delay={0.08} />
   </svg>
 );
 
@@ -196,7 +197,7 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
   >
     <title id={titleId}>Aurora DSQL query processor, adjudicators, journals, crossbar, and storage</title>
     <desc id={descriptionId}>
-      Reads travel directly to storage. Commits pass through adjudicators, journals, and the crossbar before reaching distributed storage.
+      Reads travel directly to storage. Write commits pass through adjudicators, journals, and the crossbar before reaching distributed storage.
     </desc>
 
     <g className="aurora-connectors dsql-commit-connectors">
@@ -204,7 +205,7 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       <path d="M200 110 V135 H105 V155" />
       <path d="M200 135 H295 V155" />
       <path d="M105 237 V275 M295 237 V275" />
-      <path d="M110 405 L150 445 M300 405 L250 445" />
+      <path d="M105 405 L150 445 M295 405 L250 445" />
       <path d="M200 520 V555 H85 V595" />
       <path d="M200 555 V595" />
       <path d="M200 555 H315 V595" />
@@ -217,10 +218,10 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
     <Client mobile clipId={clipId} />
     <Node x={115} y={30} width={170} height={80} eyebrow="SQL FRONTEND" label="Query processor" className="is-router" />
     <Clock animate={animate} x={330} y={70} />
-    <Node x={20} y={155} width={170} height={82} eyebrow="TRANSACTION" label="Adjudicator 1" />
-    <Node x={210} y={155} width={170} height={82} eyebrow="TRANSACTION" label="Adjudicator 2" />
-    <Journal x={70} y={275} width={80} height={130} number="1" />
-    <Journal x={260} y={275} width={80} height={130} number="2" />
+    <Node x={20} y={155} width={170} height={82} label="Adjudicator 1" />
+    <Node x={210} y={155} width={170} height={82} label="Adjudicator 2" />
+    <Journal x={65} y={275} width={80} height={130} number="1" />
+    <Journal x={255} y={275} width={80} height={130} number="2" />
     <Node x={100} y={445} width={200} height={75} eyebrow="ROUTING" label="Crossbar" className="is-router" />
 
     <g className="aurora-storage-layer dsql-storage-layer">
@@ -242,12 +243,13 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       y={[70, 70, 70, 555, 555, 595, 555, 70, 70, 70]}
       times={[0, 0.06, 0.11, 0.23, 0.28, 0.32, 0.37, 0.48, 0.53, 0.56]}
     />
-    <FlowDot animate={animate} kind="write" x={[200, 200, 200]} y={[-5, -5, 30]} times={[0, 0.36, 0.42]} />
-    <FlowDot animate={animate} kind="write" x={[180, 180, 105, 105, 105, 110, 150, 150]} y={[110, 135, 135, 155, 237, 405, 445, 445]} times={[0, 0.42, 0.47, 0.5, 0.56, 0.64, 0.7, 0.72]} />
-    <FlowDot animate={animate} kind="write" x={[220, 220, 295, 295, 295, 300, 250, 250]} y={[110, 135, 135, 155, 237, 405, 445, 445]} times={[0, 0.42, 0.47, 0.5, 0.56, 0.64, 0.7, 0.72]} delay={0.18} />
-    <FlowDot animate={animate} kind="write" radius={5} x={[200, 200, 85, 85]} y={[520, 555, 555, 595]} times={[0, 0.73, 0.8, 0.85]} />
-    <FlowDot animate={animate} kind="write" radius={5} x={[200, 200, 200, 200]} y={[520, 555, 555, 595]} times={[0, 0.73, 0.8, 0.85]} delay={0.12} />
-    <FlowDot animate={animate} kind="write" radius={5} x={[200, 200, 315, 315]} y={[520, 555, 555, 595]} times={[0, 0.73, 0.8, 0.85]} delay={0.24} />
+    <FlowDot animate={animate} kind="write" x={[200, 200, 200]} y={[-5, -5, 30]} times={[0, 0.63, 0.68]} />
+    <FlowDot animate={animate} kind="read" x={[200, 200, 200]} y={[30, 30, -5]} times={[0, 0.56, 0.6]} />
+    <FlowDot animate={animate} kind="write" x={[200, 200, 200, 105, 105, 105, 105, 105, 150, 150]} y={[110, 110, 135, 135, 155, 237, 275, 405, 445, 445]} times={[0, 0.69, 0.701, 0.743, 0.752, 0.788, 0.805, 0.862, 0.89, 0.9]} />
+    <FlowDot animate={animate} kind="write" x={[200, 200, 200, 295, 295, 295, 295, 295, 250, 250]} y={[110, 110, 135, 135, 155, 237, 275, 405, 445, 445]} times={[0, 0.69, 0.701, 0.743, 0.752, 0.788, 0.805, 0.862, 0.89, 0.9]} delay={0.1} />
+    <FlowDot animate={animate} kind="write" radius={5} x={[200, 200, 200, 85, 85, 85]} y={[520, 520, 555, 555, 595, 595]} times={[0, 0.9, 0.916, 0.967, 0.985, 0.995]} />
+    <FlowDot animate={animate} kind="write" radius={5} x={[200, 200, 200, 200, 200]} y={[520, 520, 555, 595, 595]} times={[0, 0.9, 0.947, 0.985, 0.995]} delay={0.03} />
+    <FlowDot animate={animate} kind="write" radius={5} x={[200, 200, 200, 315, 315, 315]} y={[520, 520, 555, 555, 595, 595]} times={[0, 0.9, 0.916, 0.967, 0.985, 0.995]} delay={0.06} />
   </svg>
 );
 
@@ -266,7 +268,7 @@ const AuroraDsqlAnimation = () => {
   return (
     <figure ref={figureRef} className="aurora-architecture dsql-architecture">
       <div className="aurora-architecture-key" aria-hidden="true">
-        <span><i className="is-write" /> Commit path</span>
+        <span><i className="is-write" /> Write commit path</span>
         <span><i className="is-read" /> Read path</span>
       </div>
       <DesktopDiagram animate={shouldAnimate} titleId={desktopTitleId} descriptionId={desktopDescriptionId} clipId={desktopClipId} />
