@@ -67,12 +67,19 @@ Because we're already talking about concurrency control, another interesting par
 
 In distributed systems 101, you're taught that you shouldn't rely on physical clocks because they can drift, but DSQL gets around this by using tightly synchronized physical clocks with known error bounds. Relying on physical clocks isn't unique to DSQL though, Limitless also uses timestamps for its MVCC. The difference here is that DSQL does VACUUUM / garbage collection of old rows using a time-based approach (kinda like an expiration time) whereas Limitless VACUUM is just regular Postgres VACUUM.
 
-The last difference I'll cover is is that DSQL was designed for active-active multi-region writes while still providing strong consistency. That's a lot of words, so lets break it down.
+The last difference I'll cover is is that DSQL was designed for active-active multi-region writes while still providing strong consistency. That's a lot of words. Basically, clients can issue writes to DSQL from multiple regions and once a write is committed, all subsequent transactions will see the newest state.
 
-Applications can issue writes in multiple regions, but once a transaction commits, subsequent transactions won’t observe an older state. Achieving that requires DSQL’s distributed commit and logging architecture, including components like the Journal and Adjudicator.
+### Comparisons
 
-
-mention timestamp based MVCC
+| Area | Classic Aurora | Aurora Limitless | Aurora DSQL |
+| --- | --- | --- | --- |
+| Architecture | Single writer with scalable read replicas | Routers coordinate work across Postgres shards | Fully disaggregated and hides its underlying resources |
+| Partitioning | No customer-managed sharding in this model | Hash-based sharding with customer-visible shard keys, collocation, and table types | Partitioning is hidden from the customer |
+| Distributed commits | Not sharded in this model | Multi-shard commits use 2PC | Distributed commit uses components such as the Journal and Adjudicator |
+| Serverless | Not covered | Cannot scale down to zero | Fully serverless |
+| Active-active multi-region writes | Not covered | Not supported | Supported with strong consistency |
+| Concurrency control | Not covered | Postgres-style locking | Optimistic concurrency control with conflict checks at commit time |
+| MVCC cleanup | Not covered | Timestamp-based snapshots with regular Postgres VACUUM | Timestamp-based snapshots with time-based garbage collection |
 
 ### Conclusion
 
