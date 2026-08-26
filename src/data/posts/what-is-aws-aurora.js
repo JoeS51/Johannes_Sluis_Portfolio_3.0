@@ -4,7 +4,7 @@ const post = {
     title: 'What Is Amazon Aurora and Why Are There So Many?',
     description: '',
     date: '2026-08-22',
-    readingTime: 10,
+    readingTime: 15,
     tags: ['AWS', 'Databases'],
     cover: null
   },
@@ -53,22 +53,29 @@ Aurora Limitless sounds great! where does Aurora DSQL come in? There are a coupl
 3. Limitless still exposes sharding decisions to the customer. DSQL hides that partitioning from the client
 
 ### Aurora DSQL
-This leads us to the final evolution of Aurora is Aurora DSQL.
+This leads us to the final evolution of Aurora that is **Aurora DSQL**. It is easier to understand DSQL if you understand the motivation behind it. In Marc Brooker's words, their "goal was to build a relational database system that simplifies the work of application building and operations, freeing builders from worrying about scale, reliability, durability, and even multi-region fault tolerance."
 
-
-built on s3, serverless, sharded differently.
+DSQL achieves this with a fully disaggregated, serverless architecture that supports active-active multi-region writes. It also maintains strong consistency and remains compatible with Postgres. There's a lot to break down, but here is an animation to give you a better picture:
 
 [[AURORA_DSQL_ANIMATION]]
 
+mention timestamp based MVCC
 
 ### Conclusion
 
-To finish it off, I have some personal thoughts on all of these systems. I recently saw a tweet by James Cowling, the CTO of Convex, that really resonated with me when reading the DSQL paper.
+This is more of a personal reflection that I had while reading this paper, but I recently saw a tweet by James Cowling, the CTO of Convex, that really resonated with me:
 
-![one of my favorite voices on twitter](/images/convex-cto-tweet.png)
+![](/images/convex-cto-tweet.png)
 
-It's easy to find flaws in a paper and critique/question the decisions that they made. At the end of the day, an immense amount of time and effort went into the making of each of these databases and the folks at Amazon are probably more informed than the reader of the drawbacks of their system. DSQL is especially interestg which is probably why it sparks more debate. but if we think back to A couple of years ago if you mentioned using S3 for your database, you would probably be seen as crazy but now it's common sense. Who knows maybe DSQL is the future. Only time will tell 
+Reading these papers, I noticed that, subconsciously, I was trying to poke holes in the system and its design. Reading this tweet, I was just reminded that an immense amount of time and thought went into the making of each of these databases, and the folks at AWS don't need me to tell them about the tradeoffs of their system. Anyways, innovation is good and thanks for reading!
 
+
+### Resources
+- [Aurora Limitless Paper](https://dl.acm.org/doi/epdf/10.1145/3788853.3803089) 
+- [Aurora DSQL Paper](https://arxiv.org/pdf/2607.13276)
+- [Marc Brooker's blog](https://brooker.co.za/blog/2025/11/02/thinking-dsql.html)
+- [Marc Bowes blog](https://marc-bowes.com/)
+- [DSQL Simulator](https://brooker.co.za/dsql-transaction-flow.html)
 `
 };
 
