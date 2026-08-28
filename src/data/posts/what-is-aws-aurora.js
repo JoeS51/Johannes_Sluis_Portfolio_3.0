@@ -33,27 +33,27 @@ This animation shows the flow for both read and write paths. Writes pass through
 The single writer is the biggest limitation of classic Aurora. The single writer bottlenecks the write throughput of this system. You have the option to vertically scale your writer, but at some point, the vertical scaling won't be able to handle all your writes. At which point, you want to horizontally scale your writer. That leads us to Aurora Limitless.
 
 ### Aurora Limitless
-The folks at Amazon noticed the bottlenecks of classic Aurora and wanted to tackle them in a new system called *Aurora Limitless* (which we find out has its own limits). Aurora Limitless builds on top of a lot of the same ideas that classic Aurora had. Instead of having a single writer responsible for the whole DB, Aurora Limitless introduces **routers** and **shards**. Routers accept SQL queries from clients, plan and coordinate queries and forward requests to the relevant shards. Each shard is a Postgres compute instance responsible for a subset of the data. Aurora limitless uses hash-based partitioning across these shards and the underlying data is still persisted in Aurora's distributed storage.
+The folks at Amazon noticed the bottlenecks of classic Aurora and wanted to tackle them in a new system called *Aurora Limitless* (which we find out has its own limits). Aurora Limitless builds on top of a lot of the same ideas that classic Aurora had. Instead of having a single writer responsible for the whole DB, Aurora Limitless introduces **routers** and **shards**. Routers accept SQL queries from clients, plan and coordinate queries and forward requests to the relevant shards. Each shard is a Postgres compute instance responsible for a subset of the data. Aurora Limitless uses hash-based partitioning across these shards and the underlying data is still persisted in Aurora's distributed storage.
 
-If a query touches only one shard, then the router can send the work directly there. Otherwise, the router uses 2PC to coordinate work across all the shards that a transaction touches. The 2PC protocol to coordinate a commit across multiple shards is super interesting, but I won't dive into that here. If you're curious look at page 180 in the [Aurora Limitless paper](https://dl.acm.org/doi/epdf/10.1145/3788853.3803089).
+If a query touches only one shard, then the router can send the work directly there. Otherwise, for multi-shard writes, the router uses 2PC to coordinate work across all the shards that a transaction touches. The 2PC protocol to coordinate a commit across multiple shards is super interesting, but I won't dive into that here. If you're curious look at page 180 in the [Aurora Limitless paper](https://dl.acm.org/doi/epdf/10.1145/3788853.3803089).
 
 The last component is a **control plane** that manages the life cycle of the shards, monitors the health of all the routers/shards, handles auto-scaling, etc. 
 
 [[AURORA_LIMITLESS_ANIMATION]]
 
-In this animation, the client issues a read query to router 3. Router 3 then uses its hash function on the dog_ids + routing metadata to understand which shard each of them belong to. The router then sends the reads to those shards, combines their results and returns the result to the client.
+In this animation, the client issues a read query to router 3. Router 3 then uses its hash function on the dog_ids + routing metadata to understand which shard each of them belongs to. The router then sends the reads to those shards, combines their results and returns the result to the client.
 
-You might be asking, "but what if one shard gets a majority of the requests?" That's where *shard splitting* comes in. Either the customer or the control plane notices that one of the shards needs more capacity and initiates a shard split. If a shard is already overloaded, the last thing that you want to do is make it read and rewrite all of its data into a new shard. Aurora Limitless avoids that initial overhead of copying data to a new shard through Aurora's storage level CoW mechansim.
+You might be asking, "but what if one shard gets a majority of the requests?" That's where *shard splitting* comes in. Either the customer or the control plane notices that one of the shards needs more capacity and initiates a shard split. If a shard is already overloaded, the last thing that you want to do is make it read and rewrite all of its data into a new shard. Aurora Limitless avoids that initial overhead of copying data to a new shard through Aurora's storage level CoW mechansm.
 
 There are other issues with sharding your data such as expensive joins. Limitless addresses some of these issues through **collocation**. With collocation, you can place related tables on the same shard to make JOINs less expensive. Additionally, Limitless supports three different table types: sharded, reference, and standard tables so tables can be distributed across the shards in different ways.
 
-Aurora Limitless sounds great! where does Aurora DSQL come in? There are a couple of things:
+Aurora Limitless sounds great! Where does Aurora DSQL come in? There are a couple of things:
 1. Limitless cannot scale down to 0. It is not truly serverless
 2. Limitless doesn't support active-active multi-region writes
 3. Limitless still exposes sharding decisions to the customer. DSQL hides that partitioning from the client
 
 ### Aurora DSQL
-This leads us to the final evolution of Aurora that is **Aurora DSQL**. It is easier to understand DSQL if you understand the motivation behind it. In Marc Brooker's words, their "goal was to build a relational database system that simplifies the work of application building and operations, freeing builders from worrying about scale, reliability, durability, and even multi-region fault tolerance."
+This leads us to the final evolution of Aurora: **Aurora DSQL**. It is easier to understand DSQL if you understand the motivation behind it. In Marc Brooker's words, their "goal was to build a relational database system that simplifies the work of application building and operations, freeing builders from worrying about scale, reliability, durability, and even multi-region fault tolerance."
 
 DSQL achieves this with a fully disaggregated, serverless architecture that supports active-active multi-region writes. It also maintains strong consistency and remains compatible with Postgres. There's a lot to break down, but here is an animation to give you a better picture:
 
@@ -65,9 +65,9 @@ Another major difference in DSQL is the use of [Optimistic Concurrency Control](
 
 Because we're already talking about concurrency control, another interesting part of DSQL is its implementation of MVCC. Like Postgres, DSQL can keep multiple versions of a row so transactions can read from a consistent snapshot. Instead of transaction IDs, DSQL uses timestamps to determine which versions of a row are visible to a transaction. When a transaction begins, it gets a timestamp that defines its snapshot, and it only sees row versions that were committed before that point in time. 
 
-In distributed systems 101, you're taught that you shouldn't rely on physical clocks because they can drift, but DSQL gets around this by using tightly synchronized physical clocks with known error bounds. Relying on physical clocks isn't unique to DSQL though, Limitless also uses timestamps for its MVCC. The difference here is that DSQL does VACUUUM / garbage collection of old rows using a time-based approach (kinda like an expiration time) whereas Limitless VACUUM is just regular Postgres VACUUM.
+In distributed systems 101, you're taught that you shouldn't rely on physical clocks because they can drift, but DSQL gets around this by using tightly synchronized physical clocks with known error bounds. Relying on physical clocks isn't unique to DSQL though, Limitless also uses timestamps for its MVCC. The difference here is that DSQL does VACUUM / garbage collection of old rows using a time-based approach (kinda like an expiration time) whereas Limitless VACUUM is just regular Postgres VACUUM.
 
-The last difference I'll cover is is that DSQL was designed for active-active multi-region writes while still providing strong consistency. That's a lot of words. Basically, clients can issue writes to DSQL from multiple regions and once a write is committed, all subsequent transactions will see the newest state.
+The last difference I'll cover is that DSQL was designed for active-active multi-region writes while still providing strong consistency. That's a lot of words. Basically, clients can issue writes to DSQL from multiple regions and once a write is committed, all subsequent transactions will see the newest state.
 
 ### Summary
 
@@ -93,7 +93,7 @@ Reading these papers, I noticed that, subconsciously, I was trying to poke holes
 - [Aurora Limitless Paper](https://dl.acm.org/doi/epdf/10.1145/3788853.3803089) 
 - [Aurora DSQL Paper](https://arxiv.org/pdf/2607.13276)
 - [Marc Brooker's blog](https://brooker.co.za/blog/2025/11/02/thinking-dsql.html)
-- [Marc Bowes blog](https://marc-bowes.com/)
+- [Marc Bowes's blog](https://marc-bowes.com/)
 - [DSQL Simulator](https://brooker.co.za/dsql-transaction-flow.html)
 `
 };
