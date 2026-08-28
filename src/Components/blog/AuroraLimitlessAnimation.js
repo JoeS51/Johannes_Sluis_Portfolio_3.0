@@ -235,7 +235,6 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
     <Node x={20} y={180} width={84} height={82} eyebrow="QUERY" label="Router 1" className="is-router" />
     <Node x={114} y={180} width={84} height={82} eyebrow="SELECTED" label="Router 2" className="is-router is-selected" />
     <Node x={208} y={180} width={84} height={82} eyebrow="QUERY" label="Router 3" className="is-router" />
-    <ReadQuery animate={animate} mobile />
     <text className="limitless-hash-label" x="156" y="302" textAnchor="middle">hash(dog_id)</text>
     <Shard mobile x={20} y={345} width={84} label="Shard 1" keys="17,104,901" />
     <Shard mobile x={114} y={345} width={84} label="Shard 2" keys="42,205,777" />

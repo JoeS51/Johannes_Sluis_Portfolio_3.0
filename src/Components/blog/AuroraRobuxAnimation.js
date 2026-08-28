@@ -158,7 +158,7 @@ const Diagram = ({ animate, mobile, titleId, descriptionId, clipId }) => {
       <image href={nerdKid} {...client} preserveAspectRatio="xMidYMid slice" clipPath={`url(#${clipId})`} />
       <rect className="robux-client-frame" {...client} rx="12" />
 
-      <QueryBubble animate={animate} mobile={mobile} />
+      {!mobile && <QueryBubble animate={animate} />}
       <g className="aurora-connectors robux-connectors">
         {mobile ? (
           <>

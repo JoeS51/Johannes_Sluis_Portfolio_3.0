@@ -152,6 +152,8 @@ The VACUUM process is very involved and complex, so I'll only be going over it a
 
 ### HOT Updates (?)
 
+TODO
+
 ### References
 - [The internals of PostgreSQL by Hironobu Suzuki](https://www.interdb.jp/pg/pgsql05/index.html)
 - [PostgreSQL 14 internals by Egor Rogov](https://postgrespro.com/community/books/internals)
