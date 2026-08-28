@@ -184,7 +184,7 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
     <Node x={645} y={200} width={150} height={82} eyebrow="READ ONLY" label="Replica 3" />
 
     <g className="aurora-storage-layer">
-      <rect x="25" y="365" width="770" height="135" rx="10" />
+      <rect x="15" y="365" width="810" height="135" rx="10" />
       <text className="aurora-storage-title" x="45" y="393">SHARED DISTRIBUTED STORAGE</text>
       <StorageLayer animate={animate} />
     </g>
@@ -246,7 +246,8 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
 
     <g className="aurora-connectors">
       <path d="M170 125 V160 H52 V215" />
-      <path d="M230 125 V175 H338" />
+      <path d="M230 125 V175" />
+      <path d="M148 175 H338" />
       <path d="M148 175 V215 M243 175 V215 M338 175 V215" />
       <path d="M52 305 V420" />
       <path d="M148 305 V420 M243 305 V420 M338 305 V420" />
@@ -263,9 +264,6 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
       <text className="aurora-storage-title" x="34" y="445">SHARED DISTRIBUTED STORAGE</text>
       <StorageLayer animate={animate} mobile />
     </g>
-
-    <SqlQuery animate={animate} kind="write" mobile />
-    <SqlQuery animate={animate} kind="read" mobile />
 
     <FlowDot animate={animate} kind="write" x={[52, 52, 98, 98, 52]} y={[420, 420, 455, 455, 420]} times={[0, 0.29, 0.34, 0.38, 0.4]} />
     <FlowDot animate={animate} kind="write" x={[52, 52, 202, 202, 52]} y={[420, 420, 455, 455, 420]} times={[0, 0.29, 0.34, 0.38, 0.4]} delay={0.1} />
