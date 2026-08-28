@@ -67,11 +67,15 @@ Another major difference in DSQL is the use of [Optimistic Concurrency Control](
 
 Because we're already talking about concurrency control, another interesting part of DSQL is its implementation of MVCC. Like Postgres, DSQL can keep multiple versions of a row so transactions can read from a consistent snapshot. Instead of transaction IDs, DSQL uses timestamps to determine which versions of a row are visible to a transaction. When a transaction begins, it gets a timestamp that defines its snapshot, and it only sees row versions that were committed before that point in time. 
 
-In distributed systems 101, you're taught that you shouldn't rely on physical clocks because they can drift, but DSQL gets around this by using tightly synchronized physical clocks with known error bounds. Relying on physical clocks isn't unique to DSQL though, Limitless also uses timestamps for its MVCC. The difference here is that DSQL does VACUUM / garbage collection of old rows using a time-based approach (kinda like an expiration time) whereas Limitless VACUUM is just regular Postgres VACUUM.
+In distributed systems 101, you're taught that you shouldn't rely on physical clocks because they can drift, but DSQL gets around this by using tightly synchronized physical clocks with known error bounds. Relying on physical clocks isn't unique to DSQL though, Limitless also uses timestamps for its MVCC. The difference here is that DSQL won't make users manually run VACUUM while Limitless retains Postgres's VACUUM/AUTOVACUUM operations for customers to control VACUUM (which is eseentially how Postgres garbage collects old MVCC rows).
 
 The last difference I'll cover is that DSQL was designed for active-active multi-region writes while still providing strong consistency. That's a lot of words. Basically, clients can issue writes to DSQL from multiple regions and once a write is committed, all subsequent transactions will see the newest state.
 
 ### Summary
+
+So to answer the question in the title about why there are so many Auroras: they're different databases designed to solve different problems. I'm still not sure why they're all named Aurora. I think it's confusing, but the Aurora name also carries some credibility, which might be why Amazon decided to keep it.
+
+Here's a comparison of all of them side-to-side:
 
 | Area | Classic Aurora | Aurora Limitless | Aurora DSQL |
 | --- | --- | --- | --- |
