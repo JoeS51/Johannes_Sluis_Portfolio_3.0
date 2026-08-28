@@ -4,8 +4,8 @@ const post = {
     title: 'What Is Amazon Aurora and Why Are There So Many?',
     description: '',
     date: '2026-08-22',
-    readingTime: 15,
-    tags: ['AWS', 'Databases'],
+    readingTime: 12,
+    tags: ['Database internals'],
     cover: null
   },
   content: `
