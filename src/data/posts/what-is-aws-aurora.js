@@ -2,7 +2,7 @@ const post = {
   slug: 'what-is-amazon-aurora',
   frontmatter: {
     title: 'What Is Amazon Aurora and Why Are There So Many?',
-    description: '',
+    description: 'A comparison of classic Amazon Aurora, Aurora Limitless, and Aurora DSQL, focusing on their architecture, scaling, sharding, and consistency.',
     date: '2026-08-22',
     readingTime: 12,
     tags: ['Database internals'],
@@ -84,7 +84,7 @@ The last difference I'll cover is that DSQL was designed for active-active multi
 
 This is more of a personal reflection that I had while reading this paper, but I recently saw a tweet by James Cowling, the CTO of Convex, that really resonated with me:
 
-![](/images/convex-cto-tweet.png)
+![Tweet from Convex CTO James Cowling](/images/convex-cto-tweet.png)
 
 Reading these papers, I noticed that, subconsciously, I was trying to poke holes in the system and its design. Reading this tweet, I was just reminded that an immense amount of time and thought went into the making of each of these databases, and the folks at AWS don't need me to tell them about the tradeoffs of their system. Anyways, innovation is good and thanks for reading!
 
