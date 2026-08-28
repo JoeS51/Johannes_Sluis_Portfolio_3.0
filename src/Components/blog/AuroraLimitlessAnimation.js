@@ -9,6 +9,13 @@ const transition = {
   repeatDelay: 0.8,
 };
 
+const controlTransition = {
+  duration: 0.85,
+  ease: 'linear',
+  repeat: Infinity,
+  repeatDelay: 9.95,
+};
+
 const Node = ({ x, y, width, height, eyebrow, label, className = '' }) => (
   <g className={`aurora-node limitless-node ${className}`}>
     <rect x={x} y={y} width={width} height={height} rx="8" />
@@ -36,7 +43,7 @@ const Shard = ({ x, y, width, label, keys, mobile = false }) => (
   </g>
 );
 
-const FlowDot = ({ animate, x, y, times, kind, delay = 0 }) => (
+const FlowDot = ({ animate, x, y, times, kind, delay = 0, animationTransition = transition }) => (
   <motion.circle
     className={`aurora-flow-dot is-${kind}`}
     r="6"
@@ -46,7 +53,7 @@ const FlowDot = ({ animate, x, y, times, kind, delay = 0 }) => (
       cy: y,
       opacity: x.map((_, index) => index === 0 || index === x.length - 1 ? 0 : 1),
     } : { opacity: 0 }}
-    transition={{ ...transition, delay, times }}
+    transition={{ ...animationTransition, delay, times }}
   />
 );
 
@@ -203,7 +210,15 @@ const DesktopDiagram = ({ animate, titleId, descriptionId, clipId }) => (
     <KeyFlow animate={animate} value="42" x={[435, 435, 435, 275, 275, 275, 275, 275, 275, 275, 435, 435, 435]} y={[257, 257, 300, 300, 335, 435, 485, 435, 335, 300, 300, 257, 257]} times={[0, 0.29, 0.31, 0.386, 0.403, 0.45, 0.474, 0.498, 0.545, 0.562, 0.638, 0.658, 0.678]} />
     <KeyFlow animate={animate} value="8" x={[435, 435, 435, 435, 435, 435, 435, 435, 435, 435, 435]} y={[257, 257, 300, 335, 435, 485, 435, 335, 300, 257, 257]} times={[0, 0.29, 0.31, 0.327, 0.374, 0.398, 0.422, 0.469, 0.486, 0.506, 0.526]} />
     <FlowDot animate={animate} kind="read" x={[435, 435, 435, 440, 440, 440]} y={[257, 257, 175, 145, 145, 105]} times={[0, 0.84, 0.913, 0.94, 0.944, 0.98]} />
-    <FlowDot animate={animate} kind="control" x={[710, 710, 690, 690, 500, 500]} y={[225, 225, 225, 120, 120, 175]} times={[0, 0.08, 0.099, 0.201, 0.386, 0.44]} delay={4.5} />
+    <FlowDot
+      animate={animate}
+      kind="control"
+      x={[710, 710, 690, 690, 500, 500]}
+      y={[225, 225, 225, 120, 120, 175]}
+      times={[0, 0.02, 0.074, 0.358, 0.871, 1]}
+      delay={9.9}
+      animationTransition={controlTransition}
+    />
   </svg>
 );
 
@@ -258,7 +273,15 @@ const MobileDiagram = ({ animate, titleId, descriptionId, clipId }) => (
     <KeyFlow animate={animate} value="42" x={[156, 156, 156, 156, 156, 156, 156, 156, 156, 156, 156]} y={[262, 262, 315, 345, 440, 510, 440, 345, 315, 262, 262]} times={[0, 0.29, 0.331, 0.354, 0.427, 0.481, 0.535, 0.608, 0.631, 0.672, 0.692]} />
     <KeyFlow animate={animate} value="8" x={[156, 156, 156, 250, 250, 250, 250, 250, 250, 250, 156, 156, 156]} y={[262, 262, 315, 315, 345, 440, 510, 440, 345, 315, 315, 262, 262]} times={[0, 0.29, 0.331, 0.403, 0.426, 0.499, 0.553, 0.607, 0.68, 0.703, 0.775, 0.816, 0.836]} />
     <FlowDot animate={animate} kind="read" x={[156, 156, 156, 200, 200, 200]} y={[262, 262, 180, 145, 145, 110]} times={[0, 0.84, 0.903, 0.93, 0.963, 0.99]} />
-    <FlowDot animate={animate} kind="control" x={[305, 305, 300, 300, 198, 198]} y={[225, 225, 225, 165, 165, 180]} times={[0, 0.08, 0.09, 0.209, 0.41, 0.44]} delay={4.5} />
+    <FlowDot
+      animate={animate}
+      kind="control"
+      x={[305, 305, 300, 300, 198, 198]}
+      y={[225, 225, 225, 165, 165, 180]}
+      times={[0, 0.02, 0.047, 0.377, 0.937, 1]}
+      delay={9.9}
+      animationTransition={controlTransition}
+    />
   </svg>
 );
 
