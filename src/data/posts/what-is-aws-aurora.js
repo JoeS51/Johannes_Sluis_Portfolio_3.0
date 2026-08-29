@@ -5,7 +5,7 @@ const post = {
     description: 'A comparison of classic Amazon Aurora, Aurora Limitless, and Aurora DSQL, focusing on their architecture, scaling, sharding, and consistency.',
     date: '2026-08-22',
     readingTime: 12,
-    tags: ['Database internals'],
+    tags: ['Database internals', 'Distributed systems'],
     cover: null
   },
   content: `
