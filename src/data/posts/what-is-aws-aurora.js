@@ -21,7 +21,7 @@ In fact, there are four (or you could argue three) offerings under the Amazon Au
 - [Aurora PostgreSQL Limitless Database](https://docs.aws.amazon.com/AmazonRDS/latest/AuroraUserGuide/limitless.html)
 - [Aurora DSQL](https://docs.aws.amazon.com/aurora-dsql/latest/userguide/what-is-aurora-dsql.html)
 
-That's a lot! Why did they name them all Aurora? Why did they create DSQL when they already had limitless? Do they just love Postgres? I read the Aurora DSQL and Aurora Limitless research papers to hopefully answer these questions. Also, I'll be focusing more on the differences in their architecture and design choices rather than their differences to an application developer. I am [databasemaxxing](https://pthorpe92.dev/databasemaxxing/) after all.
+That's a lot! Why did they name them all Aurora? Why did they create DSQL when they already had limitless? Do they just love Postgres? I read the Aurora DSQL and Aurora Limitless research papers to hopefully answer these questions. I'll be focusing more on the differences in their architecture and design choices rather than their differences to an application developer. I am [databasemaxxing](https://pthorpe92.dev/databasemaxxing/) after all.
 
 ### Aurora MySQL/PostgreSQL
 This is the classic Aurora offering and the first in the Aurora series. If you're familiar with AlloyDB, HorizonDB, or Neon, then you can think of it as something similar to those systems. The basic idea is that your Postgres/MySQL database doesn't live on a single machine. Aurora disaggregates compute and storage (basically Query Processor and Storage engine are separated). There is a single writer compute instance and you can add multiple read replicas, which are all backed by the same distributed storage layer.
@@ -30,7 +30,7 @@ This is the classic Aurora offering and the first in the Aurora series. If you'r
 
 This animation shows the flow for both read and write paths. Writes pass through a dedicated writer instance and reads can pass through any of the read instances (these can be scaled up/out). 
 
-The writer sends redo/WAL records to the distributed storage layer as changes occur. When the transaction commits, Aurora waits for the required storage quorum (4/6 storage copies ack the write) before acknowledging the commit. The storage layer of this system is replicated across three different AZs with six copies of the data across the AZs, so it is fairly fault-tolerant.
+The writer sends redo/WAL records to the distributed storage layer as changes occur. To commit a transaction, Aurora waits for the required storage quorum (4/6 storage copies ack the write) before acknowledging the commit. The storage layer of this system is replicated across three different AZs with six copies of the data across the AZs, so it is fairly fault-tolerant.
 
 The single writer is the biggest limitation of classic Aurora. The single writer bottlenecks the write throughput of this system. You have the option to vertically scale your writer, but at some point, the vertical scaling won't be able to handle all your writes. At which point, you want to horizontally scale your writer. That leads us to Aurora Limitless.
 
@@ -67,13 +67,13 @@ Another major difference in DSQL is the use of [Optimistic Concurrency Control](
 
 Because we're already talking about concurrency control, another interesting part of DSQL is its implementation of MVCC. Like Postgres, DSQL can keep multiple versions of a row so transactions can read from a consistent snapshot. Instead of transaction IDs, DSQL uses timestamps to determine which versions of a row are visible to a transaction. When a transaction begins, it gets a timestamp that defines its snapshot, and it only sees row versions that were committed before that point in time. 
 
-In distributed systems 101, you're taught that you shouldn't rely on physical clocks because they can drift, but DSQL gets around this by using tightly synchronized physical clocks with known error bounds. Relying on physical clocks isn't unique to DSQL though, Limitless also uses timestamps for its MVCC. The difference here is that DSQL won't make users manually run VACUUM while Limitless retains Postgres's VACUUM/AUTOVACUUM operations for customers to control VACUUM (which is eseentially how Postgres garbage collects old MVCC rows).
+In distributed systems 101, you're taught that you shouldn't rely on physical clocks because they can drift, but DSQL gets around this by using tightly synchronized physical clocks with known error bounds. Relying on physical clocks isn't unique to DSQL though, Limitless also uses timestamps for its MVCC. The difference here is that DSQL abstracts garbage collection away from users, while Limitless retains Postgres's VACUUM/AUTOVACUUM interface.
 
-The last difference I'll cover is that DSQL was designed for active-active multi-region writes while still providing strong consistency. That's a lot of words. Basically, clients can issue writes to DSQL from multiple regions and once a write is committed, all subsequent transactions will see the newest state.
+Lastly, DSQL was designed for active-active multi-region writes while still providing strong consistency. Basically, clients can issue writes to DSQL from multiple regions and once a write is committed, all subsequent transactions will see the newest state.
 
 ### Summary
 
-So to answer the question in the title about why there are so many Auroras: they're different databases designed to solve different problems. I'm still not sure why they're all named Aurora. I think it's confusing, but the Aurora name also carries some credibility, which might be why Amazon decided to keep it.
+So to answer the question about why there are so many Auroras: they're all different databases designed to solve different problems. I'm still not sure why they're all named Aurora though. I think it's confusing, but the Aurora name also carries some credibility, which might be why Amazon decided to keep it.
 
 Here's a comparison of all of them side-to-side:
 
@@ -81,7 +81,7 @@ Here's a comparison of all of them side-to-side:
 | --- | --- | --- | --- |
 | Architecture | Single writer with scalable read replicas | Routers coordinate work across Postgres shards | Fully disaggregated and hides its underlying resources |
 | Partitioning | No customer-managed sharding in this model | Hash-based sharding with customer-visible shard keys, collocation, and table types | Partitioning is hidden from the customer |
-| Scaling | Writer only scales up | Cannot scale down to zero | Fully serverless |
+| Write Scaling | Writer only scales vertically | Cannot scale down to zero | Fully serverless |
 | Multi-region writes | Not supported | Not supported | Supported with strong consistency |
 | Concurrency control | Postgres-style | Postgres-style with timestamp-based MVCC | Optimistic concurrency control |
 | Postgres compat | High | High with some limitless-specific restrictions | Postgres compatible, but not full feature parity (no pg extensions, only repeatable read isolation level, etc.) |
@@ -92,7 +92,9 @@ This is more of a personal reflection that I had while reading this paper, but I
 
 ![Tweet from Convex CTO James Cowling](/images/convex-cto-tweet.png)
 
-Reading these papers, I noticed that, subconsciously, I was trying to poke holes in the system and its design. Reading this tweet, I was just reminded that an immense amount of time and thought went into the making of each of these databases, and the folks at AWS don't need me to tell them about the tradeoffs of their system. Anyways, innovation is good and thanks for reading!
+Reading these papers, I noticed that, subconsciously, I was trying to poke holes in the system and its design. Reading this tweet, I was just reminded that an immense amount of time and thought went into the making of each of these databases, and the folks at AWS don't need me to tell them about the tradeoffs of their system.
+
+Thanks for reading!
 
 
 ### Resources
