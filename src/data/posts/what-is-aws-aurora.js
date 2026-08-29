@@ -96,6 +96,22 @@ Reading these papers, I noticed that, subconsciously, I was trying to poke holes
 
 Thanks for reading!
 
+**edit:**
+
+After posting this article, it looks like someone working on these actual systems commented with the following clarification. I thought it would be helpful to include here:
+#### "
+*I just want to add a simple clarification that might help with all of the Aurora product "family" confusion.*
+
+*Aurora MySQL/Postgres is Aurora (or OG Aurora, if you like). It is one team and one technology. Postgres was added after MySQL, but is the same storage system and page writer underneath adapted for Postgres.*
+
+*Aurora Limitless is from some other AWS group and the paper does not have anyone from the original Aurora team on it. They added higher-level routing and sharding on top of Aurora's storage system.*
+
+*Aurora DSQL has nothing to do with original Aurora and no original Aurora contributors were involved.*
+
+#### "
+-- one of the co-creators of the original Aurora system
+
+(pretty amazing this article reached some of the folks actually working on all of these systems!)
 
 ### Resources
 - [Aurora Limitless Paper](https://dl.acm.org/doi/epdf/10.1145/3788853.3803089) 
