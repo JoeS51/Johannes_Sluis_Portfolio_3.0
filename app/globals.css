@@ -49,6 +49,10 @@ html[data-ink-theme="dark"]:has(.ink) body {
   color-scheme: dark;
 }
 
+.ink {
+  -webkit-tap-highlight-color: transparent;
+}
+
 .ink [lang="ja"] {
   font-family: var(--font-noto-jp), sans-serif;
 }
@@ -77,8 +81,10 @@ html[data-ink-theme="dark"]:has(.ink) body {
   font-weight: 700;
 }
 
-.ink-theme:hover {
-  color: var(--ink-fg);
+@media (hover: hover) {
+  .ink-theme:hover {
+    color: var(--ink-fg);
+  }
 }
 
 .ink-theme:focus-visible {
@@ -128,8 +134,14 @@ html[data-ink-theme="dark"]:has(.ink) body {
 }
 
 .ink-nav-links a[aria-current="page"],
-.ink-nav-links a:hover {
+.ink-nav-links a:active {
   color: var(--ink-fg);
+}
+
+@media (hover: hover) {
+  .ink-nav-links a:hover {
+    color: var(--ink-fg);
+  }
 }
 
 .ink-main {
@@ -229,7 +241,8 @@ html[data-ink-theme="dark"]:has(.ink) body {
   }
 }
 
-/* Links fill with ink from the left on hover, the text flipping to paper. */
+/* Links fill with ink from the left on hover, the text flipping to paper.
+   Touch screens can't hover (a tap leaves :hover stuck on), so there the ink stamps in while pressed. */
 .ink-specs a,
 .ink-post-title,
 .ink-article-nav b {
@@ -242,15 +255,28 @@ html[data-ink-theme="dark"]:has(.ink) body {
   box-decoration-break: clone;
 }
 
-.ink-specs a:hover,
+.ink-specs a:active,
 .ink-specs a:focus-visible,
-.ink-posts li:hover .ink-post-title,
+.ink-posts li:active .ink-post-title,
 .ink-post-title:focus-visible,
-.ink-article-nav a:hover b,
+.ink-article-nav a:active b,
 .ink-article-nav a:focus-visible b {
   background-size: 100% 100%;
   color: var(--ink-bg);
   outline: none;
+}
+
+@media (hover: hover) {
+  .ink-specs a:hover,
+  .ink-posts li:hover .ink-post-title,
+  .ink-article-nav a:hover b {
+    background-size: 100% 100%;
+    color: var(--ink-bg);
+  }
+
+  .ink-specs a:hover::after {
+    color: inherit;
+  }
 }
 
 .ink-specs a::after {
@@ -261,12 +287,12 @@ html[data-ink-theme="dark"]:has(.ink) body {
   transition: color 0.28s ease;
 }
 
-.ink-specs a:hover::after,
+.ink-specs a:active::after,
 .ink-specs a:focus-visible::after {
   color: inherit;
 }
 
-@media (prefers-reduced-motion: reduce) {
+@media (hover: none), (prefers-reduced-motion: reduce) {
   .ink-specs a,
   .ink-post-title,
   .ink-article-nav b {
@@ -359,8 +385,14 @@ html[data-ink-theme="dark"]:has(.ink) body {
   transition: color 0.2s ease;
 }
 
-.ink .ink-back:hover {
+.ink .ink-back:active {
   color: var(--ink-fg);
+}
+
+@media (hover: hover) {
+  .ink .ink-back:hover {
+    color: var(--ink-fg);
+  }
 }
 
 .ink-article-header {
