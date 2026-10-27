@@ -54,7 +54,7 @@ const specs: Spec[] = [
 export default function Page() {
   return (
     <div className="ink-sheet">
-      <InkTitle ja="自己紹介" title="About" />
+      <InkTitle ja="アバウト" title="About" />
       <p className="ink-prose">
         Hey! Thanks for checking out my page. I&apos;m Joe, a software engineer interested in systems programming and mostly databases.
         I&apos;m on the Azure HorizonDB engine team, working on databases full time. I also occasionally write articles and make funny projects.

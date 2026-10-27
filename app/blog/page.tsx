@@ -17,7 +17,7 @@ export default function Page() {
   const posts = getAllPosts();
   return (
     <div className="ink-sheet">
-      <InkTitle ja="文章" title="Writing" />
+      <InkTitle ja="ライティング" title="Writing" />
       <ol className="ink-posts">
         {posts.map((post, index) => (
           <li key={post.slug}>
