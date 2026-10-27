@@ -44,6 +44,7 @@ const specs: Spec[] = [
   { label: "Name", ja: "名前", value: "Johannes Kazuki Sluis" },
   { label: "Team", ja: "所属", value: "Azure HorizonDB engine team" },
   { label: "Interests", ja: "興味", value: "Systems programming, databases, soccer" },
+  { label: "Languages", ja: "言語", value: "Rust, C, Japanese" },
   { label: "Meet", ja: "面談", value: <a href={links.cal} target="_blank" rel="noopener noreferrer">Book a 15 min call</a> },
 ];
 
