@@ -1,0 +1,78 @@
+/* A quiet archive heading lets the serif article titles lead the page. */
+/* Same stack joesluis.com ends up with (Bootstrap's body font wins there): the reader's system UI font. */
+.blog-page { min-height:100svh; font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue","Noto Sans","Liberation Sans",Arial,sans-serif; width:100%; overflow-x:hidden; background:#fff; color:#121212; -webkit-font-smoothing:antialiased; }
+.blog-post-main { max-width:960px; margin:0 auto; padding:3rem 1.5rem 4rem; }
+.blog-back { margin-bottom:2rem; }
+.blog-back-link { display:inline-flex; align-items:center; gap:.5rem; color:rgb(15 23 42 / 65%); font-size:.9rem; text-decoration:none; transition:color .2s ease; }
+.blog-back-link:hover { color:#0f172a; }
+.blog-post-header { margin-bottom:3rem; }
+.blog-post-title { display:block; grid-template-columns:none; font-family:inherit; margin:0 0 1rem; color:#000; font-size:clamp(2.25rem,5vw,3.25rem); font-weight:500; letter-spacing:-.025em; line-height:1.1; }
+.blog-post-meta { display:flex; flex-wrap:wrap; align-items:center; gap:.75rem; margin-bottom:1.5rem; color:rgb(15 23 42 / 55%); }
+.blog-post-tags { display:flex; flex-wrap:wrap; gap:.5rem; }
+.blog-tag { padding:.25rem .75rem; border-radius:999px; background:rgb(15 23 42 / 5%); color:rgb(15 23 42 / 75%); font-size:.75rem; letter-spacing:.08em; text-transform:uppercase; }
+.blog-post-layout { display:flex; align-items:flex-start; gap:2.5rem; min-width:0; }
+.blog-post-content { flex:1; width:100%; max-width:720px; min-width:0; overflow-x:hidden; }
+.blog-heading-1,.blog-heading-2,.blog-heading-3,.blog-heading-4 { display:block; grid-template-columns:none; margin:2rem 0 1rem; color:#0f172a; font-weight:500; letter-spacing:-.01em; line-height:1.2; }
+.blog-heading-1:first-child,.blog-heading-2:first-child,.blog-heading-3:first-child,.blog-heading-4:first-child { margin-top:0; }
+.blog-heading-1 { font-size:clamp(2rem,4vw,2.75rem); }
+.blog-heading-2 { font-size:clamp(1.75rem,3vw,2.25rem); }
+.blog-heading-3 { font-size:1.5rem; }
+.blog-heading-4 { font-size:1.25rem; }
+.blog-paragraph { margin:0 0 1.25rem; color:rgb(15 23 42 / 80%); font-size:1.05rem; letter-spacing:.015em; line-height:1.8; overflow-wrap:anywhere; }
+.blog-link { color:#0f172a; font-weight:600; text-decoration:underline; text-decoration-color:rgb(15 23 42 / 30%); text-decoration-thickness:2px; }
+.blog-list,.blog-ordered-list { display:grid; gap:.5rem; margin:0 0 1.25rem; padding-left:1.5rem; color:rgb(15 23 42 / 80%); }
+.blog-list { list-style:disc; }
+.blog-ordered-list { list-style:decimal; }
+.blog-list-item { font-size:1.05rem; line-height:1.6; overflow-wrap:anywhere; }
+.blog-quote { margin:2rem 0; padding:1rem 1.5rem; border-left:4px solid rgb(15 23 42 / 15%); background:rgb(15 23 42 / 3%); color:rgb(15 23 42 / 70%); font-style:italic; }
+.blog-quote .blog-paragraph { margin-bottom:0; color:inherit; }
+.blog-code-block-wrapper { position:relative; width:100%; max-width:100%; margin:.75rem 0 1.25rem; }
+.blog-code-block-wrapper pre { width:100%; max-width:100%; margin:0; padding:1.5rem; overflow-x:auto; border-radius:12px; background:#282c34; color:#f8fafc; font:1rem/1.5 "Source Code Pro",Menlo,Monaco,Consolas,monospace; white-space:pre; }
+.blog-code-block-wrapper pre code { padding:0; border-radius:0; background:transparent; color:inherit; font:inherit; }
+.blog-inline-code { padding:.1rem .4rem; border-radius:6px; background:rgb(15 23 42 / 8%); font:0.95em "Source Code Pro",Menlo,Monaco,Consolas,monospace; }
+.blog-video,.blog-post-content video { display:block; width:100%; max-width:100%; height:auto; margin:1.5rem 0 2.5rem; border:1px solid rgb(15 23 42 / 8%); border-radius:16px; background:#0f172a; aspect-ratio:16/9; }
+.blog-table-wrapper { max-width:100%; margin:2rem 0; overflow-x:auto; overscroll-behavior-inline:contain; border:1px solid rgb(15 23 42 / 10%); border-radius:12px; }
+.blog-table-wrapper table { width:100%; min-width:680px; border-collapse:collapse; }
+.blog-table-head { background:rgb(15 23 42 / 4%); }
+.blog-table-header,.blog-table-cell { padding:.75rem 1rem; border-bottom:1px solid rgb(15 23 42 / 8%); font-size:.95rem; line-height:1.5; text-align:left; }
+.blog-divider { margin:3rem 0; border:0; border-top:1px solid rgb(15 23 42 / 10%); }
+.blog-figure { margin:2rem 0; }
+.blog-figure img { display:block; width:100%; max-width:100%; height:auto; border:1px solid rgb(15 23 42 / 8%); border-radius:16px; }
+.blog-figure figcaption { margin-top:.75rem; color:rgb(15 23 42 / 60%); font-size:.9rem; text-align:center; }
+.blog-toc { position:sticky; top:6.5rem; align-self:flex-start; display:none; min-width:220px; }
+.blog-toc-title { margin:0 0 1rem; color:rgb(15 23 42 / 45%); font-size:.75rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; }
+.blog-toc-list { margin:0; padding:0; border-left:1px solid rgb(15 23 42 / 10%); list-style:none; }
+.blog-toc-item { margin:0; }
+.blog-toc-subitem { margin-left:1.5rem; }
+.blog-toc-link { display:block; padding:.4rem 0 .4rem 1rem; color:rgb(15 23 42 / 55%); font-size:.9rem; text-decoration:none; transition:color .2s ease; }
+.blog-toc-top .blog-toc-link,.blog-toc-link.active { color:#0f172a; font-weight:600; }
+.blog-post-nav { display:grid; gap:1.5rem; margin-top:4rem; padding-top:3rem; border-top:1px solid rgb(15 23 42 / 8%); }
+.blog-post-nav-card { padding:1.5rem; border:1px solid rgb(15 23 42 / 10%); border-radius:16px; color:inherit; text-decoration:none; transition:border-color .2s ease,transform .2s ease; }
+.blog-post-nav-card:hover { border-color:rgb(15 23 42 / 30%); transform:translateY(-4px); }
+.blog-post-nav-card.next { text-align:right; }
+.blog-post-nav-label { margin:0 0 .25rem; color:rgb(15 23 42 / 55%); font-size:.85rem; }
+.blog-post-nav-title { margin:0; color:#0f172a; font-size:1.25rem; font-weight:600; line-height:1.3; }
+@media(min-width:1024px) {
+  .blog-post-main { max-width:1280px; padding-right:3rem; padding-left:3rem; }
+  .blog-post-content { max-width:860px; }
+  .blog-post-layout { gap:4rem; }
+  .blog-toc { display:block; }
+  .blog-post-nav { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:768px) {
+  .blog-post-main { padding:5rem 1.25rem 3rem; }
+  .blog-post-title { font-size:clamp(1.9rem,7vw,2.5rem); }
+  .blog-post-layout { flex-direction:column; }
+  .blog-post-content { max-width:100%; }
+  .blog-paragraph,.blog-list-item { font-size:1rem; }
+  .blog-code-block-wrapper pre { padding:1rem; font-size:.85rem; }
+}
+@media(max-width:480px) {
+  .blog-post-main { padding:4.5rem 1rem 2.5rem; }
+  .blog-post-title { font-size:clamp(1.75rem,8vw,2.2rem); }
+}
+/* Articles keep the monochrome ink but sit on white paper. */
+.blog-page { color:#242424; background:#fff; }
+.blog-back-link,.blog-post-meta,.blog-paragraph,.blog-list,.blog-ordered-list,.blog-quote,.blog-toc-title,.blog-toc-link,.blog-post-nav-label,.blog-figure figcaption { color:#4b4b4a; }
+.blog-tag,.blog-inline-code,.blog-quote,.blog-table-head { background:#efefed; }
+.blog-code-block-wrapper pre,.blog-video,.blog-post-content video { color:#e1e1df; background:#333; }
