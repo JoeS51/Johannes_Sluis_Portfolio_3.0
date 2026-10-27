@@ -1,4 +1,4 @@
-import { Children, Fragment, isValidElement, type ComponentType } from "react";
+import { Fragment, type ComponentType } from "react";
 import ReactMarkdown, { type Components } from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
@@ -30,10 +30,9 @@ const components: Components = {
   h2: ({ children }) => <h2 className="blog-heading-2">{children}</h2>,
   h3: ({ children }) => <h3 className="blog-heading-3">{children}</h3>,
   h4: ({ children }) => <h4 className="blog-heading-4">{children}</h4>,
-  p: ({ children }) => {
-    const containsFigure = Children.toArray(children).some(
-      (child) => isValidElement(child) && child.type === "figure",
-    );
+  // Images render as <figure>, which can't sit inside a <p>, so those paragraphs become a <div>.
+  p: ({ node, children }) => {
+    const containsFigure = node?.children.some((child) => child.type === "element" && child.tagName === "img");
 
     return containsFigure
       ? <div className="blog-paragraph">{children}</div>
