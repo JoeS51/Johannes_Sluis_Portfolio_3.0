@@ -6,4 +6,5 @@ export const links = {
   email: "joesluis51@gmail.com",
   github: "https://github.com/JoeS51",
   linkedin: "https://www.linkedin.com/in/joesluis/",
+  cal: "https://cal.com/joe-sluis-3snodn/15min",
 };
