@@ -11,8 +11,8 @@ const specs: Spec[] = [
   { label: "Focus", ja: "専門", value: "Databases & systems" },
   { label: "Email", ja: "連絡", value: <a href={`mailto:${links.email}`}>{links.email}</a> },
   { label: "Meet", ja: "面談", value: <a href={links.cal} target="_blank" rel="noopener noreferrer">Book a 15 min call</a> },
-  { label: "GitHub", value: <a href={links.github} target="_blank" rel="noopener noreferrer">JoeS51</a> },
-  { label: "LinkedIn", value: <a href={links.linkedin} target="_blank" rel="noopener noreferrer">joesluis</a> },
+  { label: "GitHub", ja: "愛用", value: <a href={links.github} target="_blank" rel="noopener noreferrer">JoeS51</a> },
+  { label: "LinkedIn", ja: "苦手", value: <a href={links.linkedin} target="_blank" rel="noopener noreferrer">joesluis</a> },
 ];
 
 const person = {
