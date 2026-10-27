@@ -30,7 +30,7 @@ html:has(.ink) body {
 }
 
 /* Dark: a blue-black cloth cover with silver type and thin gray hairlines.
-   The theme script in the ink layout resolves the stored choice or the system setting onto <html>. */
+   The theme script in the layout puts the stored choice on <html>, defaulting to light. */
 :root[data-ink-theme="dark"] .ink {
   --ink-bg: #0e0f12;
   --ink-fg: #b9bcc1;
