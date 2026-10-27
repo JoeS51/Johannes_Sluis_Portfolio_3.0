@@ -211,14 +211,14 @@ html[data-ink-theme="dark"]:has(.ink) body {
 
 .ink-specs > div {
   display: grid;
-  grid-template-columns: 8.5em minmax(0, 1fr);
+  grid-template-columns: 9.4em minmax(0, 1fr);
   align-items: baseline;
   margin-bottom: 18px;
 }
 
 .ink-specs dt {
   display: grid;
-  grid-template-columns: 5.5em auto;
+  grid-template-columns: 6.4em auto;
   align-items: baseline;
   font-weight: 700;
 }
