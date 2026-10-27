@@ -7,12 +7,12 @@ export const metadata: Metadata = {
 };
 
 const specs: Spec[] = [
-  { label: "Team", ja: "所属", value: "Azure HorizonDB" },
+  { label: "Role", ja: "職業", value: "Software engineer" },
   { label: "Focus", ja: "専門", value: "Databases & systems" },
   { label: "Email", ja: "連絡", value: <a href={`mailto:${links.email}`}>{links.email}</a> },
+  { label: "Meet", ja: "面談", value: <a href={links.cal} target="_blank" rel="noopener noreferrer">Book a 15 min call</a> },
   { label: "GitHub", value: <a href={links.github} target="_blank" rel="noopener noreferrer">JoeS51</a> },
   { label: "LinkedIn", value: <a href={links.linkedin} target="_blank" rel="noopener noreferrer">joesluis</a> },
-  { label: "Meet", ja: "面談", value: <a href={links.cal} target="_blank" rel="noopener noreferrer">Book a 15 min call</a> },
 ];
 
 const person = {
