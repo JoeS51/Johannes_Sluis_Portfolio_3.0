@@ -48,6 +48,7 @@ const specs: Spec[] = [
   { label: "Email", ja: "連絡", value: <a href={`mailto:${links.email}`}>{links.email}</a> },
   { label: "GitHub", value: <a href={links.github} target="_blank" rel="noopener noreferrer">JoeS51</a> },
   { label: "LinkedIn", value: <a href={links.linkedin} target="_blank" rel="noopener noreferrer">joesluis</a> },
+  { label: "Meet", ja: "面談", value: <a href={links.cal} target="_blank" rel="noopener noreferrer">Book a 15 min call</a> },
 ];
 
 export default function Page() {
