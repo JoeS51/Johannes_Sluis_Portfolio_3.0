@@ -10,30 +10,31 @@ const post = {
     cover: null,
   },
   content: `
-### What is MVCC
-In Postgres, whenever you UPDATE a row, you are actually creating a new row in the database rather than modifying the original row in-place. This came as a surprise to me initially
-because it feels unintuitive and like wasted work. Why would you want to clog up your database with extra rows rather than updating rows in-place?
-As it turns out, this isn't a bug in Postgres but an intentional feature called MVCC, or multi-version concurrency control, where a database maintains multiple versions of its rows.
+### What is MVCC?
 
-It also turns out that many major OLTP databases like MySQL, Turso, etc. all use some form of MVCC. In this article, I'll only be covering how MVCC works in Postgres (ignoring some of the specifics like freezing).
-To understand the broader picture, let's quickly go over isolation levels and dirty reads.
+As a highschool student, my favorite method for keeping track of iterations on my essay was naming them \`final_draft\`, \`FINAL_DRAFT_2.0\`, \`FINAL_FINAL_DRAFT\`. Looking back, this is probably why I struggled, but it turns out that it's not such a bad idea. Databases do the same thing.
 
-### Concurrency Control
+In Postgres, whenever you UPDATE a row, you are actually creating a new row in the database rather than modifying the original row in-place. This initially might feel unintuitive, but it is an intentional design called MVCC, or multi-version concurrency control, where a database maintains multiple versions of its rows and is actually meant to speed things up.
+
+I'll mainly be covering how MVCC works in Postgres (ignoring some of the specifics like freezing), but many other major databases like MySQL, Turso, etc. all use some from of MVCC.
+To understand why MVCC is helpful, let's go over the alternatives.
+
+### Why MVCC?
 If one transaction has modified a row but hasn't committed yet, should other transactions see that row? Usually, the answer is no. 
 
 Reading another transaction's uncommitted change is called a **dirty read**. The issue with dirty reads is that a transaction might read data from a transaction that eventually rolls back, meaning that data never officially existed.
 
 Most databases prevent concurrency anomalies, like dirty reads, by using one of these three concurrency control mechanisms:
-1. MVCC
+1. Multi-version concurrency control (MVCC)
 2. Strict two-phase locking (S2PL) - Writers take exclusive locks on rows they modify, and readers may need shared locks before reading those rows 
 3. Optimistic concurrency control (OCC) 
 
-There are tradeoffs for each of these options, but the main argument for MVCC is that it is faster compared to S2PL. We can see why with this example below where a database DOESN'T use MVCC:
+There are tradeoffs for each of these options, but the main argument for MVCC is that it gives you more con**currency** compared to S2PL. To see why, let's look at this example where we use S2PL rather than MVCC:
 
 [[MVCC_TRANSACTION_ANIMATION]]
 
-There's a clear issue in the example above: readers are blocked by writers. That means a long-running write transaction can block all read operations. The vice versa is true too where long-running read operations on a row can block writers.
-MVCC solves this problem.
+There's a clear issue in the example above: readers are blocked by writers. That means a long-running write transaction can block all read operations, and the vice versa is true too where long-running read operations on a row can block writers.
+MVCC avoids this problem entirely.
 
 ### MVCC in Postgres
 Each transaction in postgres is associated with a 32-bit integer for its transaction ID (txid). Each row in Postgres is physically stored as a heap tuple, and every tuple carries some hidden metadata fields that make MVCC work. 
