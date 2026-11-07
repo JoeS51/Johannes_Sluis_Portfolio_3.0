@@ -9,26 +9,39 @@ const links = [
   { href: "/about", name: "About" },
 ];
 
-type Theme = "light" | "dark";
+function hasStoredTheme() {
+  try { return localStorage.getItem("ink-theme") !== null; } catch { return false; }
+}
 
-// 白 / 黒 with the current one inked in; clicking flips it and remembers the choice.
+// A square switch: follows the OS until clicked, then remembers the choice.
+// The thumb's position comes from CSS, so it's right before hydration; this state only drives aria-checked.
 function ThemeSwitch() {
-  const [theme, setTheme] = useState<Theme | null>(null);
+  const [dark, setDark] = useState(false);
 
-  useEffect(() => setTheme(document.documentElement.dataset.inkTheme === "dark" ? "dark" : "light"), []);
-
-  const flip = () => {
-    const next = theme === "dark" ? "light" : "dark";
-    document.documentElement.dataset.inkTheme = next;
-    try { localStorage.setItem("ink-theme", next); } catch {}
-    setTheme(next);
+  const apply = (next: boolean) => {
+    document.documentElement.dataset.inkTheme = next ? "dark" : "light";
+    setDark(next);
   };
 
-  if (!theme) return null;
-  const mark = (value: Theme, glyph: string) => theme === value ? <b>{glyph}</b> : <span aria-hidden="true">{glyph}</span>;
+  useEffect(() => {
+    setDark(document.documentElement.dataset.inkTheme === "dark");
+    const os = matchMedia("(prefers-color-scheme: dark)");
+    const onOsChange = (event: MediaQueryListEvent) => {
+      if (!hasStoredTheme()) apply(event.matches);
+    };
+    os.addEventListener("change", onOsChange);
+    return () => os.removeEventListener("change", onOsChange);
+  }, []);
+
+  const flip = () => {
+    const next = document.documentElement.dataset.inkTheme !== "dark";
+    try { localStorage.setItem("ink-theme", next ? "dark" : "light"); } catch {}
+    apply(next);
+  };
+
   return (
-    <button className="ink-theme" type="button" lang="ja" onClick={flip} aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}>
-      {mark("light", "白")}{mark("dark", "黒")}
+    <button className="ink-theme" type="button" role="switch" aria-checked={dark} aria-label="Dark mode" onClick={flip}>
+      <span className="ink-theme-track" />
     </button>
   );
 }
