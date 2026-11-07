@@ -30,7 +30,7 @@ html:has(.ink) body {
 }
 
 /* Dark: a blue-black cloth cover with silver type and thin gray hairlines.
-   The theme script in the layout puts the stored choice on <html>, defaulting to light. */
+   The theme script in the layout puts the stored choice on <html>, defaulting to the OS setting. */
 :root[data-ink-theme="dark"] .ink {
   --ink-bg: #0e0f12;
   --ink-fg: #b9bcc1;
@@ -61,24 +61,47 @@ html[data-ink-theme="dark"]:has(.ink) body {
   color: inherit;
 }
 
+/* Padding makes a 48x44 tap target around the 36x20 track; negative margins keep it out of the nav's layout. */
 .ink-theme {
-  display: flex;
-  gap: 0.35em;
-  padding: 0;
+  display: block;
+  margin: -12px -6px;
+  padding: 12px 6px;
   border: 0;
   background: none;
   color: var(--ink-muted);
-  font: inherit;
   cursor: pointer;
 }
 
-.ink-theme [aria-hidden] {
-  opacity: 0.45;
+/* The script always sets the attribute, so without it (no JS) the switch couldn't work. */
+:root:not([data-ink-theme]) .ink-theme {
+  display: none;
 }
 
-.ink-theme b {
-  color: var(--ink-fg);
-  font-weight: 700;
+.ink-theme-track {
+  display: block;
+  width: 36px;
+  height: 20px;
+  border: 2px solid currentColor;
+}
+
+.ink-theme-track::after {
+  content: "";
+  display: block;
+  width: 10px;
+  height: 10px;
+  margin: 3px;
+  background: var(--ink-fg);
+  transition: transform 120ms ease;
+}
+
+:root[data-ink-theme="dark"] .ink-theme-track::after {
+  transform: translateX(16px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ink-theme-track::after {
+    transition: none;
+  }
 }
 
 @media (hover: hover) {
@@ -88,8 +111,12 @@ html[data-ink-theme="dark"]:has(.ink) body {
 }
 
 .ink-theme:focus-visible {
+  outline: none;
+}
+
+.ink-theme:focus-visible .ink-theme-track {
   outline: 1px solid var(--ink-line);
-  outline-offset: 4px;
+  outline-offset: 3px;
 }
 
 .ink h1 {
@@ -157,6 +184,12 @@ html[data-ink-theme="dark"]:has(.ink) body {
 .ink-sheet {
   width: min(100%, 520px);
   margin: 0 auto;
+}
+
+/* Sits a little below center. Stays inside .ink-main's bottom padding, so it never adds a scrollbar. */
+.ink-sheet-home {
+  position: relative;
+  top: 24px;
 }
 
 .ink-kicker {
