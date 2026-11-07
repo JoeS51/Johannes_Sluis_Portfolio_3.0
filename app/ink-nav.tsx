@@ -51,11 +51,11 @@ export function InkNav() {
   return (
     <nav className="ink-nav" aria-label="Site">
       <Link className="ink-nav-home" href="/" lang="ja" aria-label="Joe Sluis, home" aria-current={pathname === "/" ? "page" : undefined}>ジョー</Link>
-      <ThemeSwitch />
       <div className="ink-nav-links">
         {links.map((link) => (
           <Link key={link.href} href={link.href} aria-current={pathname.startsWith(link.href) ? "page" : undefined}>{link.name}</Link>
         ))}
+        <ThemeSwitch />
       </div>
     </nav>
   );
