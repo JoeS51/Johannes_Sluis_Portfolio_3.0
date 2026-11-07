@@ -184,10 +184,13 @@ html[data-ink-theme="dark"]:has(.ink) body {
   margin: 0 auto;
 }
 
-/* Sits a little below center. Stays inside .ink-main's bottom padding, so it never adds a scrollbar. */
-.ink-sheet-home {
-  position: relative;
-  top: 24px;
+/* On phones and laptops the home text sits a little below center; tall desktop windows keep it centered.
+   It stays inside .ink-main's bottom padding, so it never adds a scrollbar. */
+@media (max-height: 1100px) {
+  .ink-sheet-home {
+    position: relative;
+    top: 24px;
+  }
 }
 
 .ink-kicker {
