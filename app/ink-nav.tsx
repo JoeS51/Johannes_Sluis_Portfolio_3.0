@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 
 const links = [
   { href: "/blog", name: "Writing" },
+  { href: "/projects", name: "Projects" },
   { href: "/about", name: "About" },
 ];
 
@@ -18,8 +19,14 @@ function hasStoredTheme() {
 function ThemeSwitch() {
   const [dark, setDark] = useState(false);
 
+  // Colors swap instantly: hover transitions are paused for the flip so links don't lag behind the page.
+  // Flushing styles while paused commits the new colors; only the thumb's slide still animates.
   const apply = (next: boolean) => {
-    document.documentElement.dataset.inkTheme = next ? "dark" : "light";
+    const root = document.documentElement;
+    root.classList.add("ink-theme-switching");
+    root.dataset.inkTheme = next ? "dark" : "light";
+    getComputedStyle(root).color;
+    root.classList.remove("ink-theme-switching");
     setDark(next);
   };
 

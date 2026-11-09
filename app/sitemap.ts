@@ -7,6 +7,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: siteUrl, lastModified: posts[0]?.frontmatter.date },
     { url: `${siteUrl}/about` },
+    { url: `${siteUrl}/projects` },
     { url: `${siteUrl}/blog`, lastModified: posts[0]?.frontmatter.date },
     ...posts.map((post) => ({ url: `${siteUrl}/blog/${post.slug}`, lastModified: post.frontmatter.date })),
   ];
