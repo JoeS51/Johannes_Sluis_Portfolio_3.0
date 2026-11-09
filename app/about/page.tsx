@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { InkSpecs, InkTitle, type Spec } from "../ink-specs";
 import { links } from "../site";
 
@@ -53,8 +54,8 @@ export default function Page() {
     <div className="ink-sheet">
       <InkTitle ja="アバウト" title="About" />
       <p className="ink-prose">
-        Hey! Thanks for checking out my page. I&apos;m Joe, a software engineer interested in systems programming and mostly databases.
-        I&apos;m on the Azure HorizonDB engine team, working on databases full time. I also occasionally write articles and make funny projects.
+        Hey! I&apos;m Joe, a software engineer interested in systems programming.
+        I&apos;m on the Azure HorizonDB engine team, working on databases full time. I also occasionally write articles and make <Link href="/projects">funny projects</Link>.
         Reach out for anything. Cheers.
       </p>
       <InkSpecs specs={specs} />

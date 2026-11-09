@@ -37,12 +37,12 @@ There's a clear issue in the example above: readers are blocked by writers. That
 MVCC avoids this problem entirely.
 
 ### MVCC in Postgres
-Each transaction in postgres is associated with a 32-bit integer for its transaction ID (txid). Each row in Postgres is physically stored as a heap tuple, and every tuple carries some hidden metadata fields that make MVCC work. 
+Each transaction in Postgres is associated with a 32-bit integer for its transaction ID (txid). Each row in Postgres is physically stored as a heap tuple, and every tuple carries some hidden metadata fields that make MVCC work. 
 Each tuple contains:
-- t_xmin - the txid of the transaction that created this tuple
-- t_xmax - the txid of the transaction that deleted this tuple
-- t_cid - a counter within a transaction that tracks which SQL command created or deleted a tuple
-- t_ctid - a physical pointer to the current version of a tuple. It stores the page number and offset of where the tuple lives
+- *t_xmin* - the txid of the transaction that created this tuple
+- *t_xmax* - the txid of the transaction that deleted this tuple
+- *t_cid* - a counter within a transaction that tracks which SQL command created or deleted a tuple
+- *t_ctid* - a physical pointer to the current version of a tuple. It stores the page number and offset of where the tuple lives
 
 ![Postgres heap page and tuple metadata](/images/postgres-mvcc-tuple-header.svg)
 Looking at the image above, you can see the xmin of both tuples is 100. That means a transaction with txid 100 inserted both of those tuples. The xmax for both of these tuples is 0 which means these tuples have not been deleted by any transaction yet.
