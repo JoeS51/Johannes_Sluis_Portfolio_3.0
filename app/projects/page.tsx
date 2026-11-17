@@ -14,12 +14,17 @@ type Project = { name: string; description: string; href?: string };
 
 const projects: Project[] = [
   {
+    name: "WhichDB",
+    description: "An interactive map for exploring database engines, their relationships, and managed hosting options",
+    href: "https://whichdb.dev",
+  },
+  {
     name: "Electrocuting myself when I bite my nails",
-    description: "A fun project to break a nail-biting habit the hard way.",
+    description: "A fun project to break a bad habit",
   },
   {
     name: "LeetCode in x86-64 assembly",
-    description: "Solving LeetCode problems in x86-64 assembly.",
+    description: "Solving LeetCode problems in x86-64 assembly",
     href: "https://github.com/JoeS51/leetcode-x86-64",
   },
 ];
