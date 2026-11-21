@@ -5,6 +5,10 @@
 /.next/
 /out/
 
+# generated build output
+/build/
+/dist/
+
 # local environment files
 .env*
 

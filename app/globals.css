@@ -621,6 +621,15 @@ html[data-ink-theme="dark"]:has(.ink) body {
   color: #d6d8dc;
 }
 
+/* Unlabelled fences also receive blog-inline-code; don't give them an inline background. */
+.ink .blog-code-block-wrapper pre code {
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+
 .ink .blog-toc-list {
   border-left-color: var(--ink-line);
 }
