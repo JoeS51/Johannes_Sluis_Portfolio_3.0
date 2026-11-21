@@ -44,11 +44,11 @@ const components: Components = {
     </a>
   ),
   img: ({ src, alt }) => (
-    <figure className="blog-figure">
+    <figure className={src === "/images/nerd-sniping.png" ? "blog-figure blog-figure-plain" : "blog-figure"}>
       {/* Article images can be animated or SVG, so retain their native formats. */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src={src} alt={alt ?? ""} loading="lazy" />
-      {alt && <figcaption>{alt}</figcaption>}
+      {alt && src !== "/images/nerd-sniping.png" && <figcaption>{alt}</figcaption>}
     </figure>
   ),
   ul: ({ children }) => <ul className="blog-list">{children}</ul>,

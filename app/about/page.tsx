@@ -12,7 +12,8 @@ export const metadata: Metadata = {
   openGraph: { title: "About", description, url: "/about" },
 };
 
-const asciiArt = String.raw`    -+#%%%#*+-     :+#@@@@%#*@@@@@@@@@@@%=
+const asciiArt = String.raw`
+        -+#%%%#*+-     :+#@@@@%#*@@@@@@@@@@@%=
     -@@#=.      :=*%@@@+:       .   ..::..   -%@@:
   :@%  -*#%%%%%%#*+.  .=#%%%%%%%#=.  :#%%%%%%+: .@@=
  +@. +%%%%%%%%%%%%= .%%%%%%%%%%%%%%%#:  *%%%%%%%+  @@

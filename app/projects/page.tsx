@@ -19,13 +19,18 @@ const projects: Project[] = [
     href: "https://whichdb.dev",
   },
   {
-    name: "Electrocuting myself when I bite my nails",
-    description: "A fun project to break a bad habit",
-  },
-  {
     name: "LeetCode in x86-64 assembly",
     description: "Solving LeetCode problems in x86-64 assembly",
     href: "https://github.com/JoeS51/leetcode-x86-64",
+  },
+  {
+    name: "React-lite",
+    description: "Built a lightweight React from scratch",
+    href: "https://github.com/JoeS51/React-lite",
+  },
+  {
+    name: "Electrocuting myself when I bite my nails",
+    description: "A fun project to break a bad habit",
   },
 ];
 

@@ -1,4 +1,5 @@
 import buildingReactFromScratch from "./building-react-from-scratch";
+import howDatabaseReplicationActuallyWorks from "./how-database-replication-actually-works";
 // Unpublished until it is finished: import leetcodeInX8664Assembly from "./leetcode-in-x86-64-assembly";
 import mvccInPostgres from "./mvcc-in-postgres";
 import sshPortfolioGuide from "./ssh-portfolio-guide";
@@ -6,6 +7,7 @@ import whatIsAmazonAurora from "./what-is-amazon-aurora";
 import type { WritingPost } from "./types";
 
 const posts: WritingPost[] = [
+  howDatabaseReplicationActuallyWorks,
   whatIsAmazonAurora,
   mvccInPostgres,
   buildingReactFromScratch,

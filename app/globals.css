@@ -149,9 +149,78 @@ html[data-ink-theme="dark"]:has(.ink) body {
 }
 
 .ink-nav-home {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  margin: -8px;
   font-size: 17px;
   font-weight: 700;
   letter-spacing: 0.04em;
+  line-height: 1;
+}
+
+.ink-article {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.ink .blog-figure-plain {
+  margin-top: 2.75rem;
+}
+
+.ink .blog-figure-plain img {
+  border: 0;
+  border-radius: 0;
+}
+
+.ink-article-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px 24px;
+  margin-top: 64px;
+  padding-top: 24px;
+  border-top: 1px solid var(--ink-hairline);
+  color: var(--ink-muted);
+  font-size: 14px;
+}
+
+.ink-article-footer nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.ink-article-footer a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  text-decoration: none;
+}
+
+.ink-article-footer svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ink-article-footer a:hover,
+.ink-article-footer a:focus-visible {
+  color: var(--ink-fg);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.ink-article-subtitle {
+  margin: 12px 0 0;
+  color: var(--ink-muted);
+  font-size: 20px;
+  line-height: 1.4;
 }
 
 .ink-nav-links {
@@ -439,7 +508,7 @@ html[data-ink-theme="dark"]:has(.ink) body {
 
 .ink-article {
   width: min(100%, 1180px);
-  margin: 0 auto auto;
+  margin: clamp(24px, 5vw, 64px) auto auto;
 }
 
 .ink .ink-back {
@@ -466,16 +535,16 @@ html[data-ink-theme="dark"]:has(.ink) body {
 }
 
 .ink-article-header .ink-post-meta {
-  margin: 0 0 14px;
-  font-size: 16px;
+  margin: 0 0 22px;
+  font-size: 14px;
 }
 
 .ink-article-title {
   margin: 0;
-  font-size: clamp(36px, 7vw, 60px);
+  font-size: clamp(32px, 5vw, 52px);
   font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -0.035em;
+  line-height: 1.14;
+  letter-spacing: -0.025em;
 }
 
 .ink-article-tags {
@@ -487,7 +556,7 @@ html[data-ink-theme="dark"]:has(.ink) body {
 }
 
 .ink-article-header .ink-rule {
-  margin: 24px 0 44px;
+  margin: 32px 0 52px;
 }
 
 .ink .blog-heading-1,

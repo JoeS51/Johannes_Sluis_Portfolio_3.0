@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllPosts } from "../../content/writing";
 import { InkTitle } from "../ink-specs";
-import { formatJapaneseDate } from "./format";
+import { formatEnglishDate } from "./format";
 
 const description = "Articles by Joe Sluis about databases, software internals, and side projects.";
 
@@ -25,7 +25,7 @@ export default function Page() {
             <div>
               <Link className="ink-post-title" href={`/blog/${post.slug}`}>{post.frontmatter.title}</Link>
               <p className="ink-post-meta" lang="ja">
-                <time dateTime={post.frontmatter.date}>{formatJapaneseDate(post.frontmatter.date)}</time>・{post.frontmatter.readingTime}分
+                <time dateTime={post.frontmatter.date}>{formatEnglishDate(post.frontmatter.date)}</time>・{post.frontmatter.readingTime} min read
               </p>
               <p className="ink-post-description">{post.frontmatter.description}</p>
             </div>

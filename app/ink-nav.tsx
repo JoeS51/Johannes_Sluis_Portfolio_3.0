@@ -55,6 +55,7 @@ function ThemeSwitch() {
 
 export function InkNav() {
   const pathname = usePathname();
+
   return (
     <nav className="ink-nav" aria-label="Site">
       <Link className="ink-nav-home" href="/" lang="ja" aria-label="Joe Sluis, home" aria-current={pathname === "/" ? "page" : undefined}>ジョー</Link>
