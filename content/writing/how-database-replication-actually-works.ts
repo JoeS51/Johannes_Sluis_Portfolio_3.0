@@ -15,7 +15,7 @@ But there's a lot to consider: sync vs. async replication, logical vs. physical 
 
 I ran into a lot of these questions even while building the simplest possible [Postgres failover controller in Rust](https://github.com/JoeS51/rust-systems-examples/tree/main/crates/pg-failover), which inevitably nerd-sniped me...
 
-![Nerd sniping comic](/images/nerd-sniping.png)
+![Nerd sniping comic with a database replication question on the sign](/images/nerd-sniping-replication.png)
 
 There are many many flavors of database replication, but if you understand how database replication actually works, then the tradeoffs become clear.
 
@@ -61,7 +61,7 @@ Operation: COMMIT
 \`\`\`
 
 > The WAL in Postgres won't look like this exactly since the WAL is also all binary, but this examples helps paint the picture. 
-If you're interested in trying this out on your own, you can try pg_waldump!
+If you're interested in trying this out on your own, you can try using \`pg_waldump\`!
 
 There are two WAL records here: one for the actual inserted data and the other for the COMMIT.
 You don't need to understand everything in this WAL record, but you can see that the first WAL record contains
@@ -110,17 +110,20 @@ The answer to that depends on whether you are using synchronous replication or a
 </dl>
 <dl>
 <dt>Asynchronous replication</dt>
-<dd>The primary reports a successful commit without waiting for replica acknowledgements. Replicas catch up independently, so a failover can lose writes already acknowledged to the client.</dd>
+<dd>The primary reports a successful commit without waiting for replica acknowledgements. Replicas catch up independently</dd>
 </dl>
 </div>
 
 > In Postgres, there's a setting called \`synchronous_commit\` that determines what the primary waits for before reporting a successful commit. When synchronous replicas are configured, it can wait for them to write, flush, or replay the WAL.
 > So even within synchronous replication, there are more layers...
 
+Which one you should use depends on what you care about. Do you need replicas to server the most up-to-date data? Then use sync replication.
+Do you care about commit latency? Use async replication. 
+
 ### replication lag
 
 We mentioned earlier that the primary communicates with the replica(s) in order to keep them up-to-date. Since the WAL records are sent to the replica(s) over the network,
- there are scenarios where the replica falls behind. THis is called replica lag. If you're using synchronous replication, then you won't have replica lag since the replica needs to ack
+ there are scenarios where the replica falls behind. This is called replica lag. If you're using synchronous replication, then you won't have replica lag since the replica needs to ack
 any transaction before the primary commits it. Replica lag happens with async replication
 
 ### What are the different ways to replicate data
