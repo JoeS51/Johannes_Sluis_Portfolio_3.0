@@ -68,7 +68,13 @@ You don't need to understand everything in this WAL record, but you can see that
 the timestamp already computed on the primary, so when the replica receives these two WAL records, it will just use
 the timestamp data it received rather than computing its own.
 
-Another important piece to look at here is the **LSN**. LSN, short for Log Sequence Number, defines the byte offset of a WAL record in the WAL. 
+Another important piece to look at here is the LSN.
+
+<dl>
+<dt>Log Sequence Number (LSN)</dt>
+<dd>the byte offset of a WAL record in the WAL</dd>
+</dl>
+
 In Postgres, the LSN is a single 64-bit integer represented by 32-bit integer / 32-bit integer (I know it's weird). So in the example above, the first INSERT record 
 is at byte offset 0x1000100 in the WAL and the second COMMIT record is at a byte offset 0x1000180. You can see how this can be important in database replication.
 By comparing the primary's current LSN with the LSN the replica has replayed up to, you can tell how far behind the replica is (**replica lag** but we will get into more of that later)
@@ -94,8 +100,22 @@ This WAL replay is the same mechanism that is used when a database crashes and y
 
 ### When is a write considered successful? 
 
-In the animation above, I intentionally left out a crucial detail. When can we tell the client that their transaction has committed? The answer to that depends
-on whether you are using **synchronous replication** or **asynchronous replication**.
+In the animation above, I intentionally left out a crucial detail about when can we tell the client that their transaction has been committed.
+The answer to that depends on whether you are using synchronous replication or asynchronous replication.
+
+<div class="blog-definitions">
+<dl>
+<dt>Synchronous replication</dt>
+<dd>The primary waits for the required replicas to acknowledge the transaction before reporting success to the client</dd>
+</dl>
+<dl>
+<dt>Asynchronous replication</dt>
+<dd>The primary reports a successful commit without waiting for replica acknowledgements. Replicas catch up independently, so a failover can lose writes already acknowledged to the client.</dd>
+</dl>
+</div>
+
+> In Postgres, there's a setting called \`synchronous_commit\` that determines what the primary waits for before reporting a successful commit. When synchronous replicas are configured, it can wait for them to write, flush, or replay the WAL.
+> So even within synchronous replication, there are more layers...
 
 ### replication lag
 

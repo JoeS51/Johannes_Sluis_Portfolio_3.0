@@ -1,4 +1,5 @@
 import { Fragment, type ComponentType } from "react";
+import Image from "next/image";
 import ReactMarkdown, { type Components } from "react-markdown";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize, { defaultSchema } from "rehype-sanitize";
@@ -14,6 +15,7 @@ const markdownSchema = {
   tagNames: [...(defaultSchema.tagNames ?? []), "video", "source"],
   attributes: {
     ...defaultSchema.attributes,
+    div: [...(defaultSchema.attributes?.div ?? []), ["className", "blog-definitions"]],
     video: ["autoPlay", "className", "controls", "loop", "muted", "playsInline", "poster"],
     source: ["src", "type"],
   },
@@ -56,7 +58,23 @@ const components: Components = {
   ul: ({ children }) => <ul className="blog-list">{children}</ul>,
   ol: ({ children }) => <ol className="blog-ordered-list">{children}</ol>,
   li: ({ children }) => <li className="blog-list-item">{children}</li>,
-  blockquote: ({ children }) => <blockquote className="blog-quote">{children}</blockquote>,
+  blockquote: ({ children }) => (
+    <div className="blog-commentary">
+      <Image className="blog-commentary-avatar" src="/images/commentary-avatar.png" alt="" width={44} height={44} />
+      <aside className="blog-author-note" aria-label="Joe’s note">
+        <span className="blog-author-note-label">Joe’s note</span>
+        <div className="blog-quote">{children}</div>
+      </aside>
+    </div>
+  ),
+  dl: ({ children }) => (
+    <div className="blog-definition">
+      <span className="blog-definition-label">Term</span>
+      <dl>{children}</dl>
+    </div>
+  ),
+  dt: ({ children }) => <dt className="blog-definition-term">{children}</dt>,
+  dd: ({ children }) => <dd className="blog-definition-description">{children}</dd>,
   pre: ({ children }) => <div className="blog-code-block-wrapper"><pre>{children}</pre></div>,
   code: ({ children, className }) => <code className={className ?? "blog-inline-code"}>{children}</code>,
   table: ({ children }) => <div className="blog-table-wrapper"><table>{children}</table></div>,

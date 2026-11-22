@@ -4,6 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { motion, useInView, useReducedMotion } from "framer-motion";
 import styles from "./replication.module.css";
 
+const durations = [330, 2400, 1520, 2400, 1100];
+const totalDuration = durations.reduce((total, duration) => total + duration, 0);
+
 export function ReplicationAnimation() {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { amount: 0.25 });
@@ -14,10 +17,12 @@ export function ReplicationAnimation() {
 
   useEffect(() => {
     if (!running) return;
-    const durations = [330, 2400, 1520, 2400, 1100];
     const timer = window.setTimeout(() => setStep((value) => (value + 1) % 5), durations[step]);
     return () => window.clearTimeout(timer);
   }, [running, step]);
+
+  const progressStart = durations.slice(0, current).reduce((total, duration) => total + duration, 0) / totalDuration;
+  const progressEnd = progressStart + durations[current] / totalDuration;
 
   return (
     <figure ref={ref} className={styles.figure} aria-label="The primary writes INSERT and COMMIT records to WAL, then streams them over TCP to two replicas. Each replica writes the received WAL locally before replaying it." data-running={running}>
@@ -73,6 +78,14 @@ export function ReplicationAnimation() {
             </div>
           </div>
         ))}
+      </div>
+      <div className={styles.progress} aria-hidden="true">
+        <motion.div
+          key={current}
+          initial={{ scaleX: reducedMotion ? 1 : progressStart }}
+          animate={{ scaleX: reducedMotion ? 1 : running ? progressEnd : progressStart }}
+          transition={{ duration: running ? durations[current] / 1000 : 0, ease: "linear" }}
+        />
       </div>
     </figure>
   );
