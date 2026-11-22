@@ -1,0 +1,208 @@
+.figure {
+  margin: 2rem 0;
+  padding: 24px 0;
+  border-block: 1px solid var(--ink-hairline);
+  color: var(--ink-text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.trunk {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.node {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  width: min(160px, 100%);
+  min-height: 72px;
+  padding: 12px;
+  border: 1px solid var(--ink-hairline);
+  text-align: center;
+  background: var(--ink-bg);
+}
+
+.node[data-active="true"] {
+  border-color: var(--ink-fg);
+  background: var(--ink-surface);
+}
+
+.primary {
+  position: relative;
+  min-height: 132px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  width: 60px;
+  height: 60px;
+  padding: 8px;
+  border: 1px solid var(--ink-muted);
+  background: var(--ink-bg);
+}
+
+.internalPacket, .entry {
+  display: block;
+  width: 7px;
+  height: 7px;
+  background: var(--ink-fg);
+}
+
+.internalPacket {
+  position: absolute;
+  left: calc(50% - 3.5px);
+  animation: write-wal 1.2s linear both;
+}
+
+.entry {
+  opacity: 0;
+}
+
+.wal[data-writing="true"] .entry {
+  animation: process-entry 1.4s linear both;
+}
+
+.wal[data-writing="true"] {
+  animation: process-wal 1.4s linear both;
+}
+
+.wal[data-written="true"] .entry {
+  opacity: 1;
+}
+
+@keyframes write-wal {
+  0% { top: -4px; opacity: 1; }
+  45% { top: calc(100% - 28px); opacity: 1; }
+  46%, 100% { top: calc(100% - 28px); opacity: 0; }
+}
+
+@keyframes process-entry {
+  0%, 39% { opacity: 0; transform: scale(1) rotate(0); }
+  40% { opacity: 1; transform: scale(1) rotate(0); }
+  55% { opacity: 1; transform: scale(1.4) rotate(90deg); }
+  70% { opacity: 1; transform: scale(.8) rotate(180deg); }
+  85% { opacity: 1; transform: scale(1.2) rotate(270deg); }
+  100% { opacity: 1; transform: scale(1) rotate(360deg); }
+}
+
+@keyframes process-wal {
+  0%, 39%, 100% { background: var(--ink-bg); border-color: var(--ink-muted); }
+  55%, 80% { background: var(--ink-surface); border-color: var(--ink-fg); }
+}
+
+.eyebrow {
+  color: var(--ink-muted);
+  font: 10px/1.5 ui-monospace, Menlo, Consolas, monospace;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.node strong {
+  color: var(--ink-fg);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.link {
+  position: relative;
+  width: 1px;
+  height: 40px;
+  background: var(--ink-hairline);
+}
+
+.link::after {
+  content: "";
+  position: absolute;
+  left: -3px;
+  bottom: 0;
+  width: 6px;
+  height: 6px;
+  border-bottom: 1px solid var(--ink-muted);
+  border-right: 1px solid var(--ink-muted);
+  transform: rotate(45deg);
+}
+
+.link > span, .transport {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  white-space: nowrap;
+  color: var(--ink-muted);
+  font: 10px ui-monospace, Menlo, Consolas, monospace;
+}
+
+.link i {
+  position: absolute;
+  left: -3px;
+  width: 7px;
+  height: 7px;
+  background: var(--ink-fg);
+  animation: send 1.2s linear both;
+}
+
+.figure[data-running="false"] .link i,
+.figure[data-running="false"] .internalPacket,
+.figure[data-running="false"] .entry,
+.figure[data-running="false"] .wal {
+  animation-play-state: paused;
+}
+
+@keyframes send {
+  from { top: 0; opacity: 0; }
+  15%, 85% { opacity: 1; }
+  to { top: calc(100% - 7px); opacity: 0; }
+}
+
+.branch {
+  position: relative;
+  width: min(100%, 400px);
+  margin: 0 auto;
+}
+
+.branch svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.transport {
+  left: calc(50% + 12px);
+  top: 4px;
+}
+
+.wire {
+  fill: none;
+  stroke: var(--ink-muted);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.packet {
+  fill: var(--ink-fg);
+}
+
+.replicas {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  justify-items: center;
+  width: min(100%, 400px);
+  margin: 0 auto;
+}
+
+.replicas .node {
+  width: min(160px, calc(100% - 12px));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .link i { display: none; }
+}
