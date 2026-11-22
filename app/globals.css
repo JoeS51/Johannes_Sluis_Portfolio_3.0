@@ -16,7 +16,8 @@ body {
   --ink-line: #0a0a0a;
   --ink-hairline: #e2e2e2;
   --ink-surface: #f0f0f0;
-  --ink-code: #0a0a0a;
+  --ink-code: #f3f3f3;
+  --ink-code-text: #262626;
   --ink-rule-weight: 2.5px;
   min-height: 100svh;
   background: var(--ink-bg);
@@ -30,7 +31,7 @@ html:has(.ink) body {
 }
 
 /* Dark: a blue-black cloth cover with silver type and thin gray hairlines.
-   The theme script in the layout puts the stored choice on <html>, defaulting to the OS setting. */
+   The theme script in the layout puts the stored choice on <html>, defaulting to light. */
 :root[data-ink-theme="dark"] .ink {
   --ink-bg: #0e0f12;
   --ink-fg: #b9bcc1;
@@ -40,6 +41,7 @@ html:has(.ink) body {
   --ink-hairline: #26282d;
   --ink-surface: #191a1e;
   --ink-code: #16171b;
+  --ink-code-text: #d6d8dc;
   --ink-rule-weight: 1px;
 }
 
@@ -589,14 +591,21 @@ html[data-ink-theme="dark"]:has(.ink) body {
 }
 
 .ink .blog-inline-code,
-.ink .blog-quote,
 .ink .blog-table-head,
 .ink .blog-tag {
   background: var(--ink-surface);
 }
 
 .ink .blog-quote {
-  border-left-color: var(--ink-line);
+  padding: .5rem 1.25rem;
+  border-left: 2px solid var(--ink-hairline);
+  background: transparent;
+  color: var(--ink-muted);
+  font-style: normal;
+}
+
+.ink .blog-quote .blog-paragraph {
+  color: inherit;
 }
 
 .ink .blog-table-wrapper,
@@ -618,7 +627,7 @@ html[data-ink-theme="dark"]:has(.ink) body {
   border: 1px solid var(--ink-hairline);
   border-radius: 0;
   background: var(--ink-code);
-  color: #d6d8dc;
+  color: var(--ink-code-text);
 }
 
 /* Unlabelled fences also receive blog-inline-code; don't give them an inline background. */

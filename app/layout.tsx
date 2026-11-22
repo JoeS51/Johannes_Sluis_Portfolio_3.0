@@ -31,7 +31,7 @@ export const metadata: Metadata = {
 const analyticsId = "G-FFSPXWGQ2K";
 
 // Runs before the page paints so nobody sees the wrong theme flash. Their stored choice wins, otherwise the OS setting.
-const themeScript = `try{var t=localStorage.getItem("ink-theme")}catch(e){}document.documentElement.dataset.inkTheme=t==="dark"||t==="light"?t:matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light"`;
+const themeScript = `try{var t=localStorage.getItem("ink-theme")}catch(e){}document.documentElement.dataset.inkTheme=t==="dark"?"dark":"light"`;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (

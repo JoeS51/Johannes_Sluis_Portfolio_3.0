@@ -10,11 +10,7 @@ const links = [
   { href: "/about", name: "About" },
 ];
 
-function hasStoredTheme() {
-  try { return localStorage.getItem("ink-theme") !== null; } catch { return false; }
-}
-
-// A square switch: follows the OS until clicked, then remembers the choice.
+// A square switch: defaults to light, then remembers the visitor's choice.
 // The thumb's position comes from CSS, so it's right before hydration; this state only drives aria-checked.
 function ThemeSwitch() {
   const [dark, setDark] = useState(false);
@@ -32,12 +28,6 @@ function ThemeSwitch() {
 
   useEffect(() => {
     setDark(document.documentElement.dataset.inkTheme === "dark");
-    const os = matchMedia("(prefers-color-scheme: dark)");
-    const onOsChange = (event: MediaQueryListEvent) => {
-      if (!hasStoredTheme()) apply(event.matches);
-    };
-    os.addEventListener("change", onOsChange);
-    return () => os.removeEventListener("change", onOsChange);
   }, []);
 
   const flip = () => {

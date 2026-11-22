@@ -33,24 +33,32 @@
 
 .primary {
   position: relative;
-  min-height: 132px;
+  min-height: 164px;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.replica {
+  position: relative;
+  min-height: 164px;
   justify-content: space-between;
   align-items: center;
 }
 
 .wal {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  width: 60px;
-  height: 60px;
+  width: 112px;
+  height: 88px;
   padding: 8px;
   border: 1px solid var(--ink-muted);
   background: var(--ink-bg);
 }
 
-.internalPacket, .entry {
+.internalPacket {
   display: block;
   width: 7px;
   height: 7px;
@@ -59,20 +67,45 @@
 
 .internalPacket {
   position: absolute;
+  z-index: 2;
   left: calc(50% - 3.5px);
-  animation: write-wal 1.2s linear both;
+  animation: write-wal 1.08s linear both;
 }
 
 .entry {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  top: 30px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--ink-fg);
+  background: var(--ink-surface);
+  color: var(--ink-fg);
+  font: 9px/1 ui-monospace, Menlo, Consolas, monospace;
+  --square-offset: 10.5px;
+  --stretched-offset: 5px;
+  --seam-cover: 2px;
+  overflow: hidden;
+  white-space: nowrap;
   opacity: 0;
 }
 
+.entry:last-child {
+  top: 56px;
+  --square-offset: -12px;
+  --stretched-offset: -12px;
+  --seam-cover: 0px;
+}
+
 .wal[data-writing="true"] .entry {
-  animation: process-entry 1.4s linear both;
+  animation: split-entry 1.2s cubic-bezier(.4, 0, .2, 1) 1.08s both;
 }
 
 .wal[data-writing="true"] {
-  animation: process-wal 1.4s linear both;
+  animation: process-wal .9s linear 1.08s both;
 }
 
 .wal[data-written="true"] .entry {
@@ -81,17 +114,72 @@
 
 @keyframes write-wal {
   0% { top: -4px; opacity: 1; }
-  45% { top: calc(100% - 28px); opacity: 1; }
-  46%, 100% { top: calc(100% - 28px); opacity: 0; }
+  99.9% { top: calc(100% - 60px); opacity: 1; }
+  100% { top: calc(100% - 60px); opacity: 0; }
 }
 
-@keyframes process-entry {
-  0%, 39% { opacity: 0; transform: scale(1) rotate(0); }
-  40% { opacity: 1; transform: scale(1) rotate(0); }
-  55% { opacity: 1; transform: scale(1.4) rotate(90deg); }
-  70% { opacity: 1; transform: scale(.8) rotate(180deg); }
-  85% { opacity: 1; transform: scale(1.2) rotate(270deg); }
-  100% { opacity: 1; transform: scale(1) rotate(360deg); }
+@keyframes split-entry {
+  0% {
+    opacity: 0;
+    left: calc(50% - 3.5px);
+    right: auto;
+    width: 7px;
+    height: 3.5px;
+    transform: translateY(var(--square-offset));
+    background: var(--ink-fg);
+    border-width: 0;
+    border-color: transparent;
+    box-shadow: 0 var(--seam-cover) 0 var(--ink-fg);
+    color: transparent;
+  }
+  1%, 12% {
+    opacity: 1;
+    left: calc(50% - 3.5px);
+    width: 7px;
+    height: 3.5px;
+    transform: translateY(var(--square-offset));
+    background: var(--ink-fg);
+    border-width: 0;
+    border-color: transparent;
+    box-shadow: 0 var(--seam-cover) 0 var(--ink-fg);
+    color: transparent;
+  }
+  45% {
+    opacity: 1;
+    left: 12px;
+    width: 86px;
+    height: 9px;
+    transform: translateY(var(--stretched-offset));
+    background: var(--ink-fg);
+    border-width: 0;
+    border-color: transparent;
+    box-shadow: 0 var(--seam-cover) 0 var(--ink-fg);
+    color: transparent;
+  }
+  75% {
+    opacity: 1;
+    left: 12px;
+    width: 86px;
+    height: 18px;
+    transform: translateY(0);
+    background: var(--ink-surface);
+    border-width: 1px;
+    border-color: var(--ink-fg);
+    box-shadow: 0 0 0 var(--ink-fg);
+    color: transparent;
+  }
+  100% {
+    opacity: 1;
+    left: 12px;
+    width: 86px;
+    height: 18px;
+    transform: translateY(0);
+    background: var(--ink-surface);
+    border-width: 1px;
+    border-color: var(--ink-fg);
+    box-shadow: 0 0 0 var(--ink-fg);
+    color: var(--ink-fg);
+  }
 }
 
 @keyframes process-wal {
@@ -146,7 +234,7 @@
   width: 7px;
   height: 7px;
   background: var(--ink-fg);
-  animation: send 1.2s linear both;
+  animation: send .33s linear both;
 }
 
 .figure[data-running="false"] .link i,

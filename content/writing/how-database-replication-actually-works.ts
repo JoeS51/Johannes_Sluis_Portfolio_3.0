@@ -19,12 +19,12 @@ I ran into a lot of these questions even while building the simplest possible [P
 
 There are many many flavors of database replication, but if you understand how database replication actually works, then the tradeoffs become clear.
 
-In database replication, the primary communicates with the replica(s) in order to keep their data up-to-date. Since the primary and replica(s) are usually on different
- servers entirely, they have to communicate over the network (typically using TCP). In Postgres, the primary will listen on port \`5432\` and all replicas will create its own 
-TCP connection to that port. If the primary is sending data to its replicas over the network, then there can certainly be cases where the replicas fail to receive messages from the primary
-causing it to fall behind. This is called **replica lag**.
 
 ### What does the primary send to its replica(s)
+
+In database replication, the primary communicates with the replica(s) in order to keep their data up-to-date. Since the primary and replica(s) are usually on different
+ servers entirely, they have to communicate over the network (typically using TCP). In Postgres, the primary will listen on port \`5432\` and all replicas will create its own 
+TCP connection to that port. 
 
 When the primary receives a SQL query from the client, it could just give that same SQL query to the secondary. But then what if the SQL query is something like this:
 
@@ -42,8 +42,6 @@ A separate commit record marks a successful commit.
 For example, the WAL records for the above SQL query might look like this:
 
 \`\`\`text
-# This is a simplified illustration, not the actual binary WAL format
-
 LSN: 0/1000100
 Transaction ID: 742
 Resource manager: Heap
@@ -70,11 +68,34 @@ You don't need to understand everything in this WAL record, but you can see that
 the timestamp already computed on the primary, so when the replica receives these two WAL records, it will just use
 the timestamp data it received rather than computing its own.
 
-Database replication heavily relies on the WAL, so it is important to understand.
+Another important piece to look at here is the **LSN**. LSN, short for Log Sequence Number, defines the byte offset of a WAL record in the WAL. 
+In Postgres, the LSN is a single 64-bit integer represented by 32-bit integer / 32-bit integer (I know it's weird). So in the example above, the first INSERT record 
+is at byte offset 0x1000100 in the WAL and the second COMMIT record is at a byte offset 0x1000180. You can see how this can be important in database replication.
+By comparing the primary's current LSN with the LSN the replica has replayed up to, you can tell how far behind the replica is (**replica lag** but we will get into more of that later)
 
 ### How does the replica receive and apply the WAL?
 
+In Postgres streaming replication, the replica first connects to the primary and sends its latest LSN. This tells the primary how far behind the replica is.
+
+1. If the LSN of the primary and the replica already match, then perfect! The primary doesn't need to send anything to the replica at that moment. 
+2. If the LSN of the replica is behind the primary's, then the primary will send all the WAL data from the replica's LSN onwards. The replica will receive all this WAL data and write that data directly into its own WAL
+
+As the primary continues to receives writes from the clients and append to its WAL, it will keep sending its WAL records to the replica. The replica will also
+periodically report its LSN to the primary.
+
+When the replica receives the WAL records from the primary, it has to do two things:
+1. Put that WAL data into its OWN WAL - for durability purposes
+2. Replay that WAL data, which essentially means get the changes that the WAL data is describing into your buffer pool (or shared buffers in Postgres) because once you get it into the buffer pool
+then the replica has the up-to-date data
+
+This WAL replay is the same mechanism that is used when a database crashes and you need to bring your database up-to-speed.
+
 [[REPLICATION_ANIMATION]]
+
+### When is a write considered successful? 
+
+In the animation above, I intentionally left out a crucial detail. When can we tell the client that their transaction has committed? The answer to that depends
+on whether you are using **synchronous replication** or **asynchronous replication**.
 
 ### replication lag
 
@@ -94,7 +115,12 @@ any transaction before the primary commits it. Replica lag happens with async re
 
 - add a quiz at the end TO MAKE SURE READER ACTUALLY UNDERSTANDS (holy cook)
 - add nice animations embedded in the actual site. like there is no bacgkround for the thing
+
+### TO MENTION
 - how much of log does primaru sennd? how doesnit know??
+- streaming replication is BUILT in to postgres. some databases dont have this machinery built in
+- specify differences in replica lag
+
 
 
 ### References:

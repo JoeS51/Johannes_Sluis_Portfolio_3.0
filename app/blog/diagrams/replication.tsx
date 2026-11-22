@@ -10,16 +10,17 @@ export function ReplicationAnimation() {
   const reducedMotion = useReducedMotion();
   const [step, setStep] = useState(0);
   const running = inView && !reducedMotion;
-  const current = reducedMotion ? 3 : step;
+  const current = reducedMotion ? 4 : step;
 
   useEffect(() => {
     if (!running) return;
-    const timer = window.setInterval(() => setStep((value) => (value + 1) % 4), 1400);
-    return () => window.clearInterval(timer);
-  }, [running]);
+    const durations = [330, 2400, 1520, 2400, 1100];
+    const timer = window.setTimeout(() => setStep((value) => (value + 1) % 5), durations[step]);
+    return () => window.clearTimeout(timer);
+  }, [running, step]);
 
   return (
-    <figure ref={ref} className={styles.figure} aria-label="The primary receives the client's SQL, writes a record into its WAL, then streams WAL over TCP to two replicas." data-running={running}>
+    <figure ref={ref} className={styles.figure} aria-label="The primary writes INSERT and COMMIT records to WAL, then streams them over TCP to two replicas. Each replica writes the received WAL locally before replaying it." data-running={running}>
       <div className={styles.trunk}>
         <div className={styles.node} data-active={current === 0}>
           <span className={styles.eyebrow}>Client</span>
@@ -34,7 +35,8 @@ export function ReplicationAnimation() {
           {current === 1 && <i className={styles.internalPacket} aria-hidden="true" />}
           <div className={styles.wal} data-writing={current === 1} data-written={current >= 2}>
             <span className={styles.eyebrow}>WAL</span>
-            <i className={styles.entry} aria-hidden="true" />
+            <span className={styles.entry}>INSERT</span>
+            <span className={styles.entry}>COMMIT</span>
           </div>
         </div>
       </div>
@@ -54,16 +56,21 @@ export function ReplicationAnimation() {
                 y: [-3.5, 16.5, 16.5, 48.5],
                 opacity: [0, 1, 1, 0],
               } : { opacity: 0 }}
-              transition={{ duration: 1.2, times: [0, 0.2, 0.75, 1], ease: "linear" }}
+              transition={{ duration: 1.52, times: [0, 20 / 152, 120 / 152, 1], ease: "linear" }}
             />
           ))}
         </svg>
       </div>
       <div className={styles.replicas}>
         {[1, 2].map((replica) => (
-          <div key={replica} className={styles.node} data-active={current === 3}>
+          <div key={replica} className={`${styles.node} ${styles.replica}`} data-active={current >= 3}>
             <span className={styles.eyebrow}>Replica {replica}</span>
-            <strong>{current === 3 ? "Replayed ✓" : "—"}</strong>
+            {current === 3 && <i className={styles.internalPacket} aria-hidden="true" />}
+            <div className={styles.wal} data-writing={current === 3} data-written={current === 4}>
+              <span className={styles.eyebrow}>WAL</span>
+              <span className={styles.entry}>INSERT</span>
+              <span className={styles.entry}>COMMIT</span>
+            </div>
           </div>
         ))}
       </div>
