@@ -12,6 +12,7 @@ export default {
   // Pages from the old React portfolio; keep their links landing somewhere useful.
   async redirects() {
     return [
+      { source: "/blog/how-database-replication-actually-works", destination: "/blog/how-database-replication-works", permanent: true },
       { source: "/contact", destination: "/about", permanent: true },
       { source: "/random", destination: "/", permanent: true },
       { source: "/ssh-portfolio", destination: "/blog/ssh-portfolio-guide", permanent: true },

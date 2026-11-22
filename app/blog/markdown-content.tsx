@@ -12,7 +12,7 @@ import { ReplicationAnimation } from "./diagrams/replication";
 
 const markdownSchema = {
   ...defaultSchema,
-  tagNames: [...(defaultSchema.tagNames ?? []), "video", "source"],
+  tagNames: [...(defaultSchema.tagNames ?? []), "video", "source", "u"],
   attributes: {
     ...defaultSchema.attributes,
     div: [...(defaultSchema.attributes?.div ?? []), ["className", "blog-definitions"]],
