@@ -11,33 +11,34 @@ const post = {
   },
   content: `
 Database replication seems fairly simple. The basic idea is to copy data from one database server to another, typically for fault tolerance and read scalability. 
-But there's a lot to consider: sync vs. async replication, logical vs. physical replication, single-leader vs. multi-leader, replication lag, failovers, fencing, etc.
+But there's a lot to consider: sync vs async replication, logical vs physical replication, single-leader vs multi-leader, replication lag, failovers, fencing.
 
 I ran into a lot of these questions even while building the simplest possible [Postgres failover controller in Rust](https://github.com/JoeS51/rust-systems-examples/tree/main/crates/pg-failover), which inevitably nerd-sniped me...
 
 ![Nerd sniping comic with a database replication question on the sign](/images/nerd-sniping-replication.png)
 
-There are many flavors of database replication, so I won't be able to cover all the details, but if you understand how database replication actually works, then the tradeoffs become pretty clear!
+There are many flavors of database replication, so I won't be able to cover all the details, but my goal is to teach you how database replication actually works
+, so the tradeoffs become clear!
 
 ### What does the primary send to its replicas?
 
-In database replication, the primary has to communicate with the replicas in order to keep them up-to-date. Since the primary and replicas are usually on different
- servers entirely, they have to communicate over the network. In Postgres, the primary listens on port \`5432\` and the replicas will create their own 
+In database replication, the primary obviously needs to communicate with the replicas to keep them updated. Since the primary and replicas are usually on different
+ servers entirely, this communications happens over the network. In Postgres, the primary listens on port \`5432\` and the replicas will create their own 
 TCP connection to that port to establish communication. Once a replica connects to this port, what does the primary send?
 
-One approach would be to send the original SQL query and have the replica run it too. But consider this example:
+Well, the primary could send the original SQL query to its replicas. For example:
 
 \`\`\`sql
 INSERT INTO table1 (name, created_at) VALUES ('joe', NOW());
 \`\`\`
 
-If the primary and replica both recieve and execute this query separately, then they will each evaluate \`NOW()\` for themselves.
-The primary might store 12:00:00 in created_at, while the replica stores 12:00:01. This violates the contract of database replication. The whole point is to have the same data on the primary and replicas!
+You might have noticed a problem here. If the primary and replica both recieve and execute this query separately, then they will each evaluate \`NOW()\` for themselves.
+The primary might store 12:00:00 in created_at, while the replica stores 12:00:01. This is unfortunately not good enough.
 
-Instead of sending the exact SQL queries from the primary to replicas, we need to send the exact data we want to write on the replica and where to write it to in the database.
+Instead of sending the exact SQL queries from the primary to the replicas, we need to send the exact data we want to write on the replica and where to write it to in the database.
 Thankfully, we have the perfect thing for that: the write-ahead log (WAL).
-The WAL keeps track of changes as they're made to the database. You can think of the WAL as one long append-only file where the database records each change to the database.
-The WAL is comprised of something called <u>WAL records</u>.
+You can think of the WAL as one long append-only file where each change to the database is recorded.
+The WAL is comprised of these things called the <u>WAL records</u>.
 
 Let's use the SQL query above as an example. The WAL records for that might look like this:
 
@@ -61,14 +62,14 @@ Operation: COMMIT
 \`\`\`
 
 > The WAL in Postgres won't look like this exactly since the WAL is all binary data, but this example should help paint the picture. 
-If you're interested in trying this out on your own, you can try using \`pg_waldump\`!
+If you're interested in looking at the WAL in Postgres yourself, you can try using the \`pg_waldump\` extension!
 
 There are two WAL records here: one for the actual inserted data and the other for the COMMIT.
-You don't need to understand everything in this WAL record, but you can see that the first WAL record contains
+You can see that the first WAL record contains
 the timestamp already computed on the primary, so if we can just send the replicas these WAL records, we avoid our earlier problem entirely.
-And that's what physical replication does! In physical replication, the primary just sends the raw WAL data to its replicas.
+And that's what <u>physical replication</u> does! In physical replication, the primary just sends the raw WAL data to its replicas.
 
-The alternative to physical replication is logical replication. In logical replication, Postgres reads the WAL to determine which rows were inserted, updated, or deleted.
+A common alternative to physical replication is <u>logical replication</u>. In logical replication, Postgres reads the WAL to determine which rows were inserted, updated, or deleted.
 It then sends those changes to the replicas. In our example, that means sending the new row’s values, including the timestamp the primary already computed.
 
 From here on out, we will be focusing on physical replication, but the core idea remains the same.
