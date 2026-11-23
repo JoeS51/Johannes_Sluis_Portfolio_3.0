@@ -73,8 +73,14 @@ It then sends those changes to the replicas. In our example, that means sending 
 
 From here on out, we will be focusing on physical replication, but the core idea remains the same.
 
-
 ### How does the replica receive and apply the WAL?
+
+Before a replica can keep up with new changes from the primary, it needs a copy of the data that's already on the primary. A new physical replica typically starts from a <u>base backup</u> of the primary, 
+which is just a copy of the primary's database cluster on disk (e.g. the pages that store the tables and indexes). 
+
+From there, the replica applies WAL to bring itself up to date. As the primary generates more WAL, it streams it to the replica, which keeps applying it to stay caught up.
+
+Now is a good time to also bring up that when I say that the primary "streams its WAL" to the replica, I am describing **stream replication**. There is also ...
 
 If we look again at the WAL records above, we'll see something called the LSN.
 
@@ -137,16 +143,31 @@ from its WAL, but a query there can still miss the new row until replay catches 
 
 ### Failovers
 
+With a primary and two replicas, the primary can wait for either replica to confirm it has saved the WAL before telling the client the write succeeded.
+That gives us two database servers out of three that have the up-to-date data. Those two nodes form a <u>quorum</u>.
 
-### Logical vs. physical replication
+Now suppose the primary crashes. One replica has the write, and the other might still be behind. How do we make sure the next primary keeps the write we already told the client was saved?
+Protocols like Raft use majority votes and election rules to make sure a new leader preserves committed writes.
 
-### Sharding vs replicating
+### Conclusion
 
-### IDEAS 
+Database replication clearly has a lot of layers, and there's still more to the story than what I covered, but like I mentioned earlier, I strongly beleive that if you understand
+the principles behind it, then a lot of these database concepts become clear.
 
-- add a quiz at the end TO MAKE SURE READER ACTUALLY UNDERSTANDS (holy cook)
+For example, take <u>point-in-time restore</u> (PITR), which is a feature in Postgres and other databases where you can recover the state of the database back to what it was at some point-in-time.
+The mechanism behind PITR is very similar to what we covered with replication. If you have a base backup and the WAL, you can restore the database from the base backup 
+and then replay the WAL until you reach the point you want. If that sounds familiar, you already understand the basic idea behind PITR.
 
-### References:
+If you got this far, thank you it really means a lot! If you have any feedback at all, please let me know joesluis51@gmail.com.
+
+
+### Bonus 
+
+Whenever I read articles I like to quiz myself after to see if I actually understood what I read (active recall ftw).
+
+If it interests you, I created a little [quiz](/blog/how-database-replication-works/quiz) that you can try!
+
+### References
 - https://www.interdb.jp/pg/pgsql11/index.html
 
 `,
