@@ -9,6 +9,7 @@ import { AuroraDsqlAnimation } from "./diagrams/aurora-dsql";
 import { AuroraLimitlessAnimation } from "./diagrams/aurora-limitless";
 import { MvccTransactionAnimation } from "./diagrams/mvcc-transaction";
 import { ReplicationAnimation } from "./diagrams/replication";
+import { SynchronousCommitAnimation } from "./diagrams/synchronous-commit";
 
 const markdownSchema = {
   ...defaultSchema,
@@ -27,6 +28,7 @@ const diagrams: Record<string, ComponentType> = {
   "[[AURORA_DSQL_ANIMATION]]": AuroraDsqlAnimation,
   "[[MVCC_TRANSACTION_ANIMATION]]": MvccTransactionAnimation,
   "[[REPLICATION_ANIMATION]]": ReplicationAnimation,
+  "[[SYNCHRONOUS_COMMIT_ANIMATION]]": SynchronousCommitAnimation,
 };
 
 const components: Components = {
@@ -84,7 +86,7 @@ const components: Components = {
   hr: () => <hr className="blog-divider" />,
 };
 
-const markerPattern = /(\[\[(?:AURORA_ARCHITECTURE|AURORA_DSQL|AURORA_LIMITLESS|MVCC_TRANSACTION|REPLICATION)_ANIMATION\]\])/g;
+const markerPattern = /(\[\[(?:AURORA_ARCHITECTURE|AURORA_DSQL|AURORA_LIMITLESS|MVCC_TRANSACTION|REPLICATION|SYNCHRONOUS_COMMIT)_ANIMATION\]\])/g;
 
 export function MarkdownContent({ content }: { content: string }) {
   return content.split(markerPattern).map((part, index) => {

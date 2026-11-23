@@ -19,7 +19,7 @@ I ran into a lot of these questions even while building the simplest possible [P
 
 There are many flavors of database replication, so I won't be able to cover all the details, but if you understand how database replication actually works, then the tradeoffs become pretty clear!
 
-### What does the primary even send to its replicas?
+### What does the primary send to its replicas?
 
 In database replication, the primary has to communicate with the replicas in order to keep them up-to-date. Since the primary and replicas are usually on different
  servers entirely, they have to communicate over the network. In Postgres, the primary listens on port \`5432\` and the replicas will create their own 
@@ -65,8 +65,13 @@ If you're interested in trying this out on your own, you can try using \`pg_wald
 
 There are two WAL records here: one for the actual inserted data and the other for the COMMIT.
 You don't need to understand everything in this WAL record, but you can see that the first WAL record contains
-the timestamp already computed on the primary, so we can just send the replicas these WAL records if we want them to <FILL IN>.
-And that's what physical replciation does! It just sends WAL 
+the timestamp already computed on the primary, so if we can just send the replicas these WAL records, we avoid our earlier problem entirely.
+And that's what physical replication does! In physical replication, the primary just sends the raw WAL data to its replicas.
+
+The alternative to physical replication is logical replication. In logical replication, Postgres reads the WAL to determine which rows were inserted, updated, or deleted.
+It then sends those changes to the replicas. In our example, that means sending the new row’s values, including the timestamp the primary already computed.
+
+From here on out, we will be focusing on physical replication, but the core idea remains the same.
 
 
 ### How does the replica receive and apply the WAL?
@@ -115,37 +120,31 @@ The answer to that depends on whether you are using synchronous replication or a
 </dl>
 </div>
 
-> In Postgres, there's a setting called \`synchronous_commit\` that determines what the primary waits for before reporting a successful commit. When synchronous replicas are configured, it can wait for them to write, flush, or replay the WAL.
-> So even within synchronous replication, there are more layers...
+Which one you should use depends on what you care about. 
+With async replication, the primary can report a successful COMMIT without waiting for the replica. That keeps the replica off the commit path, but if the primary fails before 
+the replica receives the commit record, then you have lost data. 
 
-Which one you should use depends on what you care about. Do you need replicas to server the most up-to-date data? Then use sync replication.
-Do you care about commit latency? Use async replication. 
+With sync replication, the primary waits for the required replica(s) to acknowledge the commit before telling the client it has succeeded. It's important to note here that there are different <u>levels</u> of sync replication.
 
-### replication lag
+In Postgres, you can choose what the standby has to do before it sends that acknowledgment back to the primary.
+The [\`synchronous_commit\`](https://postgresqlco.nf/doc/en/param/synchronous_commit/) setting gives you three options when synchronous standbys are configured:
+- \`remote_write\` - waits for the standby to write the commit record to its own WAL. At this point, the operating system can still have the write buffered in memory
+- \`on\` - this is the default in Postgres. The primary waits for the standby to save the commit record durably in its own WAL on disk. The standby can recover the transaction
+from its WAL, but a query there can still miss the new row until replay catches up
+- \`remote_apply\` - waits for the replicas to replay the commit record. By the time the primary tells the client that COMMIT succeeded, a new query on that standby can see the row
 
-We mentioned earlier that the primary communicates with the replica(s) in order to keep them up-to-date. Since the WAL records are sent to the replica(s) over the network,
- there are scenarios where the replica falls behind. This is called replica lag. If you're using synchronous replication, then you won't have replica lag since the replica needs to ack
-any transaction before the primary commits it. Replica lag happens with async replication
+[[SYNCHRONOUS_COMMIT_ANIMATION]]
 
-### What are the different ways to replicate data
+### Failovers
+
 
 ### Logical vs. physical replication
-
-### Synchronous vs Asynchronous replication
 
 ### Sharding vs replicating
 
 ### IDEAS 
 
 - add a quiz at the end TO MAKE SURE READER ACTUALLY UNDERSTANDS (holy cook)
-- add nice animations embedded in the actual site. like there is no bacgkround for the thing
-
-### TO MENTION
-- how much of log does primaru sennd? how doesnit know??
-- streaming replication is BUILT in to postgres. some databases dont have this machinery built in
-- specify differences in replica lag
-
-
 
 ### References:
 - https://www.interdb.jp/pg/pgsql11/index.html
