@@ -23,7 +23,7 @@ There are many flavors of database replication, so I won't be able to cover all 
 ### What does the primary send to its replicas?
 
 In database replication, the primary obviously needs to communicate with the replicas to keep them updated. Since the primary and replicas are usually on different
- servers entirely, this communications happens over the network. In Postgres, the primary listens on port \`5432\` and the replicas will create their own 
+ servers entirely, this communications happens over the network. In Postgres, the primary listens on port \`5432\` by default and the replicas will create their own 
 TCP connection to that port to establish communication. Once a replica connects to this port, what does the primary send?
 
 Well, the primary could send the original SQL query to its replicas. For example:
@@ -63,7 +63,7 @@ Operation: COMMIT
 \`\`\`
 
 > The WAL in Postgres won't look like this exactly since the WAL is all binary data, but this example should help paint the picture. 
-If you're interested in looking at the WAL in Postgres yourself, you can try using the \`pg_waldump\` extension!
+If you're interested in looking at the WAL in Postgres yourself, you can try using the \`pg_waldump\`!
 
 There are two WAL records here: one for the actual inserted data and the other for the COMMIT.
 You can see that the first WAL record contains
@@ -82,7 +82,7 @@ which is just a copy of the primary's database cluster on disk (e.g. the pages t
 
 From there, the replica applies WAL to bring itself up to date. As the primary generates more WAL, it streams it to the replica, which keeps applying it to stay caught up.
 
-Now is a good time to also bring up that when I say that the primary "streams its WAL" to the replica, I am describing **stream replication**. There is also ...
+Now is a good time to also bring up that when I say that the primary "streams its WAL" to the replica, I am describing **streaming replication**. There is also ...
 
 If we look again at the WAL records above, we'll see something called the LSN.
 
@@ -105,8 +105,7 @@ periodically report its LSN to the primary.
 
 When the replica receives the WAL records from the primary, it has to do two things:
 1. Put that WAL data into its OWN WAL - for durability purposes
-2. Replay that WAL data, which essentially means get the changes that the WAL data is describing into your buffer pool (or shared buffers in Postgres) because once you get it into the buffer pool
-then the replica has the up-to-date data
+2. Replay that WAL data, which essentially means applying the changes described by the WAL records to the replica's own database pages
 
 This WAL replay is the same mechanism that is used when a database crashes and you need to bring your database up-to-speed.
 
@@ -130,7 +129,7 @@ The answer to that depends on whether you are using synchronous replication or a
 
 Which one you should use depends on what you care about. 
 With async replication, the primary can report a successful COMMIT without waiting for the replica. That keeps the replica off the commit path, but if the primary fails before 
-the replica receives the commit record, then you have lost data. 
+the replica receives the commit record, then you could have lost data. 
 
 With sync replication, the primary waits for the required replica(s) to acknowledge the commit before telling the client it has succeeded. It's important to note here that there are different <u>levels</u> of sync replication.
 
@@ -143,31 +142,64 @@ from its WAL, but a query there can still miss the new row until replay catches 
 
 [[SYNCHRONOUS_COMMIT_ANIMATION]]
 
-### Failovers
+### What if the primary fails?
 
-With a primary and two replicas, the primary can wait for either replica to confirm it has saved the WAL before telling the client the write succeeded.
-That gives us two database servers out of three that have the up-to-date data. Those two nodes form a <u>quorum</u>.
+In this article, I mainly covered <u>single-leader replication</u>, but there are other models where there isn't just a single primary.
 
-Now suppose the primary crashes. One replica has the write, and the other might still be behind. How do we make sure the next primary keeps the write we already told the client was saved?
-Protocols like Raft use majority votes and election rules to make sure a new leader preserves committed writes.
+<div class="blog-definitions blog-definitions-three">
+<dl>
+<dt>Single-leader replication</dt>
+<dd>A single primary takes care of all the writes and sends them to the replicas</dd>
+</dl>
+<dl>
+<dt>Multi-leader replication</dt>
+<dd>Multiple nodes can independently accept writes and replicate their changes to each other</dd>
+</dl>
+<dl>
+<dt>Leaderless replication</dt>
+<dd>There is no designated primary. Clients can send writes to multiple replicas, often using quorums to determine whether reads and writes are successful</dd>
+</dl>
+</div>
+
+In single-leader replication, if the primary crashes, then we need to promote one of the replicas as the new primary, this is called a <u>failover</u>.
+
+At a high level, failover usually involves these three steps:
+1. Detect that the primary has gone down
+2. Choose a replica to promote as the new primary
+3. Redirect clients/replicas to the new primary
+
+Each step, as you can imagine, comes with its own challenges. For example, how do you tell that the primary has actually gone down?
+One common technique is to use heartbeats. If the primary hasn't responded in some amount of time, then we say it has failed and start the failover process.
+
+For the second step, how do you know which replica to promote? Well, ideally you want to promote the replica with the highest LSN because that's the replica that has the most recent data.
+However, with asynchronous replication, even the replica with the highest LSN could be missing data that was on the primary. This means that transactions that were successfully committed
+and acknowledged to the client could be lost during failover.
+
+Another interesting problem is determining whether the primary has actually failed.
+What if the primary is still running but we temporarily lost network connectivity to it?
+If we promote a replica while the old primary is still accepting writes, we now have two primaries that can independently accept writes.
+Their data can start to diverge, and this situation is known as <u>split-brain</u> (even the name is scary).
+
+One way to prevent split-brain this is through a mechanism called <u>fencing</u>, where we ensure that the old primary can no longer accept writes before allowing
+the new primary to do so. This can involve shutting down the old primary's machine, revoking its access to shared storage, etc.
 
 ### Conclusion
 
 Database replication clearly has a lot of layers, and there's still more to the story than what I covered, but like I mentioned earlier, I strongly beleive that if you understand
 the principles behind it, then a lot of these database concepts become clear.
 
-For example, take <u>point-in-time restore</u> (PITR), which is a feature in Postgres and other databases where you can recover the state of the database back to what it was at some point-in-time.
+For example, take <u>point-in-time recovery</u> (PITR), which is a feature in Postgres and other databases where you can recover the state of the database back to what it was at some point-in-time.
 The mechanism behind PITR is very similar to what we covered with replication. If you have a base backup and the WAL, you can restore the database from the base backup 
 and then replay the WAL until you reach the point you want. If that sounds familiar, you already understand the basic idea behind PITR.
 
-If you got this far, thank you it really means a lot! If you have any feedback at all, please let me know joesluis51@gmail.com.
+If you got this far, thank you, it really means a lot! If you have any feedback at all, please let me know joesluis51@gmail.com.
 
 
 ### Bonus 
 
 Whenever I read articles, I like to ask myself questions about the content to see if I actually understood what I read (active recall ftw).
 
-So I assembled some question [here](/blog/how-database-replication-works/quiz) that you can try if it interests you!
+So I assembled some questions [here](/blog/how-database-replication-works/quiz) that you can try if it interests you!
 
 ### References
 - https://www.interdb.jp/pg/pgsql11/index.html

@@ -16,7 +16,7 @@ const markdownSchema = {
   tagNames: [...(defaultSchema.tagNames ?? []), "video", "source", "u"],
   attributes: {
     ...defaultSchema.attributes,
-    div: [...(defaultSchema.attributes?.div ?? []), ["className", "blog-definitions"]],
+    div: [...(defaultSchema.attributes?.div ?? []), ["className", "blog-definitions", "blog-definitions-three"]],
     video: ["autoPlay", "className", "controls", "loop", "muted", "playsInline", "poster"],
     source: ["src", "type"],
   },

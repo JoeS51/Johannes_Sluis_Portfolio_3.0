@@ -655,6 +655,10 @@ html[data-ink-theme="dark"]:has(.ink) body {
   background: transparent;
 }
 
+.ink .blog-definitions-three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .ink .blog-definitions .blog-definition {
   margin: 0;
 }
@@ -686,6 +690,12 @@ html[data-ink-theme="dark"]:has(.ink) body {
 
 @media (max-width: 600px) {
   .ink .blog-definitions {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 800px) {
+  .ink .blog-definitions-three {
     grid-template-columns: 1fr;
   }
 }
