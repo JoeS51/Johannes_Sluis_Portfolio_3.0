@@ -105,7 +105,7 @@ To keep track of its progress, the replica needs a way to identify positions in 
 
 In Postgres, the LSN is a single 64-bit integer represented by 32-bit integer / 32-bit integer (I know it's weird). So in the example above, the first INSERT record 
 is at byte offset 0x1000100 in the WAL and the second COMMIT record is at a byte offset 0x1000180. You can see how this can be important in database replication.
-By comparing the primary's current LSN with the LSN the replica has replayed up to, you can tell how far behind the replica is (this is **replica lag**, but we will get into more of that later)
+By comparing the primary's current LSN with the LSN the replica has replayed up to, you can tell how far behind the replica is (this is called **replica lag**).
 
 In Postgres streaming replication, the replica first connects to the primary and sends its latest LSN. This tells the primary how far behind the replica is.
 
