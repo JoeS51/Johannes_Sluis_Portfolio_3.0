@@ -111,6 +111,11 @@ This WAL replay is the same mechanism that is used when a database crashes and y
 
 [[REPLICATION_ANIMATION]]
 
+But there's another problem we haven't considered yet. The primary can't keep its WAL around forever. At some point, it needs to clean up its old WAL data, so what happens if a replica falls so far behind that the WAL it needs has already been removed?
+
+In Postgres, this is solved using something called <u>replication slots</u>. A replication slot keeps track of which WAL data a replica still needs and prevents the primary from removing it.
+This does introduce another problem though. If a replica goes offline for an extended period of time, the WAL on the primary can keep accumulating until it runs out of disk space.
+
 ### When is a write considered successful? 
 
 In the animation above, I intentionally left out a crucial detail about when can we tell the client that their transaction has been committed.
