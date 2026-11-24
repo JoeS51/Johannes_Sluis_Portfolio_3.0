@@ -5,6 +5,17 @@ import styles from "./replication-quiz.module.css";
 
 const questions = [
   {
+    title: "The sync replication trap",
+    scenario: "You use synchronous replication. Does that mean replica lag is impossible?",
+    answers: [
+      "Yes - a successful commit means every replica is fully caught up",
+      "No - a replica can acknowledge WAL before replaying it",
+      "No - but only when the primary has crashed",
+    ],
+    correct: 1,
+    explanation: "Synchronous replication doesn't always mean the changes are already visible to queries. Depending on the acknowledgment level, a replica can acknowledge WAL before replaying it, so replay lag can still exist. Even when acknowledgment requires replay, the guarantee applies to the required replicas and the acknowledged transaction—not every replica or newer writes.",
+  },
+  {
     title: "The timestamp trap",
     scenario: "The primary executes an INSERT containing NOW(). The replica receives the change two seconds later. How does physical replication preserve the original timestamp?",
     answers: [
@@ -16,26 +27,15 @@ const questions = [
     explanation: "Replication reproduces the recorded change. Replaying it later still writes the timestamp computed on the primary",
   },
   {
-    title: "The missing row",
-    scenario: "Sync replication uses synchronous_commit = on. The client gets a successful COMMIT, then immediately queries the acknowledging standby. Could the new row still be missing?",
+    title: "The failover trap",
+    scenario: "The primary stops responding to heartbeats. You promote the most up-to-date replica. Is it safe to let it accept writes immediately?",
     answers: [
-      "No - sync replication guarantees immediately readable data",
-      "Yes - the standby might have flushed the WAL without replaying it yet",
-      "Yes - but only if the standby lost its network connection",
-    ],
-    correct: 1,
-    explanation: "Durability and visibility are different milestones. With on, the standby has durably flushed the WAL, but replay can still be behind. remote_apply waits for replay on the required standby",
-  },
-  {
-    title: "The failover surprise",
-    scenario: "With async replication, the primary acknowledges an INSERT, then fails before sending that transaction’s WAL to the replica. The replica takes over. What should you expect?",
-    answers: [
-      "The write must exist because the client received success.",
-      "The promoted replica can reconstruct the write from its LSN.",
-      "The write can be missing despite the successful response.",
+      "Yes, the replica has the most recent data.",
+      "Yes, missing heartbeats prove the old primary has stopped.",
+      "Not necessarily. The old primary could still accept writes, causing split-brain.",
     ],
     correct: 2,
-    explanation: "The acknowledgement didn’t guarantee replication. An LSN tracks a position—it can’t reconstruct WAL the replica never received. The write may remain on the failed primary, but it isn’t available on the promoted replica.",
+    explanation: "Losing contact with the primary doesn't prove it stopped running. Fencing prevents the old primary from accepting writes before the new primary takes over.",
   },
 ];
 
