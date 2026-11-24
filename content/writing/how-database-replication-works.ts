@@ -3,7 +3,7 @@ const post = {
   frontmatter: {
     title: 'How Database Replication Works',
     subtitle: '(mostly in postgres)',
-    description: 'How database replication works, why it is likely more complicated than you think, and the tradeoffs behind each approach.',
+    description: 'how database replication works and why it is likely more complicated than you may think',
     date: '2026-11-20',
     tags: [],
     readingTime: 10,
