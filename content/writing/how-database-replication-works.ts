@@ -3,7 +3,7 @@ const post = {
   frontmatter: {
     title: 'How Database Replication Works',
     subtitle: '(mostly in postgres)',
-    description: '',
+    description: 'How database replication works, why it is likely more complicated than you think, and the tradeoffs behind each approach.',
     date: '2026-11-20',
     tags: [],
     readingTime: 10,
@@ -33,7 +33,8 @@ INSERT INTO table1 (name, created_at) VALUES ('joe', NOW());
 \`\`\`
 
 You might have noticed a problem here. If the primary and replica both recieve and execute this query separately, then they will each evaluate \`NOW()\` for themselves.
-The primary might store 12:00:00 in created_at, while the replica stores 12:00:01. This is unfortunately not good enough.
+The primary might store 12:00:00 in \`created_at\`, while the replica stores 12:00:01. Storing different data in the primary and replica would defeat the purpose of replication,
+so we need a different strategy (fun fact: there are actually ways to do replication properly using this method, and it's called *statement-based replication*).
 
 Instead of sending the exact SQL queries from the primary to the replicas, we need to send the exact data we want to write on the replica and where to write it to in the database.
 Thankfully, we have the perfect thing for that: the write-ahead log (WAL).
@@ -135,7 +136,7 @@ With sync replication, the primary waits for the required replica(s) to acknowle
 
 In Postgres, you can choose what the standby has to do before it sends that acknowledgment back to the primary.
 The [\`synchronous_commit\`](https://postgresqlco.nf/doc/en/param/synchronous_commit/) setting gives you three options when synchronous standbys are configured:
-- \`remote_write\` - waits for the standby to write the commit record to its own WAL. At this point, the operating system can still have the write buffered in memory
+- \`remote_write\` - waits for the standby to write the commit record to its own WAL. At this point, the operating system can still have the write buffered in memory ([link](https://biriukov.dev/docs/page-cache/2-essential-page-cache-theory/) if you want to understand this better)
 - \`on\` - this is the default in Postgres. The primary waits for the standby to save the commit record durably in its own WAL on disk. The standby can recover the transaction
 from its WAL, but a query there can still miss the new row until replay catches up
 - \`remote_apply\` - waits for the replicas to replay the commit record. By the time the primary tells the client that COMMIT succeeded, a new query on that standby can see the row
@@ -164,12 +165,15 @@ If you got this far, thank you it really means a lot! If you have any feedback a
 
 ### Bonus 
 
-Whenever I read articles I like to quiz myself after to see if I actually understood what I read (active recall ftw).
+Whenever I read articles, I like to ask myself questions about the content to see if I actually understood what I read (active recall ftw).
 
-If it interests you, I created a little [quiz](/blog/how-database-replication-works/quiz) that you can try!
+So I assembled some question [here](/blog/how-database-replication-works/quiz) that you can try if it interests you!
 
 ### References
 - https://www.interdb.jp/pg/pgsql11/index.html
+- https://manual.christiansoftware.org/en/topics/database-replication-failover/
+- https://transactional.blog/blog/2024-data-replication-design-spectrum
+- https://biriukov.dev/docs/page-cache/2-essential-page-cache-theory/
 
 `,
 };
