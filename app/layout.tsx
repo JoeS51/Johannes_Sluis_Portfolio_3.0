@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Script from "next/script";
-import { Inter, Noto_Sans_JP } from "next/font/google";
+import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import { InkNav } from "./ink-nav";
 import { siteDescription, siteName, siteUrl } from "./site";
 import "./globals.css";
@@ -13,9 +14,13 @@ const inter = Inter({
   variable: "--font-inter",
 });
 
-const notoSansJP = Noto_Sans_JP({
-  weight: ["400", "700"],
-  preload: false,
+// Subset to just the characters the site uses; regenerate with `node scripts/subset-jp-font.mjs`.
+const notoSansJP = localFont({
+  src: [
+    { path: "./_fonts/noto-sans-jp-400.woff2", weight: "400" },
+    { path: "./_fonts/noto-sans-jp-700.woff2", weight: "700" },
+  ],
+  display: "swap",
   variable: "--font-noto-jp",
 });
 
@@ -42,8 +47,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           <InkNav />
           <main className="ink-main">{children}</main>
         </div>
-        <Script src={`https://www.googletagmanager.com/gtag/js?id=${analyticsId}`} strategy="afterInteractive" />
-        <Script id="analytics" strategy="afterInteractive">
+        <Script src={`https://www.googletagmanager.com/gtag/js?id=${analyticsId}`} strategy="lazyOnload" />
+        <Script id="analytics" strategy="lazyOnload">
           {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag("js",new Date());gtag("config","${analyticsId}");`}
         </Script>
       </body>
