@@ -2,7 +2,7 @@
 
 import { useId, useRef } from 'react';
 import type { ClientProps, DiagramProps, FlowDotProps, NodeProps, StorageProps } from './types';
-import { motion, useInView, useReducedMotion, type Transition } from 'framer-motion';
+import { m, useInView, useReducedMotion, type Transition } from 'framer-motion';
 const dogComputer = '/images/blog/dog-computer.jpg';
 
 const transition: Transition = {
@@ -47,7 +47,7 @@ const Shard = ({ x, y, width, label, keys, mobile = false }: { x: number; y: num
 );
 
 const FlowDot = ({ animate, x, y, times, kind, delay = 0, animationTransition = transition }: FlowDotProps) => (
-  <motion.circle
+  <m.circle
     className={`aurora-flow-dot is-${kind}`}
     r="6"
     initial={{ cx: x[0], cy: y[0], opacity: 0 }}
@@ -67,7 +67,7 @@ const ReadQuery = ({ animate, mobile = false }: { animate: boolean; mobile?: boo
   const targetY = mobile ? 110 : 105;
 
   return (
-    <motion.g
+    <m.g
       className="limitless-query-keys"
       initial={{ opacity: 0, x: 0, y: 0, scale: 0.96 }}
       animate={animate ? {
@@ -85,12 +85,12 @@ const ReadQuery = ({ animate, mobile = false }: { animate: boolean; mobile?: boo
       <text x={mobile ? 200 : 548} y={mobile ? 144 : 98} textAnchor={mobile ? 'middle' : undefined}>
         WHERE dog_id IN (17, 42, 8)
       </text>
-    </motion.g>
+    </m.g>
   );
 };
 
 const KeyFlow = ({ animate, value, x, y, times, delay = 0 }: { animate: boolean; value: string; x: number[]; y: number[]; times: number[]; delay?: number }) => (
-  <motion.g
+  <m.g
     className="limitless-key-flow"
     initial={{ x: x[0], y: y[0], opacity: 0 }}
     animate={animate ? {
@@ -102,7 +102,7 @@ const KeyFlow = ({ animate, value, x, y, times, delay = 0 }: { animate: boolean;
   >
     <circle r="6" />
     <text x="0" y="-11" textAnchor="middle">{value}</text>
-  </motion.g>
+  </m.g>
 );
 
 const Client = ({ mobile = false, clipId }: ClientProps) => {
@@ -142,7 +142,7 @@ const Storage = ({ animate, mobile = false }: StorageProps) => {
   return cells.map((cell, index) => (
     <g key={cell.label}>
       <rect className="aurora-storage-cell" x={cell.x} y={y} width={width} height={height} rx="6" />
-      <motion.rect
+      <m.rect
         className="aurora-storage-pulse"
         x={cell.x}
         y={y}

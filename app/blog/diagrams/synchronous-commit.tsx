@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { m, useInView, useReducedMotion } from "framer-motion";
 import styles from "./synchronous-commit.module.css";
 
 const settings = [
@@ -100,7 +100,7 @@ function CommitLoop({ selected }: { selected: typeof settings[number] }) {
       </div>
       <figcaption className={styles.caption}>Wait for: <strong>{selected.label}</strong></figcaption>
       <div className={styles.progress} aria-hidden="true">
-        <motion.span
+        <m.span
           key={current}
           initial={{ scaleX: reducedMotion ? 1 : progressStart }}
           animate={{ scaleX: reducedMotion ? 1 : running ? progressEnd : progressStart }}

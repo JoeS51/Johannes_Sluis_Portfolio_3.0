@@ -2,7 +2,7 @@
 
 import { useId, useRef } from 'react';
 import type { ClientProps, DiagramProps, FlowDotProps, NodeProps, StorageProps } from './types';
-import { motion, useInView, useReducedMotion, type Transition } from 'framer-motion';
+import { m, useInView, useReducedMotion, type Transition } from 'framer-motion';
 const jackedDudeComputer = '/images/blog/jacked-dude-computer.jpeg';
 
 const loop: Transition = {
@@ -29,7 +29,7 @@ const Journal = ({ x, y, width = 100, height = 130, number }: { x: number; y: nu
 );
 
 const FlowDot = ({ animate, kind, x, y, times, delay = 0, radius = 6 }: FlowDotProps) => (
-  <motion.circle
+  <m.circle
     className={`aurora-flow-dot is-${kind}`}
     r={radius}
     initial={{ cx: x[0], cy: y[0], opacity: 0 }}
@@ -70,7 +70,7 @@ const Client = ({ mobile = false, clipId }: ClientProps) => {
 
 const Clock = ({ animate, x, y }: { animate: boolean; x: number; y: number }) => (
   <g className="dsql-clock">
-    <motion.circle
+    <m.circle
       className="dsql-clock-pulse"
       cx={x}
       cy={y}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
+import { m, useInView } from 'framer-motion';
 
 const accountsQuery = 'SELECT name, balance\nFROM accounts\nWHERE name IN (\'Alice\', \'Bob\');';
 
@@ -131,7 +131,7 @@ const ZellijPane = ({ title, active, blocks, shouldAnimate, delayStart = 0 }: { 
     </div>
     <pre className="mvcc-sql-window">
       {blocks.map((block, index) => (
-        <motion.code
+        <m.code
           key={`${title}-${index}-${block.text}`}
           className={`mvcc-terminal-${block.kind}`}
           initial={{ opacity: 0, y: 8 }}
@@ -139,7 +139,7 @@ const ZellijPane = ({ title, active, blocks, shouldAnimate, delayStart = 0 }: { 
           transition={{ delay: delayStart + (block.delay ?? index * 0.14), duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
         >
           <TerminalLine block={block} />
-        </motion.code>
+        </m.code>
       ))}
     </pre>
   </section>
@@ -236,7 +236,7 @@ export const MvccTransactionAnimation = () => {
           </div>
         </div>
 
-        <motion.p
+        <m.p
           key={activeStep.takeaway}
           className="mvcc-step-caption"
           initial={{ opacity: 0, y: 6 }}
@@ -244,7 +244,7 @@ export const MvccTransactionAnimation = () => {
           transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
         >
           {activeStep.takeaway}
-        </motion.p>
+        </m.p>
       </div>
 
       <div className={`mvcc-simple-view${viewMode === 'animated' ? ' is-hidden-by-choice' : ''}`}>

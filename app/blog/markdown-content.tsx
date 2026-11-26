@@ -7,6 +7,7 @@ import remarkGfm from "remark-gfm";
 import { AuroraArchitectureAnimation } from "./diagrams/aurora-architecture";
 import { AuroraDsqlAnimation } from "./diagrams/aurora-dsql";
 import { AuroraLimitlessAnimation } from "./diagrams/aurora-limitless";
+import { MotionProvider } from "./diagrams/motion-provider";
 import { MvccTransactionAnimation } from "./diagrams/mvcc-transaction";
 import { ReplicationAnimation } from "./diagrams/replication";
 import { SynchronousCommitAnimation } from "./diagrams/synchronous-commit";
@@ -92,7 +93,7 @@ export function MarkdownContent({ content }: { content: string }) {
   return content.split(markerPattern).map((part, index) => {
     const Diagram = diagrams[part];
 
-    if (Diagram) return <Diagram key={part} />;
+    if (Diagram) return <MotionProvider key={part}><Diagram /></MotionProvider>;
 
     return part ? (
       <Fragment key={`${index}-${part.slice(0, 16)}`}>

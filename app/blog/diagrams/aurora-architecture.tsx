@@ -2,7 +2,7 @@
 
 import { useId, useRef } from 'react';
 import type { ClientProps, DiagramProps, FlowDotProps, NodeProps, StorageProps } from './types';
-import { motion, useInView, useReducedMotion, type Transition } from 'framer-motion';
+import { m, useInView, useReducedMotion, type Transition } from 'framer-motion';
 const nerdKid = '/images/blog/nerd-kid.jpg';
 
 const loopTransition: Transition = {
@@ -25,7 +25,7 @@ const Node = ({ x, y, width, height, eyebrow, label, className = '' }: NodeProps
 );
 
 const FlowDot = ({ animate, x, y, times, kind, delay = 0 }: FlowDotProps) => (
-  <motion.circle
+  <m.circle
     className={`aurora-flow-dot is-${kind}`}
     r="6"
     initial={{ cx: x[0], cy: y[0], opacity: 0 }}
@@ -60,7 +60,7 @@ const SqlQuery = ({ animate, kind, mobile = false }: { animate: boolean; kind: "
       };
 
   return (
-    <motion.g
+    <m.g
       className={`aurora-sql-query is-${kind}`}
       initial={{ opacity: 0, x: 0, y: 0, scale: 0.96 }}
       animate={animate ? {
@@ -84,7 +84,7 @@ const SqlQuery = ({ animate, kind, mobile = false }: { animate: boolean; kind: "
           <text x={box.x + 14} y={box.y + 52}>WHERE username = 'Builderman';</text>
         </>
       )}
-    </motion.g>
+    </m.g>
   );
 };
 
@@ -135,7 +135,7 @@ const StorageLayer = ({ animate, mobile = false }: StorageProps) => {
       {cells.map((cell, index) => (
         <g key={cell.label}>
           <rect className="aurora-storage-cell" x={cell.x} y={y} width={width} height={height} rx="6" />
-          <motion.rect
+          <m.rect
             className="aurora-storage-pulse"
             x={cell.x}
             y={y}

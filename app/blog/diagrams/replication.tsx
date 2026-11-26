@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { motion, useInView, useReducedMotion } from "framer-motion";
+import { m, useInView, useReducedMotion } from "framer-motion";
 import styles from "./replication.module.css";
 
 const durations = [330, 2400, 1520, 2400, 1100];
@@ -50,7 +50,7 @@ export function ReplicationAnimation() {
         <svg viewBox="0 0 400 56" aria-hidden="true">
           <path className={styles.wire} d="M200 0V20H100V54m100-34h100v34M96 49l4 5 4-5m192 0 4 5 4-5" />
           {[100, 300].map((x) => (
-            <motion.rect
+            <m.rect
               key={`${x}-${current}`}
               className={styles.packet}
               width="7"
@@ -80,7 +80,7 @@ export function ReplicationAnimation() {
         ))}
       </div>
       <div className={styles.progress} aria-hidden="true">
-        <motion.div
+        <m.div
           key={current}
           initial={{ scaleX: reducedMotion ? 1 : progressStart }}
           animate={{ scaleX: reducedMotion ? 1 : running ? progressEnd : progressStart }}
