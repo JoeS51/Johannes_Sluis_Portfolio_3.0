@@ -29,7 +29,7 @@ export default function Home() {
   return (
     <div className="ink-sheet ink-sheet-home">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(person) }} />
-      <InkHeader ja="ソフトウェアエンジニア" big={<>JOE<br />SLUIS</>} reading="ジョー・スルイス" />
+      <InkHeader ja="ソフトウェアエンジニア" big={<>JOE<br />SLUIS</>} reading="ジョー・スルース" />
       <InkSpecs specs={specs} />
     </div>
   );
