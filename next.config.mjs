@@ -7,7 +7,12 @@ const securityHeaders = [
 
 export default {
   async headers() {
-    return [{ source: "/:path*", headers: securityHeaders }];
+    return [
+      { source: "/:path*", headers: securityHeaders },
+      // Blog images don't change once published, so browsers can skip re-checking them for a year.
+      // To replace one, give the new file a new name.
+      { source: "/images/:path*", headers: [{ key: "Cache-Control", value: "public, max-age=31536000" }] },
+    ];
   },
   // Pages from the old React portfolio; keep their links landing somewhere useful.
   async redirects() {
