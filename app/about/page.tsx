@@ -56,8 +56,8 @@ export default function Page() {
       <InkTitle ja="アバウト" title="About" />
       <p className="ink-prose">
         Hey! I&apos;m Joe, a software engineer interested in systems programming.
-        I&apos;m on the Azure HorizonDB engine team, working on databases full time. I also occasionally write articles and make <Link href="/projects">funny projects</Link>.
-        Reach out for anything. Cheers.
+        I&apos;m on the Azure HorizonDB engine team, building a distributed database full time. I also occasionally write articles and make <Link href="/projects">funny projects</Link>.
+        Reach out for anything. Cheers!
       </p>
       <InkSpecs specs={specs} />
       <figure className="ink-ascii" role="img" aria-label="ASCII art of the PostgreSQL elephant">
