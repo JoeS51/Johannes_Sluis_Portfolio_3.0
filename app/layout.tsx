@@ -41,6 +41,10 @@ const themeScript = `try{var t=localStorage.getItem("ink-theme")}catch(e){}docum
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        {/* Lets feed readers find the feed from any page's URL. */}
+        <link rel="alternate" type="application/rss+xml" title={siteName} href="/rss.xml" />
+      </head>
       <body className={`${inter.variable} ${notoSansJP.variable}`}>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
         <div className="ink">

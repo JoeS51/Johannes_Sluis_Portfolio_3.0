@@ -79,8 +79,8 @@ export default async function Page({ params }: PageProps) {
           <a href={`mailto:${links.email}`} aria-label="Email" title="Email">
             <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="14" rx="2" /><path d="m3 6 9 7 9-7" /></svg>
           </a>
-          <a href={links.cal} target="_blank" rel="noopener noreferrer" aria-label="Book a call" title="Book a call">
-            <svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M16 3v4M8 3v4M3 11h18m-13 5 2 2 5-5" /></svg>
+          <a href="/rss.xml" aria-label="RSS feed" title="RSS feed">
+            <svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><circle cx="6.18" cy="17.82" r="2.18" /><path d="M4 4.44v2.83c7.03 0 12.73 5.7 12.73 12.73h2.83c0-8.59-6.97-15.56-15.56-15.56Zm0 5.66v2.83c3.9 0 7.07 3.17 7.07 7.07h2.83c0-5.47-4.43-9.9-9.9-9.9Z" /></svg>
           </a>
         </nav>
       </footer>
