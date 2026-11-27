@@ -63,6 +63,23 @@ html[data-ink-theme="dark"]:has(.ink) body {
   color: inherit;
 }
 
+/* A quiet, persistent link cue, including on touch screens.
+   Use an empty masked shape so screen readers don't announce decoration.
+   Navigation and icon-only links already have their own visual cues. */
+.ink-specs a[href^="https://"]::after,
+.ink-post-title[href^="https://"]::after {
+  content: "";
+  display: inline-block;
+  width: 0.65em;
+  height: 0.65em;
+  margin-left: 0.3em;
+  vertical-align: 0.05em;
+  background: currentColor;
+  opacity: 0.6;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 10 10 2M3 2h7v7' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 10 10 2M3 2h7v7' fill='none' stroke='black' stroke-width='1.25' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
 /* Padding makes a 48x44 tap target around the 36x20 track; negative margins keep it out of the nav's layout. */
 .ink-theme {
   display: block;
@@ -347,6 +364,63 @@ html[data-ink-theme="dark"]:has(.ink) body {
   overflow-wrap: anywhere;
 }
 
+.ink-copy-email {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.ink-copy-email:focus-visible {
+  outline: 1px solid var(--ink-line);
+  outline-offset: 4px;
+}
+
+.ink-copy-icon {
+  width: 0.8em;
+  height: 0.8em;
+  margin-left: 0.35em;
+  vertical-align: -0.05em;
+  opacity: 0.6;
+}
+
+.ink-copy-email[data-copied="true"] .ink-copy-icon {
+  opacity: 1;
+}
+
+.ink-copy-check {
+  stroke-dasharray: 18;
+  stroke-dashoffset: 0;
+  animation: ink-copy-confirm 220ms ease-out;
+}
+
+@keyframes ink-copy-confirm {
+  from { stroke-dashoffset: 18; }
+  to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ink-copy-check {
+    animation: none;
+  }
+}
+
+.ink-copy-status {
+  display: block;
+  color: var(--ink-muted);
+  font-size: 0.75em;
+}
+
+.ink-copy-status:empty {
+  display: none;
+}
+
 @media (max-width: 480px) {
   .ink-specs {
     font-size: 15px;
@@ -356,7 +430,7 @@ html[data-ink-theme="dark"]:has(.ink) body {
 /* Links fill with ink from the left on hover, the text flipping to paper.
    Touch screens can't hover (a tap leaves :hover stuck on), so there the ink stamps in while pressed. */
 .ink-specs a,
-.ink-post-title,
+.ink-post-title:not(.ink-post-underline),
 .ink-article-nav b {
   margin: 0 -3px;
   padding: 0 3px;
@@ -369,8 +443,8 @@ html[data-ink-theme="dark"]:has(.ink) body {
 
 .ink-specs a:active,
 .ink-specs a:focus-visible,
-.ink-posts li:active .ink-post-title,
-.ink-post-title:focus-visible,
+.ink-posts li:active .ink-post-title:not(.ink-post-underline),
+.ink-post-title:not(.ink-post-underline):focus-visible,
 .ink-article-nav a:active b,
 .ink-article-nav a:focus-visible b {
   background-size: 100% 100%;
@@ -380,7 +454,7 @@ html[data-ink-theme="dark"]:has(.ink) body {
 
 @media (hover: hover) {
   .ink-specs a:hover,
-  .ink-posts li:hover .ink-post-title,
+  .ink-posts li:hover .ink-post-title:not(.ink-post-underline),
   .ink-article-nav a:hover b {
     background-size: 100% 100%;
     color: var(--ink-bg);
@@ -413,6 +487,32 @@ html[data-ink-theme="dark"]:has(.ink) body {
 }
 
 /* Writing list */
+
+.ink-post-underline {
+  text-decoration: none;
+  transition: opacity 200ms ease;
+}
+
+.ink-post-underline:focus-visible {
+  outline: 1px solid var(--ink-line);
+  outline-offset: 4px;
+}
+
+@media (hover: hover) {
+  .ink-posts li:hover .ink-post-underline {
+    opacity: 0.65;
+  }
+}
+
+.ink-posts li:active .ink-post-underline {
+  opacity: 0.65;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ink-post-underline {
+    transition: none;
+  }
+}
 
 .ink-posts {
   margin: 0;

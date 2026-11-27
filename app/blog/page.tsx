@@ -23,7 +23,7 @@ export default function Page() {
           <li key={post.slug}>
             <span className="ink-post-number">{String(posts.length - index).padStart(2, "0")}</span>
             <div>
-              <Link className="ink-post-title" href={`/blog/${post.slug}`}>{post.frontmatter.title}</Link>
+              <Link className="ink-post-title ink-post-underline" href={`/blog/${post.slug}`}>{post.frontmatter.title}</Link>
               <p className="ink-post-meta" lang="ja">
                 <time dateTime={post.frontmatter.date}>{formatEnglishDate(post.frontmatter.date)}</time>・{post.frontmatter.readingTime} min read
               </p>
