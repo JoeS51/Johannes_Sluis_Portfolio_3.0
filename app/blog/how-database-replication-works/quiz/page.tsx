@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function ReplicationQuizPage() {
   return (
     <div className="ink-article">
-      <Link className="ink-back" href="/blog/how-database-replication-works">← Back to the article</Link>
+      <Link className="ink-back" href="/blog/how-database-replication-works">{"←︎"} Back to the article</Link>
       <header className="ink-article-header">
         <p className="ink-post-meta">3 questions</p>
         <h1 className="ink-article-title">Super fun replication quiz</h1>

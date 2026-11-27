@@ -385,23 +385,6 @@ html[data-ink-theme="dark"]:has(.ink) body {
     background-size: 100% 100%;
     color: var(--ink-bg);
   }
-
-  .ink-specs a:hover::after {
-    color: inherit;
-  }
-}
-
-.ink-specs a::after {
-  content: "↗";
-  margin-left: 0.3em;
-  color: var(--ink-muted);
-  font-size: 0.8em;
-  transition: color 0.28s ease;
-}
-
-.ink-specs a:active::after,
-.ink-specs a:focus-visible::after {
-  color: inherit;
 }
 
 @media (hover: none), (prefers-reduced-motion: reduce) {
